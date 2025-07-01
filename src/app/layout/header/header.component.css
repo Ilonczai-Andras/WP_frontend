@@ -1,4 +1,6 @@
 .app-header {
+  background-color: var(--background);
+  color: var(--text);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -14,17 +16,48 @@
 .logo {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #6b4900;
+  color: var(--secondary);
 }
 
 .search-input {
   padding: 0.5rem;
-  border: 1px solid #ccc;
+  border: 1px solid var(--primary);
+  background-color: #120b24;
+  color: var(--text);
   border-radius: 4px;
+}
+
+.search-input::placeholder {
+  color: #bfaeed;
 }
 
 .right-section {
   display: flex;
   align-items: center;
   gap: 1rem;
+}
+
+nav a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+nav a:hover {
+  color: var(--accent);
+}
+
+.btn {
+  background-color: var(--primary);
+  color: var(--background);
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn:hover {
+  background-color: var(--accent);
+  color: var(--background);
 }
