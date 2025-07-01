@@ -1,18 +1,19 @@
-<header class="flex items-center justify-between p-4 shadow-md">
-  <div class="text-xl font-bold">
-    <a routerLink="/">WattpadClone</a>
-  </div>
-
-  <div class="flex items-center gap-4">
+<header class="app-header">
+  <div class="left-section">
+    <div class="logo">
+      <a routerLink="/">WattpadClone</a>
+    </div>
     <input
       type="text"
       placeholder="Search stories..."
-      class="px-3 py-1 border rounded"
+      class="search-input"
       (keydown.enter)="onSearch(searchInput.value)"
       #searchInput
     />
+  </div>
 
-    <nav class="hidden md:flex gap-4">
+  <div class="right-section">
+    <nav>
       <a routerLink="/explore">Explore</a>
       <a routerLink="/library" *ngIf="isLoggedIn">Library</a>
       <a routerLink="/dashboard" *ngIf="isLoggedIn">My Stories</a>
@@ -22,12 +23,8 @@
       <a routerLink="/auth/login" class="btn">Login</a>
     </div>
 
-    <div class="relative" *ngIf="isLoggedIn">
-      <button (click)="toggleMenu()" class="rounded-full w-8 h-8 bg-gray-300">U</button>
-      <div class="absolute right-0 mt-2 w-40 bg-white shadow rounded" *ngIf="showMenu">
-        <a routerLink="/dashboard/settings" class="block px-4 py-2">Settings</a>
-        <button (click)="logout()" class="block px-4 py-2 w-full text-left">Logout</button>
-      </div>
+    <div *ngIf="isLoggedIn">
+      <a routerLink="/auth/login" class="btn">Logout</a>
     </div>
   </div>
 </header>
