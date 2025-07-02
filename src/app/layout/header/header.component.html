@@ -20,11 +20,11 @@
     </nav>
 
     <div *ngIf="!isLoggedIn">
-      <a routerLink="/auth/login" class="btn">Login</a>
+      <a routerLink="/login" class="btn">Login</a>
     </div>
 
     <div *ngIf="isLoggedIn">
-      <a routerLink="/auth/login" class="btn">Logout</a>
+      <a routerLink="/logout" class="btn">Logout</a>
     </div>
   </div>
 </header>
