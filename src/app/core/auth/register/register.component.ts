@@ -14,9 +14,9 @@ export class RegisterComponent {
 
   constructor(private fb: FormBuilder, private registerService: RegisterService) {
     this.registerForm = this.fb.group({
-      first_name: ['', [Validators.required]],
-      last_name: ['', [Validators.required]],
-      username: ['', [Validators.required, Validators.minLength(3)]],
+      firstName: ['', [Validators.required]],
+      lastName: ['', [Validators.required]],
+      userName: ['', [Validators.required, Validators.minLength(3)]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required]],
     }, { validators: this.passwordMatchValidator });
@@ -29,16 +29,25 @@ export class RegisterComponent {
   }
 
   onSubmit() {
-    // if (this.registerForm.valid) {
-    //   console.log('Register Data:', this.registerForm.value);
-    //   this.registerService.register(this.registerForm.value).subscribe(
-    //     (response) => {
-    //       console.log('Registration successful:', response);
-    //     },
-    //     (error) => {
-    //       console.error('Registration failed:', error);
-    //     }
-    //   );
-    // }
+  if (this.registerForm.valid) {
+    const formValue = this.registerForm.value;
+    const signUpData = {
+      firstName: formValue.firstName,
+      lastName: formValue.lastName,
+      login: formValue.login,
+      password: formValue.password
+    };
+
+    console.log('Register Data:', signUpData);
+    this.registerService.register(signUpData).subscribe(
+      (response) => {
+        console.log('Registration successful:', response);
+      },
+      (error) => {
+        console.error('Registration failed:', error);
+      }
+    );
   }
+}
+
 }
