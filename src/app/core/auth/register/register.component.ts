@@ -34,7 +34,7 @@ export class RegisterComponent {
     const signUpData = {
       firstName: formValue.firstName,
       lastName: formValue.lastName,
-      login: formValue.login,
+      userName: formValue.userName,
       password: formValue.password
     };
 
