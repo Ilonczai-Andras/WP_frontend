@@ -4,10 +4,11 @@ import { AuthService } from '../../core/auth/auth.service';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs/internal/Subscription';
+import { ProfileComponent } from '../../features/profile/profile.component';
 
 @Component({
   selector: 'app-header',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, ProfileComponent],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
