@@ -1,7 +1,9 @@
-<p-dropdown
-  formControlName="selectedMenuItem"
-  [options]="menuItems"
-  optionLabel="name"
-  placeholder="Select a Menu Item"
-  styleClass="custom-themed-dropdown"
-/>
+<form [formGroup]="form">
+  <p-dropdown
+    formControlName="selectedMenuItem"
+    [options]="menuItems"
+    optionLabel="name"
+    placeholder="Select a Menu Item"
+    styleClass="custom-themed-dropdown"
+  ></p-dropdown>
+</form>

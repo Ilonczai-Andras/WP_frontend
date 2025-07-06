@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DropdownModule } from 'primeng/dropdown';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 interface MenuItem {
   name: string;
@@ -17,6 +17,9 @@ interface MenuItem {
 })
 export class ProfileComponent implements OnInit {
   menuItems: MenuItem[] | undefined;
+  form = new FormGroup({
+    selectedMenuItem: new FormControl(null)
+  });
   constructor() {}
 
   ngOnInit() {

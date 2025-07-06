@@ -1,1 +1,68 @@
+::ng-deep .custom-themed-dropdown.p-dropdown {
+  background-color: var(--background);
+  color: var(--text);
+  border: 1px solid var(--primary);
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.3s;
+  width: 200px;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
+::ng-deep .custom-themed-dropdown.p-dropdown:hover {
+  border-color: var(--accent);
+}
+
+::ng-deep .custom-themed-dropdown.p-dropdown.p-focus {
+  border-color: var(--secondary);
+  box-shadow: 0 0 0 2px rgba(148, 86, 9, 0.4);
+}
+
+::ng-deep .custom-themed-dropdown .p-dropdown-label {
+  color: var(--text);
+  padding: 6px 12px;
+}
+
+::ng-deep .custom-themed-dropdown .p-dropdown-trigger {
+  color: var(--accent);
+}
+
+::ng-deep .custom-themed-dropdown .p-dropdown-panel {
+  background-color: var(--background);
+  border: 1px solid var(--primary);
+}
+
+::ng-deep .custom-themed-dropdown .p-dropdown-items {
+  color: var(--text);
+}
+
+::ng-deep .custom-themed-dropdown .p-dropdown-item {
+  color: var(--text);
+  padding: 8px 12px;
+  transition: background-color 0.2s;
+}
+
+::ng-deep .custom-themed-dropdown .p-dropdown-item:hover {
+  background-color: var(--background);
+  color: var(--background);
+}
+
+::ng-deep .custom-themed-dropdown .p-select-option {
+  background-color: var(--background);
+}
+
+::ng-deep .custom-themed-dropdown .p-select-option.p-select-option-selected.p-focus {
+  background-color: var(--primary);
+}
+
+::ng-deep .custom-themed-dropdown .p-dropdown-item.p-highlight {
+  background-color: var(--accent);
+  color: var(--background);
+}
+
+::ng-deep .custom-themed-dropdown .p-dropdown-items-wrapper {
+  max-height: 400px;
+  overflow-y: auto;
+}
