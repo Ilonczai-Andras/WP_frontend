@@ -11,8 +11,11 @@ import { RegisterService } from '../../services/register.service';
 })
 export class RegisterComponent {
   registerForm: FormGroup;
+  showPassword: boolean = false;
+  showConfirmPassword: boolean = false;
 
   constructor(private fb: FormBuilder, private registerService: RegisterService) {
+
     this.registerForm = this.fb.group({
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
@@ -26,6 +29,14 @@ export class RegisterComponent {
     const password = group.get('password')?.value;
     const confirmPassword = group.get('confirmPassword')?.value;
     return password === confirmPassword ? null : { mismatch: true };
+  }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+
+  togglePasswordVisibilityForConfirm() {
+    this.showConfirmPassword = !this.showConfirmPassword;
   }
 
   onSubmit() {

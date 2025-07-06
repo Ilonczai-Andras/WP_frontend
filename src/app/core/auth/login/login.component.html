@@ -6,7 +6,19 @@
     <input id="userName" type="text" formControlName="userName" />
 
     <label for="password">Password</label>
-    <input id="password" type="password" formControlName="password" />
+    <div class="password-wrapper">
+      <input
+        [type]="showPassword ? 'text' : 'password'"
+        id="password"
+        formControlName="password"
+      />
+      <span class="eyeicon" (click)="togglePasswordVisibility()">
+        <i
+          class="fa-solid"
+          [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"
+        ></i>
+      </span>
+    </div>
 
     <button type="submit" [disabled]="loginForm.invalid">Log In</button>
     <div class="register-link">

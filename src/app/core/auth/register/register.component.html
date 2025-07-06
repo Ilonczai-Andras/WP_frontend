@@ -1,5 +1,9 @@
 <div class="register-container">
-  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+  <form
+    [formGroup]="registerForm"
+    (ngSubmit)="onSubmit()"
+    class="register-form"
+  >
     <h2>Register</h2>
 
     <label for="first_name">First Name</label>
@@ -12,10 +16,34 @@
     <input id="userName" type="text" formControlName="userName" />
 
     <label for="password">Password</label>
-    <input id="password" type="password" formControlName="password" />
+    <div class="password-wrapper">
+      <input
+        [type]="showPassword ? 'text' : 'password'"
+        id="password"
+        formControlName="password"
+      />
+      <span class="eyeicon" (click)="togglePasswordVisibility()">
+        <i
+          class="fa-solid"
+          [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"
+        ></i>
+      </span>
+    </div>
 
     <label for="confirmPassword">Confirm Password</label>
-    <input id="confirmPassword" type="password" formControlName="confirmPassword" />
+    <div class="password-wrapper">
+      <input
+        [type]="showConfirmPassword ? 'text' : 'password'"
+        id="confirmPassword"
+        formControlName="confirmPassword"
+      />
+      <span class="eyeicon" (click)="togglePasswordVisibilityForConfirm()">
+        <i
+          class="fa-solid"
+          [ngClass]="showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'"
+        ></i>
+      </span>
+    </div>
 
     <button type="submit" [disabled]="registerForm.invalid">Register</button>
   </form>
