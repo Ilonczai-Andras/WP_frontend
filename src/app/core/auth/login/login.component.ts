@@ -6,9 +6,11 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { LoginService } from '../../services/login.service';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
+import { AuthService } from '../auth.service';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-login',
@@ -20,7 +22,11 @@ export class LoginComponent {
   loginForm: FormGroup;
   showPassword = false;
 
-  constructor(private fb: FormBuilder, private LoginService: LoginService) {
+  userName = '';
+  password = '';
+  error = '';
+
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
     this.loginForm = this.fb.group({
       userName: ['', [Validators.required]],
       password: ['', [Validators.required]],
@@ -32,16 +38,13 @@ export class LoginComponent {
   }
 
   onSubmit() {
-    if (this.loginForm.valid) {
-      console.log('Login Data:', this.loginForm.value);
-      this.LoginService.login(this.loginForm.value).subscribe(
-        (response) => {
-          console.log('Login successful:', response);
-        },
-        (error) => {
-          console.error('Login failed:', error);
-        }
-      );
-    }
+    this.authService.login({ userName: this.userName, password: this.password }).subscribe({
+      next: () => {
+        this.router.navigate(['/home']);
+      },
+      error: () => {
+        this.error = 'Invalid username or password';
+      }
+    });
   }
 }

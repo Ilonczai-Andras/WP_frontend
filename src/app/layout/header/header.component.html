@@ -24,7 +24,7 @@
     </div>
 
     <div *ngIf="isLoggedIn">
-      <a routerLink="/logout" class="btn">Logout</a>
+      <div class="btn" (click)="logout()">Logout</div>
     </div>
   </div>
 </header>

@@ -3,12 +3,13 @@
     <h2>Login</h2>
 
     <label for="userName">User Name</label>
-    <input id="userName" type="text" formControlName="userName" />
+    <input id="userName" type="text" [(ngModel)]="userName" formControlName="userName" />
 
     <label for="password">Password</label>
     <div class="password-wrapper">
       <input
         [type]="showPassword ? 'text' : 'password'"
+        [(ngModel)]="password"
         id="password"
         formControlName="password"
       />
@@ -24,5 +25,6 @@
     <div class="register-link">
       <p>Don't have a profile? <a routerLink="/register">Create one</a></p>
     </div>
+    <div *ngIf="error" style="color:red">{{ error }}</div>
   </form>
 </div>

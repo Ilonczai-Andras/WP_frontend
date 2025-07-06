@@ -1,35 +1,68 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { Router } from '@angular/router';
+import { LoginService } from '../services/login.service';
+import { Observable, map } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private currentUserSubject: BehaviorSubject<any>;
-  public currentUser: Observable<any>;
+  private tokenKey = 'auth-token';
+  private userSubject = new BehaviorSubject<any>(null);
 
-  constructor(private http: HttpClient, private router: Router) {
-    this.currentUserSubject = new BehaviorSubject<any>(
-      JSON.parse(localStorage.getItem('user')!)
+  public loggedIn$: Observable<boolean> = this.userSubject.asObservable().pipe(
+    map(user => !!user)
+  );
+
+  constructor(private loginService: LoginService) {
+    const token = this.getToken();
+    if (token) {
+      this.userSubject.next(this.decodeToken(token));
+    }
+  }
+
+  login(credentials: { userName: string; password: string }): Observable<any> {
+    return this.loginService.login(credentials).pipe(
+      map(response => {
+        const token = response.token;
+        localStorage.setItem(this.tokenKey, token);
+        this.userSubject.next(this.decodeToken(token));
+        return response;
+      })
     );
-    this.currentUser = this.currentUserSubject.asObservable();
   }
 
-  // Get current user value
-  public get currentUserValue(): any {
-    return this.currentUserSubject.value;
+  logout(): void {
+    localStorage.removeItem(this.tokenKey);
+    this.userSubject.next(null);
   }
 
-  // Login function
-  login(username: string, password: string) {}
+  getToken(): string | null {
+    return localStorage.getItem(this.tokenKey);
+  }
 
-  // Logout function
-  logout(): void {}
+  isAuthenticated(): boolean {
+  const token = this.getToken();
+  const expired = !token || this.isTokenExpired(token);
 
-  // Check if the user is logged in
-  isLoggedIn(): boolean {
-    return !!this.currentUserValue;
+  if (expired) {
+    this.logout();
+  }
+
+  return !expired;
+}
+
+  getCurrentUser(): any {
+    return this.userSubject.value;
+  }
+
+  private decodeToken(token: string): any {
+    const payload = token.split('.')[1];
+    return JSON.parse(atob(payload));
+  }
+
+  private isTokenExpired(token: string): boolean {
+    const decoded = this.decodeToken(token);
+    return !decoded?.exp || Date.now() > decoded.exp * 1000;
   }
 }
