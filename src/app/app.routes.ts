@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './core/auth/login/login.component';
 import { RegisterComponent } from './core/auth/register/register.component';
+import { AuthGuard } from './core/auth/auth.guard';
 
 export const routes: Routes = [
   {
@@ -15,6 +16,11 @@ export const routes: Routes = [
   {
     path: 'register',
     component: RegisterComponent
+  },
+  {
+    path: 'profile/:username',
+    loadChildren: () => import('./features/profile/profile.routes').then(m => m.PROFILE_ROUTES),
+    canActivate: [AuthGuard]
   },
   {
     path: '',

@@ -6,8 +6,5 @@
 
 main {
   height: calc(100vh - 200px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
   background-color: var(--background);
 }

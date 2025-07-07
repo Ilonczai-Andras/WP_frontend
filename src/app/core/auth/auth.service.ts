@@ -65,4 +65,9 @@ export class AuthService {
     const decoded = this.decodeToken(token);
     return !decoded?.exp || Date.now() > decoded.exp * 1000;
   }
+
+  getUserId(): string | null {
+    const user = this.getCurrentUser();
+    return user.sub;
+  }
 }

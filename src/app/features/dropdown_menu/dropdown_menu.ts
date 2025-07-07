@@ -23,6 +23,7 @@ export class DropdownMenu implements OnInit, OnChanges {
 
   menuItems: MenuItem[] | undefined;
   form: FormGroup;
+  userid: string | null = null;
 
   constructor(
     private authService: AuthService,
@@ -35,8 +36,10 @@ export class DropdownMenu implements OnInit, OnChanges {
   }
 
   ngOnInit() {
+    this.userid = this.authService.getUserId();
+
     this.menuItems = [
-      { name: 'My Profile', route: '/profile' },
+      { name: 'My Profile', route: '/profile/' + this.userid },
       { name: 'Inbox', route: '/inbox' },
       { name: 'Notifications', route: '/notifications' },
       { name: 'Library', route: '/library' },
@@ -48,10 +51,10 @@ export class DropdownMenu implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-  if (!this.showMenu) {
-    this.resetDropdown();
+    if (!this.showMenu) {
+      this.resetDropdown();
+    }
   }
-}
 
   logout() {
     this.authService.logout();
@@ -62,6 +65,9 @@ export class DropdownMenu implements OnInit, OnChanges {
   onMenuItemClick(item: MenuItem) {
     if (item.name === 'Log Out') {
       this.logout();
+    } else if (item.route) {
+      this.router.navigateByUrl(item.route);
+      this.resetDropdown();
     }
   }
 

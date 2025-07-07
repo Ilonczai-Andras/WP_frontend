@@ -1,0 +1,39 @@
+.profile-card {
+  background-color: var(--background);
+  color: var(--text);
+  border-radius: 12px;
+  padding: 30px;
+  max-width: 500px;
+  margin: 30px auto;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+  border: 2px solid var(--primary);
+}
+
+.subtitle {
+  font-size: 16px;
+  color: var(--primary);
+  font-weight: 500;
+  margin-bottom: 15px;
+}
+
+.add-description {
+  background-color: var(--primary);
+  color: var(--background);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.add-description:hover {
+  background-color: var(--accent);
+}
+
+.joined {
+  font-size: 14px;
+  color: var(--secondary);
+  margin-top: 20px;
+}
