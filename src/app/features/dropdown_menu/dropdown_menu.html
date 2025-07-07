@@ -1,9 +1,16 @@
 <form [formGroup]="form">
   <p-dropdown
+    *ngIf="showMenu"
     formControlName="selectedMenuItem"
     [options]="menuItems"
     optionLabel="name"
     placeholder="Select a Menu Item"
     styleClass="custom-themed-dropdown"
-  ></p-dropdown>
+  >
+    <ng-template let-item pTemplate="item">
+      <div (click)="onMenuItemClick(item)">
+        <span>{{ item.name }}</span>
+      </div>
+    </ng-template>
+  </p-dropdown>
 </form>

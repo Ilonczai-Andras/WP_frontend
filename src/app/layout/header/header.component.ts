@@ -4,26 +4,26 @@ import { AuthService } from '../../core/auth/auth.service';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs/internal/Subscription';
-import { ProfileComponent } from '../../features/profile/profile.component';
+import { DropdownMenu } from '../../features/dropdown_menu/dropdown_menu';
 
 @Component({
   selector: 'app-header',
-  imports: [CommonModule, RouterLink, ProfileComponent],
+  imports: [CommonModule, RouterLink, DropdownMenu],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
-export class HeaderComponent implements OnInit, OnDestroy  {
+export class HeaderComponent implements OnInit, OnDestroy {
   isLoggedIn = false;
   showMenu = false;
   private authSub!: Subscription;
 
-
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
-    this.authSub = this.authService.loggedIn$.subscribe(
-      (loggedIn) => (this.isLoggedIn = loggedIn)
-    );
+    this.authSub = this.authService.loggedIn$.subscribe((loggedIn) => {
+      this.isLoggedIn = loggedIn;
+      console.log('Is Logged In:', this.isLoggedIn);
+    });
   }
 
   ngOnDestroy() {
@@ -38,10 +38,5 @@ export class HeaderComponent implements OnInit, OnDestroy  {
     if (query.trim()) {
       this.router.navigate(['/explore'], { queryParams: { q: query } });
     }
-  }
-
-  logout() {
-    this.authService.logout();
-    this.router.navigate(['/home']);
   }
 }

@@ -22,10 +22,6 @@
     <div *ngIf="!isLoggedIn">
       <a routerLink="/login" class="btn">Login</a>
     </div>
-
-    <div *ngIf="isLoggedIn">
-      <div class="btn" (click)="logout()">Logout</div>
-    </div>
-    <app-profile></app-profile>
+    <app-dropdown-menu [showMenu]="isLoggedIn"></app-dropdown-menu>
   </div>
 </header>
