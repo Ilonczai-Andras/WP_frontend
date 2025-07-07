@@ -15,8 +15,8 @@ interface MenuItem {
 @Component({
   selector: 'app-dropdown-menu',
   imports: [DropdownModule, ReactiveFormsModule, CommonModule],
-  templateUrl: './dropdown_menu.html',
-  styleUrl: './dropdown_menu.css',
+  templateUrl: './dropdown-menu.html',
+  styleUrl: './dropdown-menu.css',
 })
 export class DropdownMenu implements OnInit, OnChanges {
   @Input() showMenu: boolean = false;

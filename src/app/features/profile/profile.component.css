@@ -1,0 +1,105 @@
+.profile-container {
+  width: 100%;
+  background-color: var(--background);
+  color: var(--text);
+  padding: 2rem 0;
+}
+
+.img-container {
+  text-align: center;
+}
+
+.profile-picture {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  border: 3px solid var(--primary);
+  box-shadow: 0 0 12px var(--primary);
+  margin-bottom: 0.5rem;
+}
+
+.username {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: var(--text);
+}
+
+.stats{
+  margin: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
+  margin: 10px auto;
+  padding: 1rem;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+}
+
+.profile-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 800px;
+}
+
+.left-section,
+.right-section {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  min-width: 200px;
+  justify-content: flex-start;
+}
+
+.right-section {
+  justify-content: flex-end;
+}
+
+.tab {
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+  color: var(--text);
+}
+
+.tab.active,
+.tab:hover {
+  background-color: var(--primary);
+  color: var(--background);
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  padding: 1rem;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+}
+
+.cards {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  justify-content: center;
+  align-items: flex-start;
+  max-width: 800px;
+  width: 100%;
+}
+
+.description, .reading-list {
+  flex: 1 1 300px;
+  max-width: 500px;
+}
