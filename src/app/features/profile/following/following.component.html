@@ -1,0 +1,10 @@
+<div class="followers-container">
+  <div class="followers-scroll-wrapper">
+    <div class="followers-scroll-list">
+      <app-follower-item
+        *ngFor="let follower of followers"
+        [follower]="follower"
+      ></app-follower-item>
+    </div>
+  </div>
+</div>
