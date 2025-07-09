@@ -1,0 +1,101 @@
+.post-container {
+  background-color: var(--background);
+  border: 1px solid #333;
+  border-radius: 12px;
+  padding: 16px;
+  max-width: 600px;
+  margin: 0 auto;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.post-header {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.avatar {
+  flex-shrink: 0;
+}
+
+.avatar img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #333;
+  object-fit: cover;
+}
+
+.post-content {
+  flex: 1;
+}
+
+.post-textarea {
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1.5;
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
+  outline: none;
+}
+
+.post-textarea::placeholder {
+  color: #666;
+}
+
+.post-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #333;
+}
+
+.post-button {
+  background-color: var(--secondary);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 60px;
+}
+
+.post-button:hover:not(:disabled) {
+  background-color: #a96a0a;
+  transform: translateY(-1px);
+}
+
+.post-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.post-button:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 480px) {
+  .post-container {
+    margin: 0 16px;
+    padding: 12px;
+  }
+
+  .post-footer {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .post-button {
+    align-self: flex-end;
+  }
+}

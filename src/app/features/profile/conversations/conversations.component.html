@@ -1,0 +1,26 @@
+<div class="post-container">
+  <div class="post-header">
+    <div class="avatar">
+      <img src="assets/img/profile.jpg" alt="User avatar" />
+    </div>
+    <div class="post-content">
+      <textarea
+        [(ngModel)]="postContent"
+        placeholder="What's on your mind?"
+        class="post-textarea"
+        rows="4"
+      >
+      </textarea>
+    </div>
+  </div>
+
+  <div class="post-footer">
+    <button
+      class="post-button"
+      (click)="onPost()"
+      [disabled]="!postContent.trim()"
+    >
+      Post
+    </button>
+  </div>
+</div>
