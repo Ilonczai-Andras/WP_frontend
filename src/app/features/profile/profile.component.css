@@ -48,7 +48,7 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  max-width: 800px;
+  max-width: 80%;
 }
 
 .left-section,
@@ -78,7 +78,7 @@
   color: var(--background);
 }
 
-.container {
+.about-container {
   display: flex;
   justify-content: space-between;
   justify-content: center;
@@ -95,11 +95,14 @@
   gap: 1rem;
   justify-content: center;
   align-items: flex-start;
-  max-width: 800px;
+  max-width: 80%;
   width: 100%;
 }
 
-.description, .reading-list {
-  flex: 1 1 300px;
-  max-width: 500px;
+.description {
+  width: 30%;
+}
+
+.reading-list {
+  width: 70%;
 }

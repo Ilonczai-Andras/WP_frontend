@@ -18,7 +18,7 @@ export const routes: Routes = [
     component: RegisterComponent
   },
   {
-    path: 'profile/:username',
+    path: 'user/:username',
     loadChildren: () => import('./features/profile/profile.routes').then(m => m.PROFILE_ROUTES),
     canActivate: [AuthGuard]
   },

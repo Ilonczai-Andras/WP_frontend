@@ -39,7 +39,7 @@ export class DropdownMenu implements OnInit, OnChanges {
     this.userid = this.authService.getUserId();
 
     this.menuItems = [
-      { name: 'My Profile', route: '/profile/' + this.userid },
+      { name: 'My Profile', route: '/user/' + this.userid },
       { name: 'Inbox', route: '/inbox' },
       { name: 'Notifications', route: '/notifications' },
       { name: 'Library', route: '/library' },

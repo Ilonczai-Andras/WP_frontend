@@ -10,9 +10,9 @@ export class AuthService {
   private tokenKey = 'auth-token';
   private userSubject = new BehaviorSubject<any>(null);
 
-  public loggedIn$: Observable<boolean> = this.userSubject.asObservable().pipe(
-    map(user => !!user)
-  );
+  public loggedIn$: Observable<boolean> = this.userSubject
+    .asObservable()
+    .pipe(map((user) => !!user));
 
   constructor(private loginService: LoginService) {
     const token = this.getToken();
@@ -23,7 +23,7 @@ export class AuthService {
 
   login(credentials: { userName: string; password: string }): Observable<any> {
     return this.loginService.login(credentials).pipe(
-      map(response => {
+      map((response) => {
         const token = response.token;
         localStorage.setItem(this.tokenKey, token);
         this.userSubject.next(this.decodeToken(token));
@@ -42,15 +42,15 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-  const token = this.getToken();
-  const expired = !token || this.isTokenExpired(token);
+    const token = this.getToken();
+    const expired = !token || this.isTokenExpired(token);
 
-  if (expired) {
-    this.logout();
+    if (expired) {
+      this.logout();
+    }
+
+    return !expired;
   }
-
-  return !expired;
-}
 
   getCurrentUser(): any {
     return this.userSubject.value;
@@ -68,6 +68,6 @@ export class AuthService {
 
   getUserId(): string | null {
     const user = this.getCurrentUser();
-    return user.sub;
+    return user ? user.sub : null;
   }
 }
