@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { ProfileCardComponent } from './profile-card/profile-card.component';
-import { ReadingListsComponent } from './reading-lists/reading-lists.component';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-profile',
-  imports: [ProfileCardComponent, ReadingListsComponent, CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
