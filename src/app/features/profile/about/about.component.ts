@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { ProfileCardComponent } from '../profile-card/profile-card.component';
-import { ReadingListsComponent } from '../reading-lists/reading-lists.component';
+import { ProfileCardComponent } from './profile-card/profile-card.component';
+import { ReadingListsComponent } from './reading-lists/reading-lists.component';
 
 @Component({
   selector: 'app-about',
