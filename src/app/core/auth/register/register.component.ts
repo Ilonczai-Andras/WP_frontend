@@ -9,6 +9,8 @@ import { CommonModule } from '@angular/common';
 import { RegisterService } from '../../services/register.service';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
+import { SignUpDto } from '../../../models/signup.model';
+
 @Component({
   selector: 'app-register',
   imports: [ReactiveFormsModule, CommonModule],
@@ -52,10 +54,11 @@ export class RegisterComponent {
     this.showConfirmPassword = !this.showConfirmPassword;
   }
 
-  onSubmit() {
+  onSubmit(): void {
     if (this.registerForm.valid) {
       const formValue = this.registerForm.value;
-      const signUpData = {
+
+      const signUpData: SignUpDto = {
         firstName: formValue.firstName,
         lastName: formValue.lastName,
         userName: formValue.userName,

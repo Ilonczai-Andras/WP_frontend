@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { LoginService } from '../services/login.service';
-import { Observable, map } from 'rxjs';
+import { Observable, catchError, map } from 'rxjs';
 import { BehaviorSubject } from 'rxjs';
+import { CredentialsDto } from '../../models/login.model';
 
 @Injectable({
   providedIn: 'root',
@@ -21,15 +22,17 @@ export class AuthService {
     }
   }
 
-  login(credentials: { userName: string; password: string }): Observable<any> {
+  login(credentials: CredentialsDto): Observable<any> {
     return this.loginService.login(credentials).pipe(
       map((response) => {
         const token = response.token;
         localStorage.setItem(this.tokenKey, token);
         this.userSubject.next(this.decodeToken(token));
-        console.log(this.getCurrentUser());
-
         return response;
+      }),
+      catchError((error) => {
+        console.error('Login failed:', error);
+        throw error;
       })
     );
   }
@@ -86,6 +89,15 @@ export class AuthService {
 
   getUserName(): string | null {
     const user = this.getCurrentUser();
-    return user ? user.sub : null;
+    return user ? user.userName : null;
+  }
+
+  getUserId(): number {
+    const user = this.getCurrentUser();
+    if (!user) {
+      console.warn('User not found');
+      return -1;
+    }
+    return user.sub;
   }
 }
