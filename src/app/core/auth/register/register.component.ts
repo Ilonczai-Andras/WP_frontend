@@ -1,8 +1,14 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RegisterService } from '../../services/register.service';
-
+import { MessageService } from 'primeng/api';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-register',
   imports: [ReactiveFormsModule, CommonModule],
@@ -14,15 +20,22 @@ export class RegisterComponent {
   showPassword: boolean = false;
   showConfirmPassword: boolean = false;
 
-  constructor(private fb: FormBuilder, private registerService: RegisterService) {
-
-    this.registerForm = this.fb.group({
-      firstName: ['', [Validators.required]],
-      lastName: ['', [Validators.required]],
-      userName: ['', [Validators.required, Validators.minLength(3)]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', [Validators.required]],
-    }, { validators: this.passwordMatchValidator });
+  constructor(
+    private fb: FormBuilder,
+    private registerService: RegisterService,
+    private messageService: MessageService,
+    private router: Router
+  ) {
+    this.registerForm = this.fb.group(
+      {
+        firstName: ['', [Validators.required]],
+        lastName: ['', [Validators.required]],
+        userName: ['', [Validators.required, Validators.minLength(3)]],
+        password: ['', [Validators.required, Validators.minLength(6)]],
+        confirmPassword: ['', [Validators.required]],
+      },
+      { validators: this.passwordMatchValidator }
+    );
   }
 
   passwordMatchValidator(group: FormGroup) {
@@ -40,25 +53,33 @@ export class RegisterComponent {
   }
 
   onSubmit() {
-  if (this.registerForm.valid) {
-    const formValue = this.registerForm.value;
-    const signUpData = {
-      firstName: formValue.firstName,
-      lastName: formValue.lastName,
-      userName: formValue.userName,
-      password: formValue.password
-    };
+    if (this.registerForm.valid) {
+      const formValue = this.registerForm.value;
+      const signUpData = {
+        firstName: formValue.firstName,
+        lastName: formValue.lastName,
+        userName: formValue.userName,
+        password: formValue.password,
+      };
 
-    console.log('Register Data:', signUpData);
-    this.registerService.register(signUpData).subscribe(
-      (response) => {
-        console.log('Registration successful:', response);
-      },
-      (error) => {
-        console.error('Registration failed:', error);
-      }
-    );
+      this.registerService.register(signUpData).subscribe(
+        (response) => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Registration successful!',
+          });
+          this.registerForm.reset();
+          this.router.navigate(['/login']);
+        },
+        (error) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Registration failed. Please try again.',
+          });
+        }
+      );
+    }
   }
-}
-
 }
