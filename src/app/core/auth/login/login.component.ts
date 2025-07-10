@@ -50,7 +50,7 @@ export class LoginComponent {
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
-            detail: 'Registration successful!',
+            detail: 'Login  successful!',
           });
           this.loginForm.reset();
           this.router.navigate(['/home']);
@@ -59,7 +59,7 @@ export class LoginComponent {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
-            detail: 'Registration failed. Please try again.',
+            detail: 'Login failed. Please try again.',
           });
         }
       );

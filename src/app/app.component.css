@@ -8,3 +8,29 @@ main {
   height: calc(100vh - 200px);
   background-color: var(--background);
 }
+
+:host ::ng-deep .p-toast {
+  top: 80px;
+  right: 20px;
+  z-index: 10000;
+}
+
+:host ::ng-deep .p-toast-message {
+  background-color: var(--background);
+  color: var(--text);
+  border-left: 5px solid var(--primary);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  padding: 1rem;
+}
+
+/* Toast header */
+:host ::ng-deep .p-toast-summary {
+  font-weight: bold;
+  color: var(--primary);
+}
+
+/* Toast detail text */
+:host ::ng-deep .p-toast-detail {
+  color: var(--text);
+}

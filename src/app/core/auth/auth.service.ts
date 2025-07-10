@@ -27,6 +27,8 @@ export class AuthService {
         const token = response.token;
         localStorage.setItem(this.tokenKey, token);
         this.userSubject.next(this.decodeToken(token));
+        console.log(this.getCurrentUser());
+
         return response;
       })
     );
@@ -57,8 +59,24 @@ export class AuthService {
   }
 
   private decodeToken(token: string): any {
-    const payload = token.split('.')[1];
-    return JSON.parse(atob(payload));
+    if (!token) {
+      return null;
+    }
+
+    const base64Url = token.split('.')[1];
+    let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+
+    const pad = base64.length % 4;
+    if (pad) {
+      base64 += '='.repeat(4 - pad);
+    }
+
+    try {
+      return JSON.parse(atob(base64));
+    } catch (e) {
+      console.error('Failed to decode token:', e);
+      return null;
+    }
   }
 
   private isTokenExpired(token: string): boolean {
@@ -66,7 +84,7 @@ export class AuthService {
     return !decoded?.exp || Date.now() > decoded.exp * 1000;
   }
 
-  getUserId(): string | null {
+  getUserName(): string | null {
     const user = this.getCurrentUser();
     return user ? user.sub : null;
   }

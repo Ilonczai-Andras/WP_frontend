@@ -23,7 +23,7 @@ export class DropdownMenu implements OnInit, OnChanges {
 
   menuItems: MenuItem[] | undefined;
   form: FormGroup;
-  userid: string | null = null;
+  userName: string | null = null;
 
   constructor(
     private authService: AuthService,
@@ -36,10 +36,10 @@ export class DropdownMenu implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.userid = this.authService.getUserId();
+    this.userName = this.authService.getUserName();
 
     this.menuItems = [
-      { name: 'My Profile', route: '/user/' + this.userid },
+      { name: 'My Profile', route: '/user/' + this.userName },
       { name: 'Inbox', route: '/inbox' },
       { name: 'Notifications', route: '/notifications' },
       { name: 'Library', route: '/library' },
