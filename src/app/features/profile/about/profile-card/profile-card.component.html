@@ -1,7 +1,15 @@
 <div class="profile-card">
   <p class="subtitle">Help people get to know you</p>
-  <button class="add-description" (click)="openProfileDialog()">Add Description</button>
 
-  <p class="joined"><strong>Joined</strong>{{ joinedText }}</p>
+  <div *ngIf="description; else showButton">
+    <p class="user-description">{{ description }}</p>
+  </div>
+
+  <ng-template #showButton>
+    <button class="add-description" (click)="openProfileDialog()">Add Description</button>
+  </ng-template>
+
+  <p class="joined"><strong>Joined</strong> {{ joinedText }}</p>
 </div>
-<app-profile-dialog [ShowDialog]="ShowDialog"/>
+
+<app-profile-dialog [ShowDialog]="ShowDialog" />

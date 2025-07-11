@@ -2,10 +2,11 @@ import { Component } from '@angular/core';
 import { UserDto } from '../../../../models/userDto';
 import { ProfileService } from '../../../../core/services/profile.service';
 import { ProfileDialogComponent } from '../../profile-dialog/profile-dialog.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-profile-card',
-  imports: [ProfileDialogComponent],
+  imports: [ProfileDialogComponent, CommonModule],
   templateUrl: './profile-card.component.html',
   styleUrl: './profile-card.component.css',
 })
@@ -13,11 +14,15 @@ export class ProfileCardComponent {
   profile!: UserDto | null;
   joinedText: string | null = '';
   ShowDialog: boolean = false;
+  description: string | undefined = '';
 
   constructor(private profileService: ProfileService) {}
 
   ngOnInit(): void {
     this.profile = this.profileService.getProfile();
+    console.log(this.profile);
+
+    this.description = this.profile?.userprofile?.description;
 
     const joinedAt = this.profile?.userprofile?.joinedAt;
     if (joinedAt && joinedAt.length >= 7) {
