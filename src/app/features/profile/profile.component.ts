@@ -4,16 +4,18 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../../core/auth/auth.service';
 import { ProfileService } from '../../core/services/profile.service';
 import { UserDto } from '../../models/userDto';
+import { ProfileDialogComponent } from './profile-dialog/profile-dialog.component';
 
 @Component({
   selector: 'app-profile',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, ProfileDialogComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
 })
 export class ProfileComponent implements OnInit {
   username: string | null = '';
   userid: number = 0;
+  ShowDialog: boolean = false;
 
   profile!: UserDto;
 
@@ -39,5 +41,8 @@ export class ProfileComponent implements OnInit {
         console.error('Failed to load profile', error);
       }
     );
+  }
+  openProfileDialog() {
+    this.ShowDialog = true;
   }
 }

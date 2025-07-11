@@ -31,9 +31,10 @@
         >
       </div>
       <div class="right-section">
-        <div class="tab edit">Edit Profile</div>
+        <div  (click)="openProfileDialog()" class="tab edit">Edit Profile</div>
       </div>
     </div>
   </div>
   <router-outlet></router-outlet>
 </div>
+<app-profile-dialog [(ShowDialog)]="ShowDialog" />

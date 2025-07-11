@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -33,7 +33,21 @@ interface Choice {
   styleUrl: './profile-dialog.component.css',
 })
 export class ProfileDialogComponent {
-  @Input() ShowDialog: boolean = false;
+  @Output() ShowDialogChange = new EventEmitter<boolean>();
+
+  private _showDialog: boolean = false;
+
+  @Input()
+  get ShowDialog(): boolean {
+    return this._showDialog;
+  }
+  set ShowDialog(value: boolean) {
+    this._showDialog = value;
+    if (value) {
+      this.aboutForm.reset();
+      this.selectedChoice = undefined;
+    }
+  }
   aboutForm: FormGroup;
   userid: number = 0;
 
@@ -104,9 +118,14 @@ export class ProfileDialogComponent {
     return displayNames[fieldName] || fieldName;
   }
 
+  onDialogVisibleChange(visible: boolean): void {
+    this._showDialog = visible;
+    this.ShowDialogChange.emit(visible);
+  }
+
   closeDialog(): void {
-    this.ShowDialog = false;
     this.aboutForm.reset();
+    this.ShowDialog = false;
   }
 
   private markFormGroupTouched(): void {
