@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { LoginService } from '../services/login.service';
 import { Observable, catchError, map } from 'rxjs';
 import { BehaviorSubject } from 'rxjs';
-import { CredentialsDto } from '../../models/login.model';
+import { CredentialsDto } from '../../models/credentialsDto';
 
 @Injectable({
   providedIn: 'root',

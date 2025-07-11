@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { Follower } from '../../../models/follower.model';
+import { FollowerDto } from '../../../models/followerDto';
 import { FollowerItemComponent } from './follower-item/follower-item.component';
 
 @Component({
@@ -10,7 +10,7 @@ import { FollowerItemComponent } from './follower-item/follower-item.component';
   styleUrl: './following.component.css',
 })
 export class FollowingComponent {
-  followers: Follower[] = [
+  followers: FollowerDto[] = [
     {
       id: 1,
       username: 'sarah_chen',

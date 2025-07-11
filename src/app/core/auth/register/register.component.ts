@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
 import { RegisterService } from '../../services/register.service';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
-import { SignUpDto } from '../../../models/signup.model';
+import { SignUpDto } from '../../../models/signUpDto';
 
 @Component({
   selector: 'app-register',

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../core/auth/auth.service';
 import { ProfileService } from '../../core/services/profile.service';
@@ -18,7 +18,6 @@ export class ProfileComponent implements OnInit {
   followers: number = 0;
 
   constructor(
-    private route: ActivatedRoute,
     private authService: AuthService,
     private profileService: ProfileService
   ) {}
