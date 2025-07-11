@@ -1,16 +1,18 @@
 import { Component } from '@angular/core';
 import { UserDto } from '../../../../models/userDto';
 import { ProfileService } from '../../../../core/services/profile.service';
+import { ProfileDialogComponent } from '../../profile-dialog/profile-dialog.component';
 
 @Component({
   selector: 'app-profile-card',
-  imports: [],
+  imports: [ProfileDialogComponent],
   templateUrl: './profile-card.component.html',
   styleUrl: './profile-card.component.css',
 })
 export class ProfileCardComponent {
   profile!: UserDto | null;
   joinedText: string | null = '';
+  ShowDialog: boolean = false;
 
   constructor(private profileService: ProfileService) {}
 
@@ -37,5 +39,9 @@ export class ProfileCardComponent {
 
       this.joinedText = ' ' + date.toLocaleDateString('en-US', options);
     }
+  }
+
+  openProfileDialog(){
+    this.ShowDialog = true;
   }
 }

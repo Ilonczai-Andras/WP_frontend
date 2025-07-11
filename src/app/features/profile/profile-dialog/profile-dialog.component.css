@@ -1,0 +1,113 @@
+p-dialog {
+  ::ng-deep .p-dialog {
+    background-color: var(--background);
+    color: var(--text);
+    border: 1px solid var(--primary);
+    border-radius: 16px;
+    width: 40vw;
+    height: 70vh;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  ::ng-deep .p-dialog-header {
+    background-color: var(--background);
+    color: var(--text);
+    border-bottom: 1px solid var(--primary);
+  }
+
+  ::ng-deep .p-dialog-footer {
+    background-color: var(--background);
+    border-top: 1px solid var(--primary);
+  }
+}
+
+.dialog-header {
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: var(--background);
+}
+
+.dialog-title {
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: var(--accent);
+}
+
+.form-group {
+  margin-bottom: 1.2rem;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.form-input {
+  resize: none;
+  min-height: 80px;
+  max-height: 200px;
+  line-height: 1.5;
+  font-family: inherit;
+}
+
+.char-counter {
+  font-size: 0.75rem;
+  color: var(--accent);
+  text-align: right;
+  margin-top: 0.25rem;
+}
+
+
+.form-input,
+.dropdown-input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--primary);
+  background-color: transparent;
+  color: var(--text);
+  border-radius: 8px;
+  transition: border-color 0.3s ease;
+}
+
+.form-input:focus,
+.dropdown-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.ng-invalid.ng-touched {
+  border-color: red;
+}
+
+.ng-valid.ng-touched {
+  border-color: var(--accent);
+}
+
+.error-message {
+  font-size: 0.8rem;
+  color: red;
+  margin-top: 0.25rem;
+}
+
+p-button {
+  margin-left: 0.5rem;
+}
+
+::ng-deep .p-button {
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+::ng-deep .p-button.p-button-text {
+  color: var(--secondary);
+}
+
+::ng-deep .p-button.p-button-outlined {
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  background-color: transparent;
+}

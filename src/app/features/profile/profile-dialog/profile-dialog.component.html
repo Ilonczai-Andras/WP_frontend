@@ -1,0 +1,110 @@
+<div class="card">
+  <p-dialog
+    [(visible)]="ShowDialog"
+    [modal]="true"
+    [appendTo]="'body'"
+    [closable]="true"
+    [style]="{ width: '500px', maxWidth: '90vw' }"
+    [responsive]="true"
+    (onHide)="closeDialog()"
+  >
+    <ng-template pTemplate="header">
+      <div class="dialog-header">
+        <span class="dialog-title"
+          >The information you enter here, including username, profile photo,
+          and background image, will be visible to other users. Learn about safe
+          information sharing here.</span
+        >
+      </div>
+    </ng-template>
+    <form [formGroup]="aboutForm" (ngSubmit)="onSubmit()" novalidate>
+      <div class="form-group">
+        <label for="gender" class="form-label">Gender</label>
+        <p-dropdown
+          class="dropdown-input"
+          [options]="choices"
+          [(ngModel)]="selectedChoice"
+          optionLabel="gender"
+          formControlName="gender"
+          [class.ng-invalid]="isFieldInvalid('gender')"
+          [class.ng-valid]="isFieldValid('gender')"
+        />
+        <div class="error-message" *ngIf="isFieldInvalid('gender')">
+          {{ getFieldError("gender") }}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="about" class="form-label">About</label>
+        <textarea
+          pInputTextarea
+          autoResize="true"
+          rows="20"
+          id="about"
+          class="form-input"
+          formControlName="about"
+          placeholder="Enter a description"
+          [class.ng-invalid]="isFieldInvalid('about')"
+          [class.ng-valid]="isFieldValid('about')"
+        ></textarea>
+        <div class="char-counter">
+          {{ aboutForm.get("about")?.value?.length || 0 }}/1000 characters
+        </div>
+
+        <div class="error-message" *ngIf="isFieldInvalid('about')">
+          {{ getFieldError("about") }}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="website" class="form-label">My website</label>
+        <input
+          pInputText
+          id="website"
+          class="form-input"
+          formControlName="website"
+          placeholder="https://mywebsite.com"
+          [class.ng-invalid]="isFieldInvalid('website')"
+          [class.ng-valid]="isFieldValid('website')"
+        />
+        <div class="error-message" *ngIf="isFieldInvalid('website')">
+          {{ getFieldError("website") }}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="location" class="form-label">Location</label>
+        <input
+          pInputText
+          id="location"
+          class="form-input"
+          formControlName="location"
+          placeholder="Enter your location"
+          [class.ng-invalid]="isFieldInvalid('location')"
+          [class.ng-valid]="isFieldValid('location')"
+        />
+        <div class="error-message" *ngIf="isFieldInvalid('location')">
+          {{ getFieldError("location") }}
+        </div>
+      </div>
+    </form>
+
+    <ng-template pTemplate="footer">
+      <p-button
+        label="Cancel"
+        [text]="true"
+        severity="secondary"
+        (click)="closeDialog()"
+        type="button"
+      ></p-button>
+      <p-button
+        label="Save"
+        [outlined]="true"
+        severity="primary"
+        (click)="onSubmit()"
+        [disabled]="!aboutForm.valid"
+        type="button"
+      ></p-button>
+    </ng-template>
+  </p-dialog>
+</div>

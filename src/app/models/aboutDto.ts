@@ -9,9 +9,8 @@
  */
 
 
-export interface UserProfileDto { 
-    description?: string;
-    joinedAt?: string;
+export interface AboutDto { 
+    description: string;
     gender?: string;
     website?: string;
     location?: string;

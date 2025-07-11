@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { UserDto } from '../../models/userDto';
+import { AboutDto } from '../../models/aboutDto';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +17,10 @@ export class ProfileService {
 
   getUserById(id: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/${id}`);
+  }
+
+  updateUserProfile(id: number, body: AboutDto): Observable<any> {
+    return this.http.put(`${this.apiUrl}/about/${id}`, body);
   }
 
   //ProfileStateService
