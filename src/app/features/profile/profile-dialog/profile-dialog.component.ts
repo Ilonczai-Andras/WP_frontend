@@ -47,6 +47,7 @@ export class ProfileDialogComponent {
     if (value) {
       this.aboutForm.reset();
       this.selectedChoice = undefined;
+      this.populateFormWithProfileData();
     }
   }
   aboutForm: FormGroup;
@@ -70,15 +71,21 @@ export class ProfileDialogComponent {
     this.choices = [{ gender: 'He/Him' }, { gender: 'She/Her' }];
     this.userid = this.authService.getUserId();
     this.profile = this.profileService.getProfile();
+  }
+
+  private populateFormWithProfileData(): void {
+    if (!this.profile) {
+      return;
+    }
 
     const newAbout: AboutDto = {
-      description: this.profile?.userprofile?.description ?? '',
-      gender: this.profile?.userprofile?.gender ?? '',
-      website: this.profile?.userprofile?.website ?? '',
-      location: this.profile?.userprofile?.location ?? '',
+      description: this.profile.userprofile?.description ?? '',
+      gender: this.profile.userprofile?.gender ?? '',
+      website: this.profile.userprofile?.website ?? '',
+      location: this.profile.userprofile?.location ?? '',
     };
 
-    this.selectedChoice = this.choices.find(
+    this.selectedChoice = this.choices?.find(
       (choice) => choice.gender === newAbout.gender
     );
 
