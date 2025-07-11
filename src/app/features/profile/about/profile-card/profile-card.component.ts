@@ -1,11 +1,41 @@
 import { Component } from '@angular/core';
+import { UserDto } from '../../../../models/userDto';
+import { ProfileService } from '../../../../core/services/profile.service';
 
 @Component({
   selector: 'app-profile-card',
   imports: [],
   templateUrl: './profile-card.component.html',
-  styleUrl: './profile-card.component.css'
+  styleUrl: './profile-card.component.css',
 })
 export class ProfileCardComponent {
+  profile!: UserDto | null;
+  joinedText: string | null = '';
 
+  constructor(private profileService: ProfileService) {}
+
+  ngOnInit(): void {
+    this.profile = this.profileService.getProfile();
+
+    const joinedAt = this.profile?.userprofile?.joinedAt;
+    if (joinedAt && joinedAt.length >= 7) {
+      const date = new Date(
+        Number(joinedAt[0]),
+        Number(joinedAt[1]) - 1,
+        Number(joinedAt[2]),
+        Number(joinedAt[3]),
+        Number(joinedAt[4]),
+        Number(joinedAt[5]),
+        Math.floor(Number(joinedAt[6]) / 1e6)
+      );
+
+      const options: Intl.DateTimeFormatOptions = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      };
+
+      this.joinedText = ' ' + date.toLocaleDateString('en-US', options);
+    }
+  }
 }

@@ -17,7 +17,7 @@ export interface UserDto {
     lastName?: string;
     userName?: string;
     token?: string;
-    profile?: UserProfileDto;
-    stats?: UserStatsDto;
+    userstats?: UserStatsDto;
+    userprofile?: UserProfileDto;
 }
 

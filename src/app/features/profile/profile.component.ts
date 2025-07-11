@@ -14,7 +14,6 @@ import { UserDto } from '../../models/userDto';
 export class ProfileComponent implements OnInit {
   username: string | null = '';
   userid: number = 0;
-  joinedText: string | null = '';
 
   profile!: UserDto;
 
@@ -34,29 +33,7 @@ export class ProfileComponent implements OnInit {
     this.profileService.getUserById(this.userid).subscribe(
       (response) => {
         this.profile = response;
-
-        const joinedAt = this.profile.profile?.joinedAt;
-        if (joinedAt && joinedAt.length >= 7) {
-          const date = new Date(
-            Number(joinedAt[0]),
-            Number(joinedAt[1]) - 1,
-            Number(joinedAt[2]),
-            Number(joinedAt[3]),
-            Number(joinedAt[4]),
-            Number(joinedAt[5]),
-            Math.floor(Number(joinedAt[6]) / 1e6)
-          );
-
-          const options: Intl.DateTimeFormatOptions = {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-          };
-
-          const formattedDate =
-            'Joined ' + date.toLocaleDateString('en-US', options);
-          this.joinedText = formattedDate;
-        }
+        this.profileService.setProfile(this.profile);
       },
       (error) => {
         console.error('Failed to load profile', error);
