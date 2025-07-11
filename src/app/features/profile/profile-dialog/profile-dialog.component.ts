@@ -14,6 +14,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { ProfileService } from '../../../core/services/profile.service';
 import { AuthService } from '../../../core/auth/auth.service';
 import { AboutDto } from '../../../models/aboutDto';
+import { UserDto } from '../../../models/userDto';
 
 interface Choice {
   gender: string;
@@ -50,6 +51,7 @@ export class ProfileDialogComponent {
   }
   aboutForm: FormGroup;
   userid: number = 0;
+  profile!: UserDto | null;
 
   choices: Choice[] | undefined;
 
@@ -67,6 +69,25 @@ export class ProfileDialogComponent {
   ngOnInit() {
     this.choices = [{ gender: 'He/Him' }, { gender: 'She/Her' }];
     this.userid = this.authService.getUserId();
+    this.profile = this.profileService.getProfile();
+
+    const newAbout: AboutDto = {
+      description: this.profile?.userprofile?.description ?? '',
+      gender: this.profile?.userprofile?.gender ?? '',
+      website: this.profile?.userprofile?.website ?? '',
+      location: this.profile?.userprofile?.location ?? '',
+    };
+
+    this.selectedChoice = this.choices.find(
+      (choice) => choice.gender === newAbout.gender
+    );
+
+    this.aboutForm.patchValue({
+      about: newAbout.description,
+      gender: this.selectedChoice,
+      website: newAbout.website,
+      location: newAbout.location,
+    });
   }
 
   private createForm(): FormGroup {

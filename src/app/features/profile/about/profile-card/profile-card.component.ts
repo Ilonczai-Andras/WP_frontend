@@ -20,7 +20,6 @@ export class ProfileCardComponent {
 
   ngOnInit(): void {
     this.profile = this.profileService.getProfile();
-    console.log(this.profile);
 
     this.description = this.profile?.userprofile?.description;
 

@@ -1,6 +1,9 @@
 <div class="card">
   <p-dialog
     [(visible)]="ShowDialog"
+    header="The information you enter here, including username, profile photo,
+          and background image, will be visible to other users. Learn about safe
+          information sharing here"
     (visibleChange)="onDialogVisibleChange($event)"
     [modal]="true"
     [appendTo]="'body'"
@@ -8,15 +11,6 @@
     [style]="{ width: '500px', maxWidth: '90vw' }"
     [responsive]="true"
   >
-    <ng-template pTemplate="header">
-      <div class="dialog-header">
-        <span class="dialog-title"
-          >The information you enter here, including username, profile photo,
-          and background image, will be visible to other users. Learn about safe
-          information sharing here.</span
-        >
-      </div>
-    </ng-template>
     <form [formGroup]="aboutForm" (ngSubmit)="onSubmit()" novalidate>
       <div class="form-group">
         <label for="gender" class="form-label">Gender</label>
