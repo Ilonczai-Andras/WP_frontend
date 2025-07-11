@@ -5,11 +5,12 @@
       alt="Profile Picture"
       class="profile-picture"
     />
-    <div class="username">{{ username }}</div>
+    <div class="full-name">{{ profile.firstName }} {{profile.lastName}}</div>
+    <div class="username">{{ "@" + profile.userName }}</div>
     <div class="stats">
-      <div>Works {{ works }}</div>
-      <div>Followers {{ followers }}</div>
-      <div>Following {{ followers }}</div>
+      <div>Works {{ 0 }}</div>
+      <div>Reading List {{ profile.stats?.readCount }}</div>
+      <div>Followers {{ profile.stats?.followerCount }}</div>
     </div>
   </div>
 

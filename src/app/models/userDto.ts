@@ -7,8 +7,8 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { UserStats } from './userStats';
-import { UserProfile } from './userProfile';
+import { UserStatsDto } from './userStatsDto';
+import { UserProfileDto } from './userProfileDto';
 
 
 export interface UserDto { 
@@ -17,7 +17,7 @@ export interface UserDto {
     lastName?: string;
     userName?: string;
     token?: string;
-    userProfile?: UserProfile;
-    userStats?: UserStats;
+    profile?: UserProfileDto;
+    stats?: UserStatsDto;
 }
 
