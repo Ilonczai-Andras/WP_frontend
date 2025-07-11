@@ -24,7 +24,7 @@ export class ProfileService {
   }
 
   //ProfileStateService
-  setProfile(profile: UserDto): void {
+  setProfile(profile: UserDto | null): void {
     this.profileSubject.next(profile);
   }
 

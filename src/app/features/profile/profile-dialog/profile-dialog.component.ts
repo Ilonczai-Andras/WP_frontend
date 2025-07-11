@@ -15,6 +15,7 @@ import { ProfileService } from '../../../core/services/profile.service';
 import { AuthService } from '../../../core/auth/auth.service';
 import { AboutDto } from '../../../models/aboutDto';
 import { UserDto } from '../../../models/userDto';
+import { UserProfileDto } from '../../../models/userProfileDto';
 
 interface Choice {
   gender: string;
@@ -173,22 +174,27 @@ export class ProfileDialogComponent {
         location: aboutData.location,
       };
 
-      this.profileService.updateUserProfile(this.userid, newAbout).subscribe({
-        next: () => {
+      this.profileService.updateUserProfile(this.userid, newAbout).subscribe(
+        (response: UserProfileDto) => {
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
             detail: 'About saved successfully',
           });
+          if (this.profile) {
+            this.profile.userprofile = response;
+          }
+          this.profileService.setProfile(this.profile);
+          console.log(response);
         },
-        error: (err) => {
+        (error) => {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
             detail: 'Failed to save about data',
           });
-        },
-      });
+        }
+      );
 
       this.closeDialog();
     } else {
