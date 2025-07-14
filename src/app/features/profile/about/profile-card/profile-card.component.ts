@@ -3,20 +3,23 @@ import { UserDto } from '../../../../models/userDto';
 import { ProfileService } from '../../../../core/services/profile.service';
 import { ProfileDialogComponent } from '../../profile-dialog/profile-dialog.component';
 import { CommonModule } from '@angular/common';
+import { DialogTriggerService } from '../../../../core/services/dialog-trigger.service';
 
 @Component({
   selector: 'app-profile-card',
-  imports: [ProfileDialogComponent, CommonModule],
+  imports: [CommonModule],
   templateUrl: './profile-card.component.html',
   styleUrl: './profile-card.component.css',
 })
 export class ProfileCardComponent {
   profile!: UserDto | null;
   joinedText: string | null = '';
-  ShowDialog: boolean = false;
   description: string | undefined = '';
 
-  constructor(private profileService: ProfileService) {}
+  constructor(
+    private profileService: ProfileService,
+    private dialogTriggerService: DialogTriggerService
+  ) {}
 
   ngOnInit(): void {
     this.profileService.profile$.subscribe((profile) => {
@@ -47,6 +50,6 @@ export class ProfileCardComponent {
   }
 
   openProfileDialog() {
-    this.ShowDialog = true;
+    this.dialogTriggerService.triggerOpen();
   }
 }
