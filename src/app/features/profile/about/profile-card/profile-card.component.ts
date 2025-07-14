@@ -19,33 +19,34 @@ export class ProfileCardComponent {
   constructor(private profileService: ProfileService) {}
 
   ngOnInit(): void {
-    this.profile = this.profileService.getProfile();
+    this.profileService.profile$.subscribe((profile) => {
+      this.profile = profile;
+      this.description = profile?.userprofile?.description;
 
-    this.description = this.profile?.userprofile?.description;
+      const joinedAt = profile?.userprofile?.joinedAt;
+      if (joinedAt && joinedAt.length >= 7) {
+        const date = new Date(
+          Number(joinedAt[0]),
+          Number(joinedAt[1]) - 1,
+          Number(joinedAt[2]),
+          Number(joinedAt[3]),
+          Number(joinedAt[4]),
+          Number(joinedAt[5]),
+          Math.floor(Number(joinedAt[6]) / 1e6)
+        );
 
-    const joinedAt = this.profile?.userprofile?.joinedAt;
-    if (joinedAt && joinedAt.length >= 7) {
-      const date = new Date(
-        Number(joinedAt[0]),
-        Number(joinedAt[1]) - 1,
-        Number(joinedAt[2]),
-        Number(joinedAt[3]),
-        Number(joinedAt[4]),
-        Number(joinedAt[5]),
-        Math.floor(Number(joinedAt[6]) / 1e6)
-      );
+        const options: Intl.DateTimeFormatOptions = {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        };
 
-      const options: Intl.DateTimeFormatOptions = {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      };
-
-      this.joinedText = ' ' + date.toLocaleDateString('en-US', options);
-    }
+        this.joinedText = ' ' + date.toLocaleDateString('en-US', options);
+      }
+    });
   }
 
-  openProfileDialog(){
+  openProfileDialog() {
     this.ShowDialog = true;
   }
 }

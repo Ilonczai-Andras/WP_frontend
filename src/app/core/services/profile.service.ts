@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, switchMap } from 'rxjs';
 import { UserDto } from '../../models/userDto';
 import { AboutDto } from '../../models/aboutDto';
 
@@ -13,7 +13,20 @@ export class ProfileService {
   private profileSubject = new BehaviorSubject<UserDto | null>(null);
   profile$: Observable<UserDto | null> = this.profileSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  private refreshTrigger = new BehaviorSubject<number | null>(null);
+
+  constructor(private http: HttpClient) {
+    this.refreshTrigger
+      .pipe(
+        switchMap((id) => {
+          if (id === null) return [];
+          return this.getUserById(id);
+        })
+      )
+      .subscribe((profile) => {
+        this.setProfile(profile);
+      });
+  }
 
   getUserById(id: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/${id}`);
@@ -24,6 +37,10 @@ export class ProfileService {
   }
 
   //ProfileStateService
+  refreshUserProfile(id: number): void {
+    this.refreshTrigger.next(id);
+  }
+
   setProfile(profile: UserDto | null): void {
     this.profileSubject.next(profile);
   }

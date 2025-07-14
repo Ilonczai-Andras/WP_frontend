@@ -48,7 +48,9 @@ export class ProfileDialogComponent {
     if (value) {
       this.aboutForm.reset();
       this.selectedChoice = undefined;
-      this.populateFormWithProfileData();
+      setTimeout(() => {
+        this.populateFormWithProfileData();
+      }, 0);
     }
   }
   aboutForm: FormGroup;
@@ -75,6 +77,8 @@ export class ProfileDialogComponent {
   }
 
   private populateFormWithProfileData(): void {
+    this.profile = this.profileService.getProfile();
+
     if (!this.profile) {
       return;
     }
@@ -154,7 +158,8 @@ export class ProfileDialogComponent {
 
   closeDialog(): void {
     this.aboutForm.reset();
-    this.ShowDialog = false;
+    this.selectedChoice = undefined;
+    this.onDialogVisibleChange(false); // Use this instead of directly setting ShowDialog
   }
 
   private markFormGroupTouched(): void {
@@ -181,11 +186,9 @@ export class ProfileDialogComponent {
             summary: 'Success',
             detail: 'About saved successfully',
           });
-          if (this.profile) {
-            this.profile.userprofile = response;
-          }
-          this.profileService.setProfile(this.profile);
-          console.log(response);
+
+          this.profileService.refreshUserProfile(this.userid);
+          this.closeDialog();
         },
         (error) => {
           this.messageService.add({
@@ -195,8 +198,6 @@ export class ProfileDialogComponent {
           });
         }
       );
-
-      this.closeDialog();
     } else {
       this.markFormGroupTouched();
     }
