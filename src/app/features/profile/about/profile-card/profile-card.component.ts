@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { UserDto } from '../../../../models/userDto';
 import { ProfileService } from '../../../../core/services/profile.service';
-import { ProfileDialogComponent } from '../../profile-dialog/profile-dialog.component';
 import { CommonModule } from '@angular/common';
 import { DialogTriggerService } from '../../../../core/services/dialog-trigger.service';
 

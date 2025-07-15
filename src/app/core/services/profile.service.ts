@@ -36,8 +36,8 @@ export class ProfileService {
     return this.http.put(`${this.apiUrl}/about/${id}`, body);
   }
 
-  uploadImage(input: FormData, userId: number): Observable<any> {
-    return this.http.post<string>(`${this.apiUrl}/profile-image/${userId}`, input);
+  uploadImage(input: FormData, userId: number): Observable<string> {
+    return this.http.post(`${this.apiUrl}/profile-image/${userId}`, input, { responseType: 'text' });
   }
 
   //ProfileStateService

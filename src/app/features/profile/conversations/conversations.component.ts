@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ProfileService } from '../../../core/services/profile.service';
+import { UserDto } from '../../../models/userDto';
 
 @Component({
   selector: 'app-conversations',
@@ -7,9 +9,19 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './conversations.component.html',
   styleUrl: './conversations.component.css',
 })
-export class ConversationsComponent {
+export class ConversationsComponent implements OnInit {
   announceToFollowers: boolean = false;
   postContent: string = '';
+
+  profile!: UserDto | null;
+
+  constructor(private profileService: ProfileService) {}
+
+  ngOnInit(): void {
+    this.profileService.profile$.subscribe((profile) => {
+      this.profile = profile;
+    });
+  }
 
   onPost() {
     if (this.postContent.trim()) {
