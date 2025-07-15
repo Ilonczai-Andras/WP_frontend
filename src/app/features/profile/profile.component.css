@@ -9,6 +9,25 @@
   text-align: center;
 }
 
+.clickable-image {
+  cursor: pointer;
+  display: inline-block;
+}
+
+.profile-picture {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  transition: transform 0.2s ease;
+}
+
+.clickable-image:hover .profile-picture {
+  transform: scale(1.03);
+}
+
+
 .profile-picture {
   width: 96px;
   height: 96px;

@@ -1,16 +1,26 @@
 <div class="profile-container">
   <div class="img-container">
-    <img
-      src="assets/img/profile.jpg"
-      alt="Profile Picture"
-      class="profile-picture"
+    <label for="profileImageInput" class="clickable-image">
+      <img
+        [src]="profile?.userProfileDto?.imageUrl || 'assets/img/profile.jpg'"
+        alt="Profile Picture"
+        class="profile-picture"
+      />
+    </label>
+    <input
+      type="file"
+      id="profileImageInput"
+      (change)="onImageSelected($event)"
+      accept="image/*"
+      hidden
     />
-    <div class="full-name">{{ profile.firstName }} {{profile.lastName}}</div>
-    <div class="username">{{ "@" + profile.userName }}</div>
+
+    <div class="full-name">{{ profile?.firstName }} {{ profile?.lastName }}</div>
+    <div class="username">{{ "@" + profile?.userName }}</div>
     <div class="stats">
       <div>Works {{ 0 }}</div>
-      <div>Reading List {{ profile.userStatsDto?.readCount }}</div>
-      <div>Followers {{ profile.userStatsDto?.followerCount }}</div>
+      <div>Reading List {{ profile?.userStatsDto?.readCount }}</div>
+      <div>Followers {{ profile?.userStatsDto?.followerCount }}</div>
     </div>
   </div>
 
@@ -31,7 +41,7 @@
         >
       </div>
       <div class="right-section">
-        <div  (click)="openProfileDialog()" class="tab edit">Edit Profile</div>
+        <div (click)="openProfileDialog()" class="tab edit">Edit Profile</div>
       </div>
     </div>
   </div>
