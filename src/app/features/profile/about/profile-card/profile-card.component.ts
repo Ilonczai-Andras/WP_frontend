@@ -24,9 +24,9 @@ export class ProfileCardComponent {
   ngOnInit(): void {
     this.profileService.profile$.subscribe((profile) => {
       this.profile = profile;
-      this.description = profile?.userprofile?.description;
+      this.description = profile?.userProfileDto?.description;
 
-      const joinedAt = profile?.userprofile?.joinedAt;
+      const joinedAt = profile?.userProfileDto?.joinedAt;
       if (joinedAt && joinedAt.length >= 7) {
         const date = new Date(
           Number(joinedAt[0]),

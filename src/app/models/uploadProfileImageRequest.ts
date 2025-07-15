@@ -9,12 +9,7 @@
  */
 
 
-export interface UserProfileDto { 
-    description?: string;
-    joinedAt?: string;
-    gender?: string;
-    website?: string;
-    location?: string;
-    imageUrl?: string;
+export interface UploadProfileImageRequest { 
+    file: Blob;
 }
 

@@ -8,7 +8,7 @@ import { AboutDto } from '../../models/aboutDto';
   providedIn: 'root',
 })
 export class ProfileService {
-  private apiUrl = 'http://localhost:8080/api/user';
+  private apiUrl = 'http://localhost:8080/api/users';
 
   private profileSubject = new BehaviorSubject<UserDto | null>(null);
   profile$: Observable<UserDto | null> = this.profileSubject.asObservable();

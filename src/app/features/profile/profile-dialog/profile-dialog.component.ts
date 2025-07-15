@@ -84,10 +84,10 @@ export class ProfileDialogComponent {
     }
 
     const newAbout: AboutDto = {
-      description: this.profile.userprofile?.description ?? '',
-      gender: this.profile.userprofile?.gender ?? '',
-      website: this.profile.userprofile?.website ?? '',
-      location: this.profile.userprofile?.location ?? '',
+      description: this.profile.userProfileDto?.description ?? '',
+      gender: this.profile.userProfileDto?.gender ?? '',
+      website: this.profile.userProfileDto?.website ?? '',
+      location: this.profile.userProfileDto?.location ?? '',
     };
 
     this.selectedChoice = this.choices?.find(
