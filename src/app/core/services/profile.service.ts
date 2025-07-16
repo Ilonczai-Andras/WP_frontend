@@ -40,6 +40,10 @@ export class ProfileService {
     return this.http.post(`${this.apiUrl}/profile-image/${userId}`, input, { responseType: 'text' });
   }
 
+  searchUsers(query: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/search?query=${query}`);
+  }
+
   //ProfileStateService
   refreshUserProfile(id: number): void {
     this.refreshTrigger.next(id);

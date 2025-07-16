@@ -3,15 +3,36 @@
     <div class="logo">
       <a routerLink="/">WattpadClone</a>
     </div>
-    <input
-      type="text"
-      placeholder="Search stories..."
-      class="search-input"
-      (keydown.enter)="onSearch(searchInput.value)"
-      #searchInput
-    />
+    <div class="search-wrapper">
+      <input
+        type="text"
+        placeholder="Search stories and users..."
+        class="search-input"
+        [(ngModel)]="searchQuery"
+        (focus)="isSearchFocused = true"
+        (keydown.enter)="onSearch(searchQuery)"
+        (keydown.escape)="isSearchFocused = false"
+      />
+      <button
+        *ngIf="searchQuery"
+        class="clear-btn"
+        (click)="clearSearch()"
+        aria-label="Clear search"
+      >
+        ✕
+      </button>
+      <div
+        class="search-results"
+        *ngIf="isSearchFocused && searchResults.length > 0"
+      >
+        <ul>
+          <li *ngFor="let user of searchResults">
+            <a [routerLink]="['/user/', user.userName, '/about']">{{ user.userName }}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
-
   <div class="right-section">
     <nav>
       <a routerLink="/explore">Explore</a>
