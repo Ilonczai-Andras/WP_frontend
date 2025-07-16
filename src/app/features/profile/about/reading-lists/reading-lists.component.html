@@ -1,7 +1,7 @@
 <div class="container">
   <div class="header">
     <h1>{{ profile?.userStatsDto?.readCount }} Reading List</h1>
-    <div class="header-controls">
+    <div class="header-controls" *ngIf="isOwnProfile">
       <button class="btn add-btn">+ Add</button>
       <button class="btn">⚙️</button>
     </div>
@@ -9,13 +9,11 @@
 
   <div class="list-header">
     <div class="list-title">
-      {{ username }}'s Reading List
+      {{ profile?.userName }}'s Reading List
       <span class="arrow">›</span>
     </div>
     <div class="list-subtitle">
       Reading List • {{ profile?.userStatsDto?.readCount }} Stories
     </div>
   </div>
-
-  <app-reading-list-item />
 </div>

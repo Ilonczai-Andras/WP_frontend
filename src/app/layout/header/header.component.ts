@@ -52,7 +52,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .subscribe((query) => {
         this.profileService.searchUsers(query).subscribe((results) => {
           this.searchResults = results;
-          console.log(this.searchResults);
         });
       });
   }

@@ -6,7 +6,7 @@
   </div>
 
   <ng-template #showButton>
-    <button class="add-description" (click)="openProfileDialog()">Add Description</button>
+    <button *ngIf="isOwnProfile" class="add-description" (click)="openProfileDialog()">Add Description</button>
   </ng-template>
 
   <p class="joined"><strong>Joined</strong> {{ joinedText }}</p>

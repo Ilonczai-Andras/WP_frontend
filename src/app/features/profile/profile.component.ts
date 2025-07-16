@@ -41,12 +41,17 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.userid = this.authService.getUserId();
 
     this.route.paramMap.subscribe((params) => {
-      this.routeUsername = params.get('username');
+      const routeUsername = params.get('username');
 
-      this.isOwnProfile = this.routeUsername === this.username;
+      if (routeUsername) {
+        const isOwn = routeUsername === this.username;
+        this.profileService.setIsOwnProfile(isOwn);
 
-      if (this.routeUsername) {
-        this.getProfileByUsername(this.routeUsername);
+        this.profileService
+          .getUserByUsername(routeUsername)
+          .subscribe((profile) => {
+            this.profileService.setProfile(profile);
+          });
       }
     });
 

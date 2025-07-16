@@ -15,6 +15,8 @@ export class ProfileCardComponent {
   joinedText: string | null = '';
   description: string | undefined = '';
 
+  isOwnProfile = false;
+
   constructor(
     private profileService: ProfileService,
     private dialogTriggerService: DialogTriggerService
@@ -45,6 +47,10 @@ export class ProfileCardComponent {
 
         this.joinedText = ' ' + date.toLocaleDateString('en-US', options);
       }
+    });
+
+    this.profileService.isOwnProfile$.subscribe((isOwn) => {
+      this.isOwnProfile = isOwn;
     });
   }
 

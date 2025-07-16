@@ -1,26 +1,29 @@
 import { Component } from '@angular/core';
-import { ReadingListItemComponent } from './reading-list-item/reading-list-item.component';
-import { AuthService } from '../../../../core/auth/auth.service';
 import { ProfileService } from '../../../../core/services/profile.service';
 import { UserDto } from '../../../../models/userDto';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-reading-lists',
-  imports: [ReadingListItemComponent],
+  imports: [CommonModule],
   templateUrl: './reading-lists.component.html',
   styleUrl: './reading-lists.component.css',
 })
 export class ReadingListsComponent {
-  username: string | null = '';
   profile!: UserDto | null;
+  isOwnProfile = false;
 
   constructor(
-    private authService: AuthService,
     private profileService: ProfileService
   ) {}
 
   ngOnInit(): void {
-    this.username = this.authService.getUserName();
-    this.profile = this.profileService.getProfile();
+    this.profileService.profile$.subscribe((profile) => {
+      this.profile = profile;
+    });
+
+    this.profileService.isOwnProfile$.subscribe((isOwn) => {
+      this.isOwnProfile = isOwn;
+    });
   }
 }

@@ -13,6 +13,9 @@ export class ProfileService {
   private profileSubject = new BehaviorSubject<UserDto | null>(null);
   profile$: Observable<UserDto | null> = this.profileSubject.asObservable();
 
+  private isOwnProfileSubject = new BehaviorSubject<boolean>(false);
+  isOwnProfile$ = this.isOwnProfileSubject.asObservable();
+
   private refreshTrigger = new BehaviorSubject<number | null>(null);
 
   constructor(private http: HttpClient) {
@@ -65,5 +68,9 @@ export class ProfileService {
 
   clearProfile(): void {
     this.profileSubject.next(null);
+  }
+
+  setIsOwnProfile(isOwn: boolean) {
+    this.isOwnProfileSubject.next(isOwn);
   }
 }
