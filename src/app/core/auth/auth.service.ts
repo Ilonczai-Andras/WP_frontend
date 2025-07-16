@@ -11,6 +11,8 @@ export class AuthService {
   private tokenKey = 'auth-token';
   private userSubject = new BehaviorSubject<any>(null);
 
+  public currentUser$ = this.userSubject.asObservable();
+
   public loggedIn$: Observable<boolean> = this.userSubject
     .asObservable()
     .pipe(map((user) => !!user));

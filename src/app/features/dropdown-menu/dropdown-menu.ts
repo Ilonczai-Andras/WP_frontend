@@ -4,6 +4,7 @@ import { FormGroup, ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { AuthService } from '../../core/auth/auth.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs';
 
 interface MenuItem {
   name: string;
@@ -23,7 +24,9 @@ export class DropdownMenu implements OnInit, OnChanges {
 
   menuItems: MenuItem[] | undefined;
   form: FormGroup;
+
   userName: string | null = null;
+  subscription: Subscription | undefined;
 
   constructor(
     private authService: AuthService,
@@ -36,10 +39,25 @@ export class DropdownMenu implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.userName = this.authService.getUserName();
+    this.subscription = this.authService.currentUser$.subscribe((user) => {
+      this.userName = user?.userName ?? null;
+      this.buildMenuItems();
+    });
+  }
 
+  ngOnDestroy() {
+    this.subscription?.unsubscribe();
+  }
+
+  ngOnChanges() {
+    if (!this.showMenu) {
+      this.resetDropdown();
+    }
+  }
+
+  private buildMenuItems() {
     this.menuItems = [
-      { name: 'My Profile', route: '/user/' + this.userName },
+      { name: 'My Profile', route: '/user/' + (this.userName ?? '') },
       { name: 'Inbox', route: '/inbox' },
       { name: 'Notifications', route: '/notifications' },
       { name: 'Library', route: '/library' },
@@ -48,12 +66,6 @@ export class DropdownMenu implements OnInit, OnChanges {
       { name: 'Settings', route: '/settings' },
       { name: 'Log Out', route: '/logout' },
     ];
-  }
-
-  ngOnChanges() {
-    if (!this.showMenu) {
-      this.resetDropdown();
-    }
   }
 
   logout() {
