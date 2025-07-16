@@ -32,12 +32,18 @@ export class ProfileService {
     return this.http.get(`${this.apiUrl}/${id}`);
   }
 
+  getUserByUsername(username: string): Observable<UserDto> {
+    return this.http.get<UserDto>(`${this.apiUrl}/username/${username}`);
+  }
+
   updateUserProfile(id: number, body: AboutDto): Observable<any> {
     return this.http.put(`${this.apiUrl}/about/${id}`, body);
   }
 
   uploadImage(input: FormData, userId: number): Observable<string> {
-    return this.http.post(`${this.apiUrl}/profile-image/${userId}`, input, { responseType: 'text' });
+    return this.http.post(`${this.apiUrl}/profile-image/${userId}`, input, {
+      responseType: 'text',
+    });
   }
 
   searchUsers(query: string): Observable<any[]> {

@@ -27,7 +27,7 @@
       >
         <ul>
           <li *ngFor="let user of searchResults">
-            <a [routerLink]="['/user/', user.userName, '/about']">{{ user.userName }}</a>
+            <a [routerLink]="['/user/', user.userName]">{{ user.userName }}</a>
           </li>
         </ul>
       </div>

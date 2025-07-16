@@ -8,6 +8,7 @@ import { ProfileDialogComponent } from './profile-dialog/profile-dialog.componen
 import { Subject, takeUntil } from 'rxjs';
 import { DialogTriggerService } from '../../core/services/dialog-trigger.service';
 import { MessageService } from 'primeng/api';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -17,14 +18,18 @@ import { MessageService } from 'primeng/api';
 })
 export class ProfileComponent implements OnInit, OnDestroy {
   username: string | null = '';
+  routeUsername: string | null = '';
   userid: number = 0;
   ShowDialog: boolean = false;
 
   profile!: UserDto | null;
 
+  isOwnProfile = false;
+
   private destroy$ = new Subject<void>();
 
   constructor(
+    private route: ActivatedRoute,
     private authService: AuthService,
     private profileService: ProfileService,
     private dialogTriggerService: DialogTriggerService,
@@ -35,6 +40,16 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.username = this.authService.getUserName();
     this.userid = this.authService.getUserId();
 
+    this.route.paramMap.subscribe((params) => {
+      this.routeUsername = params.get('username');
+
+      this.isOwnProfile = this.routeUsername === this.username;
+
+      if (this.routeUsername) {
+        this.getProfileByUsername(this.routeUsername);
+      }
+    });
+
     this.dialogTriggerService.trigger$
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
@@ -44,8 +59,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.profileService.profile$.subscribe((profile) => {
       this.profile = profile;
     });
-
-    this.getProfile();
   }
 
   ngOnDestroy() {
@@ -53,17 +66,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  getProfile() {
-    this.profileService.getUserById(this.userid).subscribe(
-      (response) => {
-        this.profile = response;
-        this.profileService.setProfile(this.profile);
-      },
-      (error) => {
-        console.error('Failed to load profile', error);
-      }
-    );
-  }
   openProfileDialog() {
     this.ShowDialog = true;
   }
@@ -103,5 +105,19 @@ export class ProfileComponent implements OnInit, OnDestroy {
         }
       );
     }
+  }
+
+  getProfileByUsername(username: string) {
+    this.profileService.getUserByUsername(username).subscribe(
+      (response) => {
+        this.profile = response;
+        if (this.isOwnProfile) {
+          this.profileService.setProfile(this.profile);
+        }
+      },
+      (error) => {
+        console.error('Failed to load profile', error);
+      }
+    );
   }
 }

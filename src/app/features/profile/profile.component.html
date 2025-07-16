@@ -11,6 +11,7 @@
       type="file"
       id="profileImageInput"
       (change)="onImageSelected($event)"
+      *ngIf="isOwnProfile"
       accept="image/*"
       hidden
     />
@@ -41,7 +42,7 @@
         >
       </div>
       <div class="right-section">
-        <div (click)="openProfileDialog()" class="tab edit">Edit Profile</div>
+        <div (click)="openProfileDialog()" class="tab edit" *ngIf="isOwnProfile">Edit Profile</div>
       </div>
     </div>
   </div>
