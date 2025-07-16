@@ -1,14 +1,23 @@
 .app-footer {
   background-color: var(--background);
   color: var(--text);
-  padding: 1rem;
-  text-align: center;
+  padding: 1rem 2rem;
   height: 100px;
   display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
+  text-align: center;
 }
 
 .footer-text {
   font-size: 0.875rem;
-  color: var(--text);
+}
+
+@media (max-width: 768px) {
+  .app-footer {
+    flex-direction: column;
+    height: auto;
+    padding: 1.5rem;
+  }
 }

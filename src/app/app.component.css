@@ -5,8 +5,21 @@
 }
 
 main {
-  height: calc(100vh - 200px);
+  flex-grow: 1;
   background-color: var(--background);
+  padding: 2rem;
+}
+
+@media (max-width: 768px) {
+  main {
+    padding: 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  main {
+    padding: 3rem 5rem;
+  }
 }
 
 :host ::ng-deep .p-toast {
