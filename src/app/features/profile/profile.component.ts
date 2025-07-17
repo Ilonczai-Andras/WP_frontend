@@ -64,6 +64,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.profileService.profile$.subscribe((profile) => {
       this.profile = profile;
     });
+
+    this.profileService.isOwnProfile$.subscribe((isOwn) => {
+      this.isOwnProfile = isOwn;
+    })
   }
 
   ngOnDestroy() {
