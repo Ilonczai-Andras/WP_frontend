@@ -17,4 +17,8 @@ export class FollowService {
   getFollowersById(userId: number):  Observable<FollowDto> {
     return this.http.get(`${this.apiUrl}/${userId}/followers`);
   }
+
+  getFollowingById(userId: number):  Observable<FollowDto> {
+    return this.http.get(`${this.apiUrl}/${userId}/following`);
+  }
 }

@@ -14,5 +14,6 @@ export interface FollowResponseDto {
     firstName?: string;
     lastName?: string;
     userName?: string;
+    imgUrl?: string;
 }
 

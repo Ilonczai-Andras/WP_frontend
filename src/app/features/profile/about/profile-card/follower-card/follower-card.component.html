@@ -1,1 +1,24 @@
-<p>follower-card works!</p>
+<div class="follower-container">
+  <div>Following</div>
+  <div class="elements">
+    <ng-container *ngFor="let follower of followers">
+      <img
+        class="avatar"
+        [src]="follower.imgUrl || 'assets/img/profile.jpg'"
+        [alt]="follower.userName"
+        [title]="follower.userName"
+      />
+    </ng-container>
+    <a
+      *ngIf="hasExtra"
+      class="avatar extra"
+      [routerLink]="['/user', userName, 'following']"
+      [title]="'+' + extraCount + ' more'"
+    >
+      +{{ extraCount }}
+    </a>
+  </div>
+  <div *ngIf="followers?.length === 0" class="no-followers-message">
+    No followers yet.
+  </div>
+</div>
