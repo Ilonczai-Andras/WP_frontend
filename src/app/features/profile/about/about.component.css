@@ -1,6 +1,5 @@
 .about-container {
   display: flex;
-  justify-content: space-between;
   justify-content: center;
   align-items: center;
   margin: 0 auto;
@@ -15,14 +14,49 @@
   gap: 1rem;
   justify-content: center;
   align-items: flex-start;
-  max-width: 80%;
+  width: 100%;
+  max-width: 1200px;
+  flex-wrap: wrap;
+}
+
+.profile-card,
+.reading-list {
+  flex: 1 1 100%;
   width: 100%;
 }
 
-.profile-card {
-  width: 30%;
+/* Tablet and up */
+@media (min-width: 768px) {
+  .profile-card {
+    flex: 1 1 35%;
+    width: 35%;
+  }
+
+  .reading-list {
+    flex: 1 1 60%;
+    width: 60%;
+  }
 }
 
-.reading-list {
-  width: 70%;
+/* Desktop and up */
+@media (min-width: 1024px) {
+  .cards {
+    flex-wrap: nowrap;
+  }
+
+  .profile-card {
+    width: 30%;
+  }
+
+  .reading-list {
+    width: 70%;
+  }
+}
+
+/* Ultra-wide screens */
+@media (min-width: 1600px) {
+  .cards {
+    max-width: 1400px;
+    gap: 2rem;
+  }
 }

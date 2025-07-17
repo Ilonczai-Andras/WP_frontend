@@ -1,37 +1,68 @@
 .subtitle {
-  font-size: 16px;
+  font-size: 1rem;
   color: var(--primary);
   font-weight: 500;
-  margin-bottom: 15px;
+  margin-bottom: 1rem;
 }
 
 .user-description {
-  font-size: 15px;
+  font-size: 0.95rem;
   color: var(--text);
   background-color: var(--card-bg, transparent);
-  padding: 12px 0px;
-  margin-bottom: 20px;
+  padding: 0.75rem 0;
+  margin-bottom: 1.25rem;
   white-space: pre-wrap;
+  line-height: 1.6;
+  word-break: break-word;
 }
 
 .add-description {
   background-color: var(--primary);
   color: var(--background);
   border: none;
-  padding: 10px 20px;
+  padding: 0.6rem 1.2rem;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 600;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .add-description:hover {
   background-color: var(--accent);
+  transform: scale(1.02);
 }
 
 .joined {
-  font-size: 14px;
+  font-size: 0.875rem;
   color: var(--secondary);
-  margin-top: 20px;
+  margin-top: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .subtitle {
+    font-size: 1.1rem;
+  }
+
+  .user-description {
+    font-size: 1rem;
+  }
+
+  .add-description {
+    font-size: 1rem;
+  }
+
+  .joined {
+    font-size: 0.95rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .user-description {
+    font-size: 1.05rem;
+  }
+
+  .joined {
+    font-size: 1rem;
+  }
 }

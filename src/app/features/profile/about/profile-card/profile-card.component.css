@@ -2,17 +2,18 @@
   background-color: var(--background);
   color: var(--text);
   border-radius: 12px;
-  padding: 30px;
-  max-width: 500px;
-  margin-bottom: 30px;
+  padding: 2rem;
+  width: 100%;
+  margin-bottom: 1.5rem;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
   border: 2px solid var(--primary);
+  box-sizing: border-box;
 }
 
 .section-divider {
   height: 1px;
   background-color: var(--primary);
-  margin: 24px 0;
+  margin: 1.5rem 0;
   opacity: 0.6;
   border-radius: 1px;
 }

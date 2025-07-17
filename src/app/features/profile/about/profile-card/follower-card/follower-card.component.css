@@ -1,16 +1,24 @@
 .follower-container {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 8px 0;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
   align-items: flex-start;
+  width: 100%;
+}
+
+.follower-container > div:first-child {
+  font-weight: 600;
+  color: var(--primary);
+  font-size: 1rem;
 }
 
 .elements {
   display: flex;
-  flex-direction: row;
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: 0.5rem;
   justify-content: flex-start;
+  align-items: center;
 }
 
 .avatar {
@@ -19,10 +27,13 @@
   border-radius: 50%;
   object-fit: cover;
   background-color: #e0e0e0;
-  border: 2px solid white;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   border: 3px solid var(--primary);
   box-shadow: 0 0 12px var(--primary);
+  transition: transform 0.2s ease;
+}
+
+.avatar:hover {
+  transform: scale(1.05);
 }
 
 .avatar.extra {
@@ -30,9 +41,36 @@
   justify-content: center;
   align-items: center;
   font-weight: bold;
-  font-size: 14px;
+  font-size: 0.9rem;
   color: #333;
   background-color: #f0f0f0;
   text-decoration: none;
   cursor: pointer;
+  min-width: 40px;
+  min-height: 40px;
+  border-radius: 50%;
+  border: 2px dashed var(--primary);
+}
+
+.no-followers-message {
+  font-size: 0.95rem;
+  color: var(--secondary);
+  opacity: 0.8;
+}
+
+@media (min-width: 768px) {
+  .avatar,
+  .avatar.extra {
+    width: 48px;
+    height: 48px;
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .avatar,
+  .avatar.extra {
+    width: 56px;
+    height: 56px;
+  }
 }
