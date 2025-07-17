@@ -2,14 +2,21 @@
   background-color: var(--background);
   color: var(--text);
   border: 1px solid var(--primary);
-  border-radius: 8px;
+  border-radius: 12px;
   padding: 1rem;
   width: 200px;
   min-width: 200px;
-  margin-right: 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.follower-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
 }
 
 .follower-avatar {
@@ -28,35 +35,64 @@
   background-color: var(--secondary);
   color: var(--background);
   font-weight: bold;
+  font-size: 1.2rem;
+  border: 3px solid var(--primary);
+  box-shadow: 0 0 12px var(--primary);
+  transition: transform 0.2s ease;
+}
+
+.avatar-img:hover {
+  transform: scale(1.05);
+}
+
+.follower-info {
+  margin-top: 0.5rem;
 }
 
 .follower-name {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-  font-weight: bold;
-}
-
-.verified-icon {
-  color: var(--accent);
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 0.2rem;
 }
 
 .username {
   font-size: 0.85rem;
-  opacity: 0.8;
+  opacity: 0.75;
 }
 
 .follow-button {
-  margin-top: 0.5rem;
+  margin-top: 0.75rem;
   background-color: var(--primary);
   color: var(--background);
   border: none;
-  border-radius: 4px;
-  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.9rem;
+  font-weight: 600;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .follow-button:hover {
   background-color: var(--accent);
-  color: var(--background);
+}
+
+/* Responsive behavior */
+@media (max-width: 768px) {
+  .follower-item {
+    width: 160px;
+    min-width: 160px;
+    padding: 0.75rem;
+  }
+
+  .avatar-img,
+  .avatar-placeholder {
+    width: 56px;
+    height: 56px;
+  }
+
+  .follow-button {
+    padding: 0.3rem 0.8rem;
+    font-size: 0.85rem;
+  }
 }
