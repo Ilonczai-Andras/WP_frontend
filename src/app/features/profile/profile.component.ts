@@ -9,6 +9,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { DialogTriggerService } from '../../core/services/dialog-trigger.service';
 import { MessageService } from 'primeng/api';
 import { ActivatedRoute } from '@angular/router';
+import { FollowService } from '../../core/services/follow.service';
 
 @Component({
   selector: 'app-profile',
@@ -32,6 +33,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private authService: AuthService,
     private profileService: ProfileService,
+    private followerService: FollowService,
     private dialogTriggerService: DialogTriggerService,
     private messageService: MessageService
   ) {}
@@ -51,9 +53,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
           .getUserByUsername(routeUsername)
           .subscribe((profile) => {
             this.profileService.setProfile(profile);
+            if(profile.id)
+            this.getFollowers(profile?.id);
           });
       }
     });
+
+
 
     this.dialogTriggerService.trigger$
       .pipe(takeUntil(this.destroy$))
@@ -67,7 +73,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     this.profileService.isOwnProfile$.subscribe((isOwn) => {
       this.isOwnProfile = isOwn;
-    })
+    });
   }
 
   ngOnDestroy() {
@@ -116,17 +122,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
   }
 
-  getProfileByUsername(username: string) {
-    this.profileService.getUserByUsername(username).subscribe(
+  getFollowers(userId: number): void {
+    this.followerService.getFollowingById(userId).subscribe(
       (response) => {
-        this.profile = response;
-        if (this.isOwnProfile) {
-          this.profileService.setProfile(this.profile);
-        }
+        this.followerService.setFollowData(response);
       },
-      (error) => {
-        console.error('Failed to load profile', error);
-      }
+      (error) => {}
     );
   }
 }

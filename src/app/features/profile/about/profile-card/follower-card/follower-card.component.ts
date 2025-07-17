@@ -19,16 +19,15 @@ export class FollowerCardComponent {
   @Input() maxVisible: number = 10;
 
   constructor(
-    private followService: FollowService,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    private followerService: FollowService
   ) {}
 
   ngOnInit(): void {
     this.profileService.profile$.subscribe((profile) => {
       if (profile?.id && profile.userName) {
         this.userId = profile.id;
-        this.userName = profile.userName
-        this.getFollowers(this.userId);
+        this.userName = profile.userName;
       }
     });
 
@@ -36,9 +35,9 @@ export class FollowerCardComponent {
       this.isOwnProfile = isOwn;
     });
 
-    if (this.userId) {
-      this.getFollowers(this.userId);
-    }
+    this.followerService.follow$.subscribe((follow) => {
+      this.followers = follow?.following
+    });
   }
 
   get extraCount(): number {
@@ -47,14 +46,5 @@ export class FollowerCardComponent {
 
   get hasExtra(): boolean {
     return (this.followers?.length ?? 0) > this.maxVisible - 1;
-  }
-
-  getFollowers(userId: number): void {
-    this.followService.getFollowingById(userId).subscribe(
-      (response) => {
-        this.followers = response.following;
-      },
-      (error) => {}
-    );
   }
 }

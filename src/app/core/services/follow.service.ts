@@ -1,24 +1,55 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of, switchMap } from 'rxjs';
 import { FollowDto } from '../../models/followDto';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FollowService {
   private apiUrl = 'http://localhost:8080/api/users';
 
-  // private followSubject = new BehaviorSubject<FollowDto | null>(null);
-  // follow$: Observable<FollowDto | null> = this.followSubject.asObservable();
+  private followSubject = new BehaviorSubject<FollowDto | null>(null);
+  follow$: Observable<FollowDto | null> = this.followSubject.asObservable();
 
-  constructor(private http: HttpClient) { }
+  private refreshTrigger = new BehaviorSubject<number | null>(null);
 
-  getFollowersById(userId: number):  Observable<FollowDto> {
-    return this.http.get(`${this.apiUrl}/${userId}/followers`);
+  constructor(private http: HttpClient) {
+    this.refreshTrigger
+      .pipe(
+        switchMap((id) => {
+          if (id === null) return of(null);
+          return this.getFollowingById(id);
+        })
+      )
+      .subscribe({
+        next: (followDto) => this.setFollowData(followDto),
+        error: (err) => console.error('Failed to fetch follow data:', err),
+      });
   }
 
-  getFollowingById(userId: number):  Observable<FollowDto> {
-    return this.http.get(`${this.apiUrl}/${userId}/following`);
+  getFollowersById(userId: number): Observable<FollowDto> {
+    return this.http.get<FollowDto>(`${this.apiUrl}/${userId}/followers`);
+  }
+
+  getFollowingById(userId: number): Observable<FollowDto> {
+    return this.http.get<FollowDto>(`${this.apiUrl}/${userId}/following`);
+  }
+
+  unfollowUser(followerId: number, followedId: number): Observable<string> {
+    return this.http.delete(
+      `${this.apiUrl}/${followerId}/unfollow/${followedId}`,
+      {
+        responseType: 'text',
+      }
+    );
+  }
+
+  setFollowData(followDto: FollowDto | null): void {
+    this.followSubject.next(followDto);
+  }
+
+  refreshFollowers(id: number): void {
+    this.refreshTrigger.next(id);
   }
 }
