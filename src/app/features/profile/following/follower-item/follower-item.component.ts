@@ -4,10 +4,11 @@ import { FollowResponseDto } from '../../../../models/followResponseDto';
 import { FollowService } from '../../../../core/services/follow.service';
 import { ProfileService } from '../../../../core/services/profile.service';
 import { MessageService } from 'primeng/api';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-follower-item',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './follower-item.component.html',
   styleUrl: './follower-item.component.css',
 })

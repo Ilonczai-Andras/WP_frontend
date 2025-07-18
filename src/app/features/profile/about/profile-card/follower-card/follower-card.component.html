@@ -2,12 +2,14 @@
   <div>Following</div>
   <div class="elements">
     <ng-container *ngFor="let follower of followers">
-      <img
-        class="avatar"
-        [src]="follower.imgUrl || 'assets/img/profile.jpg'"
-        [alt]="follower.userName"
-        [title]="follower.userName"
-      />
+      <a [routerLink]="['/user', follower.userName, 'about']"
+        ><img
+          class="avatar"
+          [src]="follower.imgUrl || 'assets/img/profile.jpg'"
+          [alt]="follower.userName"
+          [title]="follower.userName"
+        />
+      </a>
     </ng-container>
     <a
       *ngIf="hasExtra"

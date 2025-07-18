@@ -77,6 +77,18 @@
   align-items: center;
 }
 
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.active {
+  text-decoration: underline;
+}
+
 .right-section {
   justify-content: center;
   margin-top: 0.5rem;

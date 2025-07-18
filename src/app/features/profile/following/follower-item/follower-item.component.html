@@ -1,18 +1,22 @@
 <div class="follower-item">
   <div class="follower-avatar">
-    <img
-      *ngIf="follower?.imgUrl"
-      [src]="follower?.imgUrl"
-      [alt]="follower?.userName"
-      class="avatar-img"
-    />
+    <a [routerLink]="['/user', follower?.userName, 'about']"
+      ><img
+        *ngIf="follower?.imgUrl"
+        [src]="follower?.imgUrl"
+        [alt]="follower?.userName"
+        class="avatar-img"
+    /></a>
+
     <div *ngIf="!follower?.imgUrl" class="avatar-placeholder">
       {{ getInitials(follower?.firstName ?? "", follower?.lastName ?? "") }}
     </div>
   </div>
   <div class="follower-info">
     <div class="follower-name">
-      <span class="display-name">{{ follower?.userName }}</span>
+      <a [routerLink]="['/user', follower?.userName, 'about']"
+        ><span class="display-name">{{ follower?.userName }}</span></a
+      >
     </div>
     <span class="username">{{ "@" + follower?.userName }}</span>
   </div>
