@@ -20,5 +20,5 @@
     </div>
     <span class="username">{{ "@" + follower?.userName }}</span>
   </div>
-  <button class="follow-button" (click)="unFollowUser()">Unfollow</button>
+  <button *ngIf="isOwnProfile" class="follow-button" (click)="unFollowUser()">Unfollow</button>
 </div>

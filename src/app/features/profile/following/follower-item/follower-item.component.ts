@@ -17,6 +17,8 @@ export class FollowerItemComponent {
   ownUserId: number = 0;
   otherUserId: number = 0;
 
+  isOwnProfile: boolean = false;
+
   constructor(
     private followService: FollowService,
     private profileService: ProfileService,
@@ -32,6 +34,10 @@ export class FollowerItemComponent {
     if (this.follower?.id) {
       this.otherUserId = this.follower?.id;
     }
+
+    this.profileService.isOwnProfile$.subscribe((isOwn) => {
+      this.isOwnProfile = isOwn;
+    });
   }
 
   getInitials(firstName: string, lastName: string): string {
