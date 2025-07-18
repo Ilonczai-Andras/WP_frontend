@@ -43,6 +43,7 @@
       </div>
       <div class="right-section">
         <div (click)="openProfileDialog()" class="tab edit" *ngIf="isOwnProfile">Edit Profile</div>
+        <div (click)="follow_unfollow()" *ngIf="!isOwnProfile" class="tab edit">{{isFollowedByMe ? 'Unfollow' : 'Follow'}}</div>
       </div>
     </div>
   </div>

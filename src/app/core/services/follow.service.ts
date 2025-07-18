@@ -45,6 +45,14 @@ export class FollowService {
     );
   }
 
+  followUser(followerId: number, followedId: number): Observable<string> {
+    return this.http.post<string>(
+      `${this.apiUrl}/${followerId}/follow/${followedId}`,
+      null,
+      { responseType: 'text' as 'json' }
+    );
+  }
+
   setFollowData(followDto: FollowDto | null): void {
     this.followSubject.next(followDto);
   }

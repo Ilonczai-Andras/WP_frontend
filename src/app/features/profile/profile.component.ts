@@ -27,6 +27,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   isOwnProfile = false;
 
+  isFollowedByMe = false;
+
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -53,13 +55,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
           .getUserByUsername(routeUsername)
           .subscribe((profile) => {
             this.profileService.setProfile(profile);
-            if(profile.id)
-            this.getFollowers(profile?.id);
+            if (profile.id) this.getFollowers(profile?.id);
           });
       }
     });
-
-
 
     this.dialogTriggerService.trigger$
       .pipe(takeUntil(this.destroy$))
@@ -127,7 +126,63 @@ export class ProfileComponent implements OnInit, OnDestroy {
       (response) => {
         this.followerService.setFollowData(response);
       },
+      () => {}
+    );
+
+    this.followerService.getFollowingById(this.userid).subscribe(
+      (response) => {
+        const following = response.following || [];
+
+        this.isFollowedByMe = following.some((f) => f.id === this.profile?.id);
+      },
       (error) => {}
     );
+  }
+
+  follow_unfollow(): void {
+    if (!this.profile?.id) return;
+    if (this.isFollowedByMe) {
+      this.followerService
+        .unfollowUser(this.userid, this.profile?.id)
+        .subscribe(
+          () => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'Unfollowed successfully',
+            });
+            this.isFollowedByMe = false;
+            if (this.profile?.id)
+              this.followerService.refreshFollowers(this.profile?.id);
+          },
+          (error) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Failed to unfollow user',
+            });
+          }
+        );
+    } else {
+      this.followerService.followUser(this.userid, this.profile?.id).subscribe(
+        () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Followed successfully',
+          });
+          this.isFollowedByMe = true;
+          if (this.profile?.id)
+            this.followerService.refreshFollowers(this.profile?.id);
+        },
+        (error) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to follow user',
+          });
+        }
+      );
+    }
   }
 }
