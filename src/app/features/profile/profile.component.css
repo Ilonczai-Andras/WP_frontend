@@ -142,17 +142,27 @@ a:hover {
 
   .profile-stats {
     flex-direction: row;
+    justify-content: space-between;
     max-width: 80%;
+    width: 100%;
   }
 
   .left-section,
   .right-section {
+    flex: 1;
+    display: flex;
+    align-items: center;
     flex-direction: row;
     gap: 1rem;
     min-width: 200px;
   }
 
+  .left-section {
+    justify-content: flex-start;
+  }
+
   .right-section {
+    justify-content: flex-end;
     margin-top: 0;
   }
 
