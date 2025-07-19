@@ -1,16 +1,35 @@
 <div class="comment">
   <div class="header">
-    <strong>{{ post.posterUsername }}</strong> →
-    <span>{{ post.ownerUsername }}</span>
+    <div class="avatar">
+      <img [src]="'assets/img/profile.jpg'" alt="Profile Picture" />
+    </div>
+    <div class="info">
+      <strong>{{ post.posterUsername }}</strong>
+      <div class="joined">{{ postedAt }}</div>
+    </div>
   </div>
-  <div class="content">{{ post.content }}</div>
 
-  <button (click)="toggleReplyBox()">
-    {{ showReplyBox ? 'Cancel' : 'Reply' }}
-  </button>
+  <div class="content">{{ post.content }}</div>
+  <div *ngIf="!post.reply" class="section-divider"></div>
+
+  <div class="header-row">
+    <div class="avatar">
+      <img
+        *ngIf="!post.reply"
+        [src]="'assets/img/profile.jpg'"
+        alt="Profile Picture"
+      />
+    </div>
+    <button *ngIf="!post.reply" (click)="toggleReplyBox()">
+      {{ showReplyBox ? "Cancel" : "Reply" }}
+    </button>
+  </div>
 
   <div *ngIf="showReplyBox" class="reply-box">
-    <textarea [(ngModel)]="replyContent" placeholder="Write a reply..."></textarea>
+    <textarea
+      [(ngModel)]="replyContent"
+      placeholder="Write a reply..."
+    ></textarea>
     <button (click)="submitReply()">Send</button>
   </div>
 

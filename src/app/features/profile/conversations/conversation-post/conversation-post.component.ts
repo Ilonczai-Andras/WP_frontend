@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { ConversationBoardPostResponseDto } from '../../../../models/conversationBoardPostResponseDto';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { getFormattedDateFromNumberArray } from '../../../../../app/shared/utils/string-utils';
 
 @Component({
   selector: 'app-conversation-post',
@@ -14,8 +15,14 @@ export class ConversationPostComponent {
   showReplyBox = false;
   replyContent = '';
 
+  postedAt: string | null = '';
+
   toggleReplyBox() {
     this.showReplyBox = !this.showReplyBox;
+  }
+
+  ngOnInit(): void {
+    this.postedAt = getFormattedDateFromNumberArray(this.post.postedAt);
   }
 
   submitReply() {
