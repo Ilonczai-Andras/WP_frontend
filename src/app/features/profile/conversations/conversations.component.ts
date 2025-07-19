@@ -1,41 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { ProfileService } from '../../../core/services/profile.service';
-import { UserDto } from '../../../models/userDto';
-import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
+import { CreateConversationComponent } from './create-conversation/create-conversation.component';
+import { ShowConversationComponent } from './show-conversation/show-conversation.component';
 
 @Component({
   selector: 'app-conversations',
-  imports: [FormsModule, CommonModule],
+  imports: [CreateConversationComponent, ShowConversationComponent],
   templateUrl: './conversations.component.html',
   styleUrl: './conversations.component.css',
 })
-export class ConversationsComponent implements OnInit {
-  announceToFollowers: boolean = false;
-  postContent: string = '';
+export class ConversationsComponent {
 
-  isOwnProfile = false;
-
-  profile!: UserDto | null;
-
-  constructor(private profileService: ProfileService) {}
-
-  ngOnInit(): void {
-    this.profileService.profile$.subscribe((profile) => {
-      this.profile = profile;
-    });
-
-    this.profileService.isOwnProfile$.subscribe((isOwn) => {
-      this.isOwnProfile = isOwn;
-    });
-  }
-
-  onPost(): void {
-    // post logic
-    console.log('Posting:', this.postContent);
-  }
-
-  onCheckboxChange(event: any) {
-    this.announceToFollowers = event.target.checked;
-  }
 }

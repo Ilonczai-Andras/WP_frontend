@@ -1,0 +1,23 @@
+<div class="comment">
+  <div class="header">
+    <strong>{{ post.posterUsername }}</strong> →
+    <span>{{ post.ownerUsername }}</span>
+  </div>
+  <div class="content">{{ post.content }}</div>
+
+  <button (click)="toggleReplyBox()">
+    {{ showReplyBox ? 'Cancel' : 'Reply' }}
+  </button>
+
+  <div *ngIf="showReplyBox" class="reply-box">
+    <textarea [(ngModel)]="replyContent" placeholder="Write a reply..."></textarea>
+    <button (click)="submitReply()">Send</button>
+  </div>
+
+  <div class="replies" *ngIf="post.replies?.length">
+    <app-conversation-post
+      *ngFor="let reply of post.replies"
+      [post]="reply"
+    ></app-conversation-post>
+  </div>
+</div>
