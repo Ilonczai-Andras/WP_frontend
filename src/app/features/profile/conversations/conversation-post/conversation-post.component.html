@@ -12,15 +12,11 @@
   <div class="content">{{ post.content }}</div>
   <div *ngIf="!post.reply" class="section-divider"></div>
 
-  <div class="header-row">
+  <div *ngIf="!post.reply" class="header-row">
     <div class="avatar">
-      <img
-        *ngIf="!post.reply"
-        [src]="'assets/img/profile.jpg'"
-        alt="Profile Picture"
-      />
+      <img [src]="'assets/img/profile.jpg'" alt="Profile Picture" />
     </div>
-    <button *ngIf="!post.reply" (click)="toggleReplyBox()">
+    <button (click)="toggleReplyBox()">
       {{ showReplyBox ? "Cancel" : "Reply" }}
     </button>
   </div>
@@ -30,7 +26,7 @@
       [(ngModel)]="replyContent"
       placeholder="Write a reply..."
     ></textarea>
-    <button (click)="submitReply()">Send</button>
+    <button (click)="saveNewReply()">Send</button>
   </div>
 
   <div class="replies" *ngIf="post.replies?.length">

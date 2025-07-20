@@ -48,7 +48,7 @@ export class CreateConversationComponent {
 
     this.conversationService.savePost(this.profileId, newPost).subscribe(
       () => {
-        this.conversationService.refreshFollowers(this.profileId);
+        this.conversationService.refreshConversations(this.profileId);
         this.postContent = '';
       },
       (error) => {
