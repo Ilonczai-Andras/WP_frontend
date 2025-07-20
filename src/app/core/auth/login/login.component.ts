@@ -53,7 +53,7 @@ export class LoginComponent {
             detail: 'Login  successful!',
           });
           this.loginForm.reset();
-          this.router.navigate(['/home']);
+          this.router.navigateByUrl('/user/' + response.userName + '/about');
         },
         (error) => {
           this.messageService.add({
