@@ -16,13 +16,12 @@ import { ConversationService } from '../../core/services/conversation.service';
   selector: 'app-profile',
   imports: [CommonModule, RouterModule, ProfileDialogComponent],
   templateUrl: './profile.component.html',
-  styleUrl: './profile.component.css',
+  styleUrls: ['./profile.component.css'],
 })
 export class ProfileComponent implements OnInit, OnDestroy {
   username: string | null = '';
-  routeUsername: string | null = '';
-  userid: number = 0;
-  ShowDialog: boolean = false;
+  userId: number = 0;
+  showDialog: boolean = false;
 
   profile!: UserDto | null;
 
@@ -44,25 +43,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.username = this.authService.getUserName();
-    this.userid = this.authService.getUserId();
+    this.userId = this.authService.getUserId();
 
-    this.route.paramMap.subscribe((params) => {
+    this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       const routeUsername = params.get('username');
-
-      if (routeUsername) {
-        const isOwn = routeUsername === this.username;
-        this.profileService.setIsOwnProfile(isOwn);
-
-        this.profileService
-          .getUserByUsername(routeUsername)
-          .subscribe((profile) => {
-            this.profileService.setProfile(profile);
-            if (profile.id) {
-              this.getFollowers(profile?.id);
-              this.getPostsForUser(profile.id);
-            }
-          });
-      }
+      if (routeUsername) this.loadProfile(routeUsername);
     });
 
     this.dialogTriggerService.trigger$
@@ -71,13 +56,32 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this.openProfileDialog();
       });
 
-    this.profileService.profile$.subscribe((profile) => {
-      this.profile = profile;
-    });
+    this.profileService.profile$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((profile) => {
+        this.profile = profile;
+      });
 
-    this.profileService.isOwnProfile$.subscribe((isOwn) => {
-      this.isOwnProfile = isOwn;
-    });
+    this.profileService.isOwnProfile$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((isOwn) => {
+        this.isOwnProfile = isOwn;
+      });
+  }
+
+  private loadProfile(routeUsername: string): void {
+    const isOwn = routeUsername === this.username;
+    this.profileService.setIsOwnProfile(isOwn);
+
+    this.profileService
+      .getUserByUsername(routeUsername)
+      .subscribe((profile) => {
+        this.profileService.setProfile(profile);
+        if (profile.id) {
+          this.getFollowers(profile.id);
+          this.getPostsForUser(profile.id);
+        }
+      });
   }
 
   ngOnDestroy() {
@@ -86,7 +90,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   openProfileDialog() {
-    this.ShowDialog = true;
+    this.showDialog = true;
   }
 
   onImageSelected(event: Event): void {
@@ -104,18 +108,16 @@ export class ProfileComponent implements OnInit, OnDestroy {
       const formData = new FormData();
       formData.append('file', file);
 
-      this.profileService.uploadImage(formData, this.userid).subscribe(
+      this.profileService.uploadImage(formData, this.userId).subscribe(
         (response) => {
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
             detail: 'Profile image saved successfully',
           });
-          this.profileService.refreshUserProfile(this.userid);
+          this.profileService.refreshUserProfile(this.userId);
         },
         (error) => {
-          console.log(error);
-
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
@@ -127,76 +129,55 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   getFollowers(userId: number): void {
-    this.followerService.getFollowingById(userId).subscribe(
-      (response) => {
-        this.followerService.setFollowData(response);
-      },
-      () => {}
-    );
+    this.followerService.getFollowingById(userId).subscribe((response) => {
+      this.followerService.setFollowData(response);
+    });
+    this.checkIfUserFollowsProfile();
+  }
 
-    this.followerService.getFollowingById(this.userid).subscribe(
-      (response) => {
-        const following = response.following || [];
-
-        this.isFollowedByMe = following.some((f) => f.id === this.profile?.id);
-      },
-      (error) => {}
-    );
+  checkIfUserFollowsProfile(): void {
+    this.followerService.getFollowingById(this.userId).subscribe((response) => {
+      const following = response.following || [];
+      this.isFollowedByMe = following.some((f) => f.id === this.profile?.id);
+    });
   }
 
   getPostsForUser(userId: number): void {
-    this.conversationService.getPostsForUser(userId).subscribe(
-      (response) => {
-        this.conversationService.setConversationData(response);
-      },
-      (error) => {}
-    );
+    this.conversationService.getPostsForUser(userId).subscribe((response) => {
+      this.conversationService.setConversationData(response);
+    });
   }
 
   follow_unfollow(): void {
     if (!this.profile?.id) return;
-    if (this.isFollowedByMe) {
-      this.followerService
-        .unfollowUser(this.userid, this.profile?.id)
-        .subscribe(
-          () => {
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Success',
-              detail: 'Unfollowed successfully',
-            });
-            this.isFollowedByMe = false;
-            if (this.profile?.id)
-              this.followerService.refreshFollowers(this.profile?.id);
-          },
-          (error) => {
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Error',
-              detail: 'Failed to unfollow user',
-            });
-          }
-        );
-    } else {
-      this.followerService.followUser(this.userid, this.profile?.id).subscribe(
-        () => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Success',
-            detail: 'Followed successfully',
-          });
-          this.isFollowedByMe = true;
-          if (this.profile?.id)
-            this.followerService.refreshFollowers(this.profile?.id);
-        },
-        (error) => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Failed to follow user',
-          });
-        }
-      );
-    }
+
+    const userId = this.userId;
+    const targetId = this.profile.id;
+
+    const serviceCall = this.isFollowedByMe
+      ? this.followerService.unfollowUser(userId, targetId)
+      : this.followerService.followUser(userId, targetId);
+
+    const successMessage = this.isFollowedByMe ? 'Unfollowed' : 'Followed';
+    const errorMessage = this.isFollowedByMe ? 'unfollow' : 'follow';
+
+    serviceCall.subscribe(
+      () => {
+        this.isFollowedByMe = !this.isFollowedByMe;
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: `${successMessage} successfully`,
+        });
+        this.followerService.refreshFollowers(targetId);
+      },
+      (error) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: `Failed to ${errorMessage} user`,
+        });
+      }
+    );
   }
 }
