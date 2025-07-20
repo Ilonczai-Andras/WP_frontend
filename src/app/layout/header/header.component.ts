@@ -9,10 +9,11 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { ProfileService } from '../../core/services/profile.service';
 import { UserDto } from '../../models/userDto';
 import { FormsModule } from '@angular/forms';
+import { MyworksDropdownMenuComponent } from '../../features/myworks-dropdown-menu/myworks-dropdown-menu.component';
 
 @Component({
   selector: 'app-header',
-  imports: [CommonModule, RouterLink, DropdownMenu, FormsModule],
+  imports: [CommonModule, RouterLink, DropdownMenu, FormsModule, MyworksDropdownMenuComponent],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })

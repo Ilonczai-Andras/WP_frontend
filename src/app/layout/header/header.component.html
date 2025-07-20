@@ -34,11 +34,7 @@
     </div>
   </div>
   <div class="right-section">
-    <nav>
-      <a routerLink="/explore">Explore</a>
-      <a routerLink="/library" *ngIf="isLoggedIn">Library</a>
-      <a routerLink="/dashboard" *ngIf="isLoggedIn">My Stories</a>
-    </nav>
+    <app-myworks-dropdown-menu />
 
     <div *ngIf="!isLoggedIn">
       <a routerLink="/login" class="btn">Login</a>

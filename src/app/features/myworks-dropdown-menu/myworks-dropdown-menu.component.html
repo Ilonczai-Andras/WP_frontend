@@ -1,0 +1,35 @@
+<div class="dropdown-wrapper">
+  <button class="dropdown-button" (click)="toggleDropdown()">
+    Write
+    <svg class="dropdown-arrow" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M7 10L12 15L17 10H7Z" />
+    </svg>
+  </button>
+
+  <div class="dropdown-container" [class.open]="isDropdownOpen">
+    <div class="dropdown-menu">
+      <ng-container *ngFor="let item of menuItems">
+        <div *ngIf="item.separator" class="menu-separator"></div>
+
+        <a
+          *ngIf="item.route"
+          class="menu-item"
+          [routerLink]="item.route"
+          (click)="onItemClick(item)"
+        >
+          <svg *ngIf="item.icon" class="item-icon" viewBox="0 0 24 24">
+            <path fill="currentColor" [attr.d]="item.icon" />
+          </svg>
+          {{ item.label }}
+        </a>
+
+        <div *ngIf="!item.route" class="menu-item" (click)="onItemClick(item)">
+          <svg *ngIf="item.icon" class="item-icon" viewBox="0 0 24 24">
+            <path fill="currentColor" [attr.d]="item.icon" />
+          </svg>
+          {{ item.label }}
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>
