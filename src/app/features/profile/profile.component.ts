@@ -10,6 +10,7 @@ import { DialogTriggerService } from '../../core/services/dialog-trigger.service
 import { MessageService } from 'primeng/api';
 import { ActivatedRoute } from '@angular/router';
 import { FollowService } from '../../core/services/follow.service';
+import { ConversationService } from '../../core/services/conversation.service';
 
 @Component({
   selector: 'app-profile',
@@ -36,6 +37,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private profileService: ProfileService,
     private followerService: FollowService,
+    private conversationService: ConversationService,
     private dialogTriggerService: DialogTriggerService,
     private messageService: MessageService
   ) {}
@@ -55,7 +57,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
           .getUserByUsername(routeUsername)
           .subscribe((profile) => {
             this.profileService.setProfile(profile);
-            if (profile.id) this.getFollowers(profile?.id);
+            if (profile.id) {
+              this.getFollowers(profile?.id);
+              this.getPostsForUser(profile.id);
+            }
           });
       }
     });
@@ -134,6 +139,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
         const following = response.following || [];
 
         this.isFollowedByMe = following.some((f) => f.id === this.profile?.id);
+      },
+      (error) => {}
+    );
+  }
+
+  getPostsForUser(userId: number): void {
+    this.conversationService.getPostsForUser(userId).subscribe(
+      (response) => {
+        this.conversationService.setConversationData(response);
       },
       (error) => {}
     );

@@ -3,6 +3,8 @@ import { UserDto } from '../../../../models/userDto';
 import { ProfileService } from '../../../../core/services/profile.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ConversationService } from '../../../../core/services/conversation.service';
+import { CreateConversationBoardPostRequestDto } from '../../../../models/createConversationBoardPostRequestDto';
 
 @Component({
   selector: 'app-create-conversation',
@@ -17,12 +19,19 @@ export class CreateConversationComponent {
   isOwnProfile = false;
 
   profile!: UserDto | null;
+  profileId: number = 0;
 
-  constructor(private profileService: ProfileService) {}
+  constructor(
+    private profileService: ProfileService,
+    private conversationService: ConversationService
+  ) {}
 
   ngOnInit(): void {
     this.profileService.profile$.subscribe((profile) => {
       this.profile = profile;
+      if (profile) {
+        this.profileId = profile.id ?? 0;
+      }
     });
 
     this.profileService.isOwnProfile$.subscribe((isOwn) => {
@@ -30,9 +39,22 @@ export class CreateConversationComponent {
     });
   }
 
-  onPost(): void {
-    // post logic
-    console.log('Posting:', this.postContent);
+  saveNewPost(): void {
+    const newPost: CreateConversationBoardPostRequestDto = {
+      ownerId: this.profile?.id,
+      content: this.postContent,
+      parentPostId: null,
+    };
+
+    this.conversationService.savePost(this.profileId, newPost).subscribe(
+      () => {
+        this.conversationService.refreshFollowers(this.profileId);
+        this.postContent = '';
+      },
+      (error) => {
+        this.postContent = '';
+      }
+    );
   }
 
   onCheckboxChange(event: any) {

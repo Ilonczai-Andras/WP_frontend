@@ -16,8 +16,8 @@ export class ShowConversationComponent implements OnInit {
   constructor(private conversationService: ConversationService) {}
 
   ngOnInit(): void {
-    this.conversationService.getPostsForUser(5).subscribe((data) => {
-      this.posts = data;
+    this.conversationService.conversation$.subscribe((posts) => {
+      this.posts = posts || [];
     });
   }
 }
