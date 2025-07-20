@@ -23,6 +23,16 @@ export const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'myworks',
+    loadChildren: () => import('./features/myworks/myworks-landing-page/mywork-landing-pages.routes').then(m => m.MY_WORKS_LANDING_PAGE),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'myworks/new',
+    loadChildren: () => import('./features/myworks/myworks-new/mywork-new.routes').then(m => m.MY_WORKS_NEW),
+    canActivate: [AuthGuard]
+  },
+  {
     path: '',
     redirectTo: 'home',
     pathMatch: 'full'

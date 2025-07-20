@@ -1,0 +1,38 @@
+.mystory-new-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+/* Header styling */
+.mystory-new-header {
+  flex: 0 0 auto;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Body styling */
+.mystory-new-body {
+  flex: 1 1 auto;
+  padding: 1rem;
+  background-color: #ffffff;
+  overflow-y: auto;
+}
+
+/* Responsive adjustments if needed */
+@media (max-width: 768px) {
+  .mystory-new-header,
+  .mystory-new-body {
+    padding: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .mystory-new-header,
+  .mystory-new-body {
+    padding: 0.5rem;
+  }
+}

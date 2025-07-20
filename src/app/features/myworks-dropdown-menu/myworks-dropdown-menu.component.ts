@@ -20,7 +20,7 @@ export class MyworksDropdownMenuComponent {
     {
       label: 'My Stories',
       action: 'myStories',
-      route: 'myworks/my-stories',
+      route: 'myworks',
     },
     {
       label: 'Helpful writer resources',

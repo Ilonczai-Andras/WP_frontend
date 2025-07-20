@@ -1,0 +1,28 @@
+<div class="my-works-container">
+  <h1 class="page-title">My Stories</h1>
+
+  <div class="content-area">
+    <div class="my-stories-card">
+      <svg
+        class="book-icon"
+        fill="currentColor"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M21 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm-1 18H8V5h13v14zM10 7h9v2h-9zm0 4h9v2h-9zm0 4h9v2h-9zM4 3h1v18H4c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1z"
+        />
+      </svg>
+
+      <p class="message-text">
+        {{ profile?.userName }}
+      </p>
+      <a
+        [routerLink]="['new']"
+        routerLinkActive="active"
+        class="create-story-button"
+        >+ Create a story</a
+      >
+    </div>
+  </div>
+</div>

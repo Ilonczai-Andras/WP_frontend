@@ -1,0 +1,114 @@
+.my-works-container {
+  min-height: 100%;
+  background-color: var(--background);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  font-family: 'Inter', sans-serif;
+}
+
+@media (min-width: 640px) {
+  .my-works-container {
+    padding: 2rem;
+  }
+}
+
+.page-title {
+  font-size: 2.25rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  align-self: flex-start;
+  margin-left: 1rem;
+  color: var(--text);
+}
+
+@media (min-width: 640px) {
+  .page-title {
+    font-size: 2.5rem;
+    margin-left: 0;
+  }
+}
+
+.content-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 72rem;
+  gap: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .content-area {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+}
+
+.my-stories-card {
+  flex: 1;
+  width: 100%;
+  background-color: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  max-width: 28rem;
+}
+
+@media (min-width: 1024px) {
+  .my-stories-card {
+    max-width: none;
+  }
+}
+
+.book-icon {
+  width: 6rem;
+  height: 6rem;
+  color: #9ca3af;
+  margin-bottom: 1.5rem;
+}
+
+.message-text {
+  color: #374151;
+  font-size: 1.125rem;
+  margin-bottom: 2rem;
+}
+
+.create-story-button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  color: white;
+  background-color: var(--primary);
+  transition: all 0.3s ease-in-out;
+  border: none;
+  cursor: pointer;
+}
+
+.create-story-button:hover {
+  opacity: 0.9;
+}
+
+.create-story-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--primary);
+}
+
+a {
+  text-decoration: none;
+}
+
+a.active {
+  text-decoration: underline;
+}
+
+a:hover {
+  text-decoration: underline;
+}

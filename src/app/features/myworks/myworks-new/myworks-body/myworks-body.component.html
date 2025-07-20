@@ -1,0 +1,159 @@
+<div class="form-container">
+  <div class="form-card">
+    <!-- Header with Avatar -->
+    <div class="form-header">
+      <div class="avatar">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <circle
+            cx="12"
+            cy="7"
+            r="4"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
+      <h2 class="form-title">Personal Information</h2>
+    </div>
+
+    <!-- Form -->
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+      <!-- Name Fields Row -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="firstName">First Name</label>
+          <input
+            id="firstName"
+            type="text"
+            formControlName="firstName"
+            [class.error]="isFieldInvalid('firstName')"
+            placeholder="John"
+          />
+          <div *ngIf="isFieldInvalid('firstName')" class="error-message">
+            First name is required
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="lastName">Last Name</label>
+          <input
+            id="lastName"
+            type="text"
+            formControlName="lastName"
+            [class.error]="isFieldInvalid('lastName')"
+            placeholder="Doe"
+          />
+          <div *ngIf="isFieldInvalid('lastName')" class="error-message">
+            Last name is required
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Fields -->
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          [class.error]="isFieldInvalid('email')"
+          placeholder="john.doe@example.com"
+        />
+        <div *ngIf="isFieldInvalid('email')" class="error-message">
+          Please enter a valid email address
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Phone Number</label>
+        <input
+          id="phone"
+          type="tel"
+          formControlName="phone"
+          [class.error]="isFieldInvalid('phone')"
+          placeholder="+1 (555) 123-4567"
+        />
+        <div *ngIf="isFieldInvalid('phone')" class="error-message">
+          Phone number is required
+        </div>
+      </div>
+
+      <!-- Address Fields -->
+      <div class="form-group">
+        <label for="address">Street Address</label>
+        <input
+          id="address"
+          type="text"
+          formControlName="address"
+          [class.error]="isFieldInvalid('address')"
+          placeholder="123 Main Street"
+        />
+        <div *ngIf="isFieldInvalid('address')" class="error-message">
+          Address is required
+        </div>
+      </div>
+
+      <!-- Address Details Row -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="city">City</label>
+          <input
+            id="city"
+            type="text"
+            formControlName="city"
+            [class.error]="isFieldInvalid('city')"
+            placeholder="New York"
+          />
+          <div *ngIf="isFieldInvalid('city')" class="error-message">
+            City is required
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="state">State</label>
+          <input
+            id="state"
+            type="text"
+            formControlName="state"
+            [class.error]="isFieldInvalid('state')"
+            placeholder="NY"
+          />
+          <div *ngIf="isFieldInvalid('state')" class="error-message">
+            State is required
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="zipCode">ZIP Code</label>
+          <input
+            id="zipCode"
+            type="text"
+            formControlName="zipCode"
+            [class.error]="isFieldInvalid('zipCode')"
+            placeholder="10001"
+          />
+          <div *ngIf="isFieldInvalid('zipCode')" class="error-message">
+            ZIP code is required
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="submit-btn" [disabled]="profileForm.invalid">
+        Save Information
+      </button>
+    </form>
+  </div>
+</div>
