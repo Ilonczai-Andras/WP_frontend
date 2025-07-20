@@ -5,12 +5,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ConversationService } from '../../../../core/services/conversation.service';
 import { CreateConversationBoardPostRequestDto } from '../../../../models/createConversationBoardPostRequestDto';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-create-conversation',
   imports: [CommonModule, FormsModule],
   templateUrl: './create-conversation.component.html',
-  styleUrl: './create-conversation.component.css',
+  styleUrls: ['./create-conversation.component.css'],
 })
 export class CreateConversationComponent {
   announceToFollowers: boolean = false;
@@ -21,27 +22,36 @@ export class CreateConversationComponent {
   profile!: UserDto | null;
   profileId: number = 0;
 
+  private destroy$ = new Subject<void>();
+
   constructor(
     private profileService: ProfileService,
     private conversationService: ConversationService
   ) {}
 
   ngOnInit(): void {
-    this.profileService.profile$.subscribe((profile) => {
-      this.profile = profile;
-      if (profile) {
-        this.profileId = profile.id ?? 0;
-      }
-    });
+    this.profileService.profile$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((profile) => {
+        this.profile = profile;
+        this.profileId = profile?.id ?? 0;
+      });
 
-    this.profileService.isOwnProfile$.subscribe((isOwn) => {
-      this.isOwnProfile = isOwn;
-    });
+    this.profileService.isOwnProfile$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((isOwn) => {
+        this.isOwnProfile = isOwn;
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   saveNewPost(): void {
     const newPost: CreateConversationBoardPostRequestDto = {
-      ownerId: this.profile?.id,
+      ownerId: this.profileId,
       content: this.postContent,
       parentPostId: null,
     };
@@ -57,7 +67,8 @@ export class CreateConversationComponent {
     );
   }
 
-  onCheckboxChange(event: any) {
-    this.announceToFollowers = event.target.checked;
+  onCheckboxChange(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    this.announceToFollowers = target.checked;
   }
 }

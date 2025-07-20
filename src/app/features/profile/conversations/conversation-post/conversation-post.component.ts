@@ -14,7 +14,7 @@ import { Subject, takeUntil } from 'rxjs';
   selector: 'app-conversation-post',
   imports: [CommonModule, FormsModule],
   templateUrl: './conversation-post.component.html',
-  styleUrl: './conversation-post.component.css',
+  styleUrls: ['./conversation-post.component.css'],
 })
 export class ConversationPostComponent implements OnInit, OnDestroy {
   @Input() post!: ConversationBoardPostResponseDto;
