@@ -37,7 +37,7 @@
           *ngIf="i === characters.length - 1"
           type="button"
           (click)="addCharacter()"
-          [disabled]="areAllCharactersFilled()"
+          [disabled]="hasEmptyCharacter()"
         >
           +
         </button>
@@ -45,12 +45,9 @@
     </div>
 
     <label>Category </label>
-    <select
-      [ngModelOptions]="{ standalone: true }"
-      [(ngModel)]="selectedCategory"
-    >
-      <option [value]="null" disabled selected>Select a category</option>
-      <option *ngFor="let cat of categories" [value]="cat">
+    <select formControlName="category">
+      <option [ngValue]="null" disabled>Select a category</option>
+      <option *ngFor="let cat of categories" [ngValue]="cat">
         {{ categoryLabels[cat] }}
       </option>
     </select>
@@ -73,30 +70,22 @@
     />
 
     <label>Target Audience </label>
-    <select
-      [ngModelOptions]="{ standalone: true }"
-      [(ngModel)]="selectedAudience"
-    >
+    <select formControlName="targetAudience">
+      <option [value]="null" disabled selected>Select audience</option>
       <option *ngFor="let audience of audiences" [value]="audience">
         {{ audienceLabels[audience] }}
       </option>
     </select>
 
     <label>Language </label>
-    <select
-      [ngModelOptions]="{ standalone: true }"
-      [(ngModel)]="selectedLanguage"
-    >
+    <select formControlName="language">
       <option *ngFor="let lang of languages" [value]="lang">
         {{ languageLabels[lang] }}
       </option>
     </select>
 
     <label>Copyright </label>
-    <select
-      [ngModelOptions]="{ standalone: true }"
-      [(ngModel)]="selectedLicense"
-    >
+    <select formControlName="copyright">
       <option *ngFor="let license of licenses" [value]="license">
         {{ licenseLabels[license] }}
       </option>
@@ -110,6 +99,6 @@
       </div>
     </label>
 
-    <button type="submit" [disabled]="storyForm.invalid">Save</button>
+    <button (click)="submit()" type="submit">Save</button>
   </form>
 </div>

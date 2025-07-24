@@ -9,22 +9,12 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import {
-  CategoryEnum,
-  CategoryLabels,
-} from '../../../../shared/enums/category.enum';
-import {
-  LanguageEnum,
-  LanguageLabels,
-} from '../../../../shared/enums/language.enum';
-import {
-  CopyrightLicenseEnum,
-  CopyrightLicenseLabels,
-} from '../../../../shared/enums/copyright-license.enum';
-import {
-  TargetAudienceEnum,
-  TargetAudienceLabels,
-} from '../../../../shared/enums/target-audience.enum';
+import { CategoryLabels } from '../../../../shared/enums/category.enum';
+import { LanguageLabels } from '../../../../shared/enums/language.enum';
+import { CopyrightLicenseLabels } from '../../../../shared/enums/copyright-license.enum';
+import { TargetAudienceLabels } from '../../../../shared/enums/target-audience.enum';
+import { StoryRequestDto } from '../../../../models/storyRequestDto';
+import { StoryService } from '../../../../core/services/story.service';
 
 @Component({
   selector: 'app-myworks-body',
@@ -38,36 +28,36 @@ export class MyworksBodyComponent {
 
   tagInputVisible = false;
   tagInput: string = '';
-  tagsList: string[] = [];
 
-  categories = Object.values(CategoryEnum);
+  categories = Object.values(StoryRequestDto.CategoryEnum);
   categoryLabels = CategoryLabels;
-  selectedCategory: CategoryEnum | null = null;
 
-  languages = Object.values(LanguageEnum);
+  languages = Object.values(StoryRequestDto.LanguageEnum);
   languageLabels = LanguageLabels;
-  selectedLanguage: LanguageEnum = LanguageEnum.ENGLISH;
 
-  licenses = Object.values(CopyrightLicenseEnum);
+  licenses = Object.values(StoryRequestDto.CopyrightEnum);
   licenseLabels = CopyrightLicenseLabels;
-  selectedLicense: CopyrightLicenseEnum =
-    CopyrightLicenseEnum.ALL_RIGHTS_RESERVED;
 
-  audiences = Object.values(TargetAudienceEnum);
+  audiences = Object.values(StoryRequestDto.TargetAudienceEnum);
   audienceLabels = TargetAudienceLabels;
-  selectedAudience: TargetAudienceEnum = TargetAudienceEnum.YOUNG_ADULT;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private storyService: StoryService) {
     this.storyForm = this.fb.group({
       title: ['', [Validators.required]],
       description: ['', [Validators.required]],
-      characters: this.fb.array([this.fb.control('', Validators.required)]),
+      characters: this.fb.array([this.fb.control('')]),
       category: ['', [Validators.required]],
       tags: this.fb.array([]),
       targetAudience: ['', [Validators.required]],
       language: ['', [Validators.required]],
       copyright: ['', [Validators.required]],
       mature: [false],
+    });
+  }
+
+  ngOnInit(): void {
+    this.storyForm.valueChanges.subscribe((value) => {
+      this.setStoryManually();
     });
   }
 
@@ -81,7 +71,8 @@ export class MyworksBodyComponent {
   }
 
   addCharacter() {
-    this.characters.push(this.fb.control(''));
+    const charactersArray = this.storyForm.get('characters') as FormArray;
+    charactersArray.push(this.fb.control(''));
   }
 
   removeCharacter(index: number) {
@@ -97,21 +88,36 @@ export class MyworksBodyComponent {
 
   addTagFromInput() {
     const trimmedTag = this.tagInput.trim();
-    if (trimmedTag && !this.tagsList.includes(trimmedTag)) {
-      this.tagsList.push(trimmedTag);
-      this.tags.push(this.fb.control(trimmedTag));
+    if (trimmedTag) {
+      // Check if tag already exists in the FormArray
+      const tagsArray = this.storyForm.get('tags') as FormArray;
+      const existingTag = tagsArray.controls.find(
+        (control) => control.value === trimmedTag
+      );
+
+      if (!existingTag) {
+        tagsArray.push(this.fb.control(trimmedTag));
+      }
     }
     this.tagInput = '';
   }
 
-  removeTag(tag: string) {
-    const index = this.tagsList.indexOf(tag);
+  removeTag(tagValue: string) {
+    const tagsArray = this.storyForm.get('tags') as FormArray;
+    const index = tagsArray.controls.findIndex(
+      (control) => control.value === tagValue
+    );
+
     if (index >= 0) {
-      this.tagsList.splice(index, 1);
-      (this.storyForm.get('tags') as FormArray).removeAt(index);
+      tagsArray.removeAt(index);
     }
   }
+
   areAllCharactersFilled(): boolean {
+    return this.characters.every((char) => char.value.trim() !== '');
+  }
+
+  hasEmptyCharacter(): boolean {
     return this.characters.some((char) => char.value.trim() === '');
   }
 
@@ -124,5 +130,30 @@ export class MyworksBodyComponent {
     }
   }
 
-  submit() {}
+  setStoryManually() {
+    const storyRequest: StoryRequestDto = {
+      title: this.storyForm.value.title.trim(),
+      description: this.storyForm.value.description.trim(),
+      mainCharacters: this.storyForm.value.characters.filter(
+        (char: string) => char.trim() !== ''
+      ),
+      category: this.storyForm.value.category,
+      tags: this.storyForm.value.tags,
+      targetAudience: this.storyForm.value.targetAudience,
+      language: this.storyForm.value.language,
+      copyright: this.storyForm.value.copyright,
+      mature: this.storyForm.value.mature,
+      coverImageUrl: this.coverImageUrl ? this.coverImageUrl.toString() : '',
+    };
+
+    this.storyService.setStory(storyRequest);
+  }
+
+  submit() {
+    if (this.storyForm.invalid) {
+      console.log('Form is invalid');
+      return;
+    }
+    this.setStoryManually();
+  }
 }
