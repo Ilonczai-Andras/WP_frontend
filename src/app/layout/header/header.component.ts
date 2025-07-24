@@ -10,16 +10,25 @@ import { ProfileService } from '../../core/services/profile.service';
 import { UserDto } from '../../models/userDto';
 import { FormsModule } from '@angular/forms';
 import { MyworksDropdownMenuComponent } from '../../features/myworks-dropdown-menu/myworks-dropdown-menu.component';
+import { LayoutService } from '../../core/services/layout.service';
 
 @Component({
   selector: 'app-header',
-  imports: [CommonModule, RouterLink, DropdownMenu, FormsModule, MyworksDropdownMenuComponent],
+  imports: [
+    CommonModule,
+    RouterLink,
+    DropdownMenu,
+    FormsModule,
+    MyworksDropdownMenuComponent,
+  ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   isLoggedIn = false;
   showMenu = false;
+
+  showHeader: boolean = true;
 
   searchQuery: string = '';
 
@@ -46,7 +55,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    private layoutService: LayoutService
   ) {
     this.searchSubject
       .pipe(debounceTime(300), distinctUntilChanged())
@@ -60,6 +70,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.authSub = this.authService.loggedIn$.subscribe((loggedIn) => {
       this.isLoggedIn = loggedIn;
+    });
+
+    this.layoutService.setHeader(true);
+    this.layoutService.header$.subscribe((showHeader) => {
+      this.showHeader = showHeader;
     });
   }
 
