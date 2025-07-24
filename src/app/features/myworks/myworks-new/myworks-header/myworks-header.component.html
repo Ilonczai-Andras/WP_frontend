@@ -1,7 +1,7 @@
 <div class="header-container">
   <!-- Left section: Back arrow and text -->
   <div class="left-section">
-    <button class="back-button" aria-label="Go back">
+    <button (click)="goBack()" class="back-button" aria-label="Go back">
       <!-- Inline SVG for the back arrow icon -->
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -26,11 +26,7 @@
 
   <!-- Right section: Buttons -->
   <div class="right-section">
-    <button class="cancel-button">
-      Cancel
-    </button>
-    <button class="skip-button">
-      Skip
-    </button>
+    <button class="cancel-button">Cancel</button>
+    <button class="skip-button">Skip</button>
   </div>
 </div>
