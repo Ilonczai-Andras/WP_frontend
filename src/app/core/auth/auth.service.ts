@@ -37,13 +37,13 @@ export class AuthService {
       map((response) => {
         const token = response.token;
         localStorage.setItem(this.tokenKey, token);
-        const decodedUser = this.decodeToken(token);
-
-        this.userSubject.next(decodedUser);
-
-        this.profileService.loadOwnProfile(decodedUser.userName);
-        this.followService.prefetchOwnFollowing(decodedUser.sub);
-        this.conversationService.prefetchUserPosts(decodedUser.sub);
+        if (token) {
+          const decodedUser = this.decodeToken(token);
+          this.userSubject.next(decodedUser);
+          this.profileService.loadOwnProfile(decodedUser.userName);
+          this.followService.prefetchOwnFollowing(decodedUser.sub);
+          this.conversationService.prefetchUserPosts(decodedUser.sub);
+        }
 
         return response;
       }),

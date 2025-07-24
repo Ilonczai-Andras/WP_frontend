@@ -122,11 +122,18 @@ export class MyworksBodyComponent {
   }
 
   onCoverSelected(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => (this.coverImageUrl = reader.result);
-      reader.readAsDataURL(file);
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+
+      const MAX_SIZE_MB = 2;
+      if (file.size > MAX_SIZE_MB * 1024 * 1024) {
+        alert(`Image is too large. Max size is ${MAX_SIZE_MB}MB.`);
+        return;
+      }
+
+      this.coverImageUrl = URL.createObjectURL(file);
+      this.storyService.setFormData(file);
     }
   }
 
@@ -147,13 +154,5 @@ export class MyworksBodyComponent {
     };
 
     this.storyService.setStory(storyRequest);
-  }
-
-  submit() {
-    if (this.storyForm.invalid) {
-      console.log('Form is invalid');
-      return;
-    }
-    this.setStoryManually();
   }
 }

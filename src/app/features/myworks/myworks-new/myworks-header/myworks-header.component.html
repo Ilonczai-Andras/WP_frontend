@@ -27,6 +27,10 @@
   <!-- Right section: Buttons -->
   <div class="right-section">
     <button class="cancel-button">Cancel</button>
-    <button class="skip-button">Skip</button>
+
+    <!-- Conditionally show Skip or Send -->
+    <button class="skip-button" (click)="onSubmit()">
+      {{ isComplete ? "Send" : "Skip" }}
+    </button>
   </div>
 </div>

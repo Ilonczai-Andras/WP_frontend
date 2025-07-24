@@ -71,30 +71,28 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   private loadProfile(routeUsername: string): void {
     const isOwn = routeUsername === this.username;
+    console.log(routeUsername, this.username);
 
     if (isOwn) {
       this.profileService.loadOwnProfile(routeUsername);
     } else {
       this.profileService.loadProfileByUsername(routeUsername);
-
-      this.profileService
-        .getUserByUsername(routeUsername)
-        .subscribe((profile) => {
-          if (profile?.id) {
-            this.followerService
-              .checkIfUserFollows(profile.id, this.userId)
-              .subscribe((isFollowing) => {
-                this.isFollowedByMe = isFollowing;
-              });
-            this.conversationService.prefetchUserPosts(profile.id);
-            this.followerService
-              .getFollowingById(profile.id)
-              .subscribe((res) => {
-                this.followerService.setFollowData(res);
-              });
-          }
-        });
     }
+    this.profileService
+      .getUserByUsername(routeUsername)
+      .subscribe((profile) => {
+        if (profile?.id) {
+          this.followerService
+            .checkIfUserFollows(profile.id, this.userId)
+            .subscribe((isFollowing) => {
+              this.isFollowedByMe = isFollowing;
+            });
+          this.conversationService.prefetchUserPosts(profile.id);
+          this.followerService.getFollowingById(profile.id).subscribe((res) => {
+            this.followerService.setFollowData(res);
+          });
+        }
+      });
   }
 
   ngOnDestroy() {
