@@ -27,8 +27,15 @@ export class AuthService {
     private conversationService: ConversationService
   ) {
     const token = this.getToken();
-    if (token) {
-      this.userSubject.next(this.decodeToken(token));
+    if (token && !this.isTokenExpired(token)) {
+      const decodedUser = this.decodeToken(token);
+      this.userSubject.next(decodedUser);
+
+      if (decodedUser && decodedUser.userName && decodedUser.sub) {
+        this.profileService.loadOwnProfile(decodedUser.userName);
+        this.followService.prefetchOwnFollowing(decodedUser.sub);
+        this.conversationService.prefetchUserPosts(decodedUser.sub);
+      }
     }
   }
 
@@ -57,6 +64,9 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem(this.tokenKey);
     this.userSubject.next(null);
+    this.profileService.clearProfile();
+    this.followService.setFollowData(null);
+    this.conversationService.setConversationData(null);
   }
 
   getToken(): string | null {
