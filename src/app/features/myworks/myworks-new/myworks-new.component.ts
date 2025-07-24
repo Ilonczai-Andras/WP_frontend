@@ -32,7 +32,7 @@ export class MyworksNewComponent implements OnInit {
 
   profile!: UserDto | null;
 
-  storyRequest!: StoryRequestDto;
+  storyRequest: StoryRequestDto = {};
 
   file!: any;
 
@@ -99,14 +99,12 @@ export class MyworksNewComponent implements OnInit {
 
   onSubmit() {
     if (this.profile?.id)
-      if (this.isComplete) {
-        this.storyService
-          .createStory(this.profile.id, this.storyRequest, this.file)
-          .subscribe({
-            next: () => console.log('Story submitted'),
-            error: (err) => console.error(err),
-          });
-      }
+      this.storyService
+        .createStory(this.profile.id, this.storyRequest, this.file)
+        .subscribe({
+          next: () => console.log('Story submitted'),
+          error: (err) => console.error(err),
+        });
   }
 
   onCoverSelected(event: any) {
@@ -121,6 +119,7 @@ export class MyworksNewComponent implements OnInit {
       }
 
       this.coverImageUrl = URL.createObjectURL(file);
+      this.file = file;
     }
   }
 
@@ -156,7 +155,10 @@ export class MyworksNewComponent implements OnInit {
   }
 
   get isComplete(): boolean {
-    return this.storyService.isCompleteStory(this.storyRequest);
+    return (
+      !!this.storyRequest &&
+      this.storyService.isCompleteStory(this.storyRequest)
+    );
   }
 
   get characters(): FormControl[] {
@@ -185,7 +187,7 @@ export class MyworksNewComponent implements OnInit {
   }
 
   setStoryManually() {
-    const storyRequest: StoryRequestDto = {
+    this.storyRequest = {
       title: this.storyForm.value.title.trim(),
       description: this.storyForm.value.description.trim(),
       mainCharacters: this.storyForm.value.characters.filter(
@@ -199,7 +201,6 @@ export class MyworksNewComponent implements OnInit {
       mature: this.storyForm.value.mature,
       coverImageUrl: this.coverImageUrl ? this.coverImageUrl.toString() : '',
     };
-
-    this.storyService.setStory(storyRequest);
+    console.log(this.storyRequest);
   }
 }

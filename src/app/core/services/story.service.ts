@@ -36,16 +36,16 @@ export class StoryService {
     req: StoryRequestDto,
     file: any
   ): Observable<StoryResponseDto> {
-    const requestWithDefaults: StoryRequestDto = {
-      ...this.defaultStoryRequest,
-      ...req,
-    };
+    const requestWithDefaults = this.mergeWithDefaults(req);
+    console.log(requestWithDefaults);
 
     const formData = new FormData();
 
     formData.append(
       'req',
-      new Blob([JSON.stringify(requestWithDefaults)], { type: 'application/json' })
+      new Blob([JSON.stringify(requestWithDefaults)], {
+        type: 'application/json',
+      })
     );
     formData.append('file', file);
 
@@ -55,11 +55,30 @@ export class StoryService {
     );
   }
 
-  createStoryWithDefaultValues(userId: number): Observable<StoryResponseDto> {
-    return this.http.post<StoryResponseDto>(
-      `${this.apiUrl}/${userId}/create`,
-      this.defaultStoryRequest
-    );
+  private mergeWithDefaults(req: Partial<StoryRequestDto>): StoryRequestDto {
+    const merged: StoryRequestDto = { ...this.defaultStoryRequest };
+
+    (Object.keys(req) as (keyof StoryRequestDto)[]).forEach((key) => {
+      const value = req[key];
+
+      const isNonEmptyString =
+        typeof value === 'string' && value.trim().length > 0;
+      const isNonEmptyArray = Array.isArray(value) && value.length > 0;
+      const isBoolean = typeof value === 'boolean';
+      const isEnum =
+        (typeof value === 'string' && value.trim().length > 0) ||
+        typeof value === 'number';
+
+      if (
+        value !== undefined &&
+        value !== null &&
+        (isNonEmptyString || isNonEmptyArray || isBoolean || isEnum)
+      ) {
+        merged[key] = value as any;
+      }
+    });
+
+    return merged;
   }
 
   isCompleteStory(req: StoryRequestDto): boolean {
