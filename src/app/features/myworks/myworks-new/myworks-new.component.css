@@ -2,23 +2,20 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  padding: 1rem;
+  padding: 1rem 0rem;
   box-sizing: border-box;
+  background-color: var(--background);
 }
 
 /* Header styling */
 .mystory-new-header {
   flex: 0 0 auto;
-  padding: 1rem;
-  background-color: #f8f9fa;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Body styling */
 .mystory-new-body {
   flex: 1 1 auto;
-  padding: 1rem;
-  background-color: #ffffff;
   overflow-y: auto;
 }
 

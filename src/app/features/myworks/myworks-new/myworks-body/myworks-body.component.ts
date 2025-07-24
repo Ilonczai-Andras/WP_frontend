@@ -1,50 +1,128 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component } from '@angular/core';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import {
+  CategoryEnum,
+  CategoryLabels,
+} from '../../../../shared/enums/category.enum';
+import {
+  LanguageEnum,
+  LanguageLabels,
+} from '../../../../shared/enums/language.enum';
+import {
+  CopyrightLicenseEnum,
+  CopyrightLicenseLabels,
+} from '../../../../shared/enums/copyright-license.enum';
+import {
+  TargetAudienceEnum,
+  TargetAudienceLabels,
+} from '../../../../shared/enums/target-audience.enum';
 
 @Component({
   selector: 'app-myworks-body',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './myworks-body.component.html',
   styleUrl: './myworks-body.component.css',
 })
-export class MyworksBodyComponent implements OnInit {
-  profileForm: FormGroup;
+export class MyworksBodyComponent {
+  storyForm: FormGroup;
+  coverImageUrl: string | ArrayBuffer | null = null;
 
-  constructor(private formBuilder: FormBuilder) {
-    this.profileForm = this.formBuilder.group({
-      firstName: ['', [Validators.required]],
-      lastName: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.required]],
-      address: ['', [Validators.required]],
-      city: ['', [Validators.required]],
-      state: ['', [Validators.required]],
-      zipCode: ['', [Validators.required]],
+  tagInputVisible = false;
+  tagInput: string = '';
+  tagsList: string[] = [];
+
+  categories = Object.values(CategoryEnum);
+  categoryLabels = CategoryLabels;
+  selectedCategory: CategoryEnum | null = null;
+
+  languages = Object.values(LanguageEnum);
+  languageLabels = LanguageLabels;
+  selectedLanguage: LanguageEnum = LanguageEnum.ENGLISH;
+
+  licenses = Object.values(CopyrightLicenseEnum);
+  licenseLabels = CopyrightLicenseLabels;
+  selectedLicense: CopyrightLicenseEnum =
+    CopyrightLicenseEnum.ALL_RIGHTS_RESERVED;
+
+  audiences = Object.values(TargetAudienceEnum);
+  audienceLabels = TargetAudienceLabels;
+  selectedAudience: TargetAudienceEnum = TargetAudienceEnum.YOUNG_ADULT;
+
+  constructor(private fb: FormBuilder) {
+    this.storyForm = this.fb.group({
+      title: ['', [Validators.required]],
+      description: ['', [Validators.required]],
+      characters: this.fb.array([this.fb.control('', Validators.required)]),
+      category: ['', [Validators.required]],
+      tags: this.fb.array([]),
+      targetAudience: ['', [Validators.required]],
+      language: ['', [Validators.required]],
+      copyright: ['', [Validators.required]],
+      mature: [false],
     });
   }
 
-  ngOnInit(): void {}
+  get characters(): FormControl[] {
+    return (this.storyForm.get('characters') as FormArray)
+      .controls as FormControl[];
+  }
 
-  onSubmit(): void {
-    if (this.profileForm.valid) {
-      console.log('Form Submitted:', this.profileForm.value);
-      // Handle form submission logic here
-    } else {
-      console.log('Form is invalid');
-      this.markFormGroupTouched();
+  get tags(): FormControl[] {
+    return (this.storyForm.get('tags') as FormArray).controls as FormControl[];
+  }
+
+  addCharacter() {
+    this.characters.push(this.fb.control(''));
+  }
+
+  removeCharacter(index: number) {
+    (this.storyForm.get('characters') as FormArray).removeAt(index);
+  }
+
+  onTagInput(event: KeyboardEvent) {
+    if (event.key === ' ' && this.tagInput.trim() !== '') {
+      this.addTagFromInput();
+      event.preventDefault();
     }
   }
 
-  private markFormGroupTouched(): void {
-    Object.keys(this.profileForm.controls).forEach((key) => {
-      const control = this.profileForm.get(key);
-      control?.markAsTouched();
-    });
+  addTagFromInput() {
+    const trimmedTag = this.tagInput.trim();
+    if (trimmedTag && !this.tagsList.includes(trimmedTag)) {
+      this.tagsList.push(trimmedTag);
+      this.tags.push(this.fb.control(trimmedTag));
+    }
+    this.tagInput = '';
   }
 
-  isFieldInvalid(fieldName: string): boolean {
-    const field = this.profileForm.get(fieldName);
-    return !!(field && field.invalid && field.touched);
+  removeTag(tag: string) {
+    const index = this.tagsList.indexOf(tag);
+    if (index >= 0) {
+      this.tagsList.splice(index, 1);
+      (this.storyForm.get('tags') as FormArray).removeAt(index);
+    }
   }
+  areAllCharactersFilled(): boolean {
+    return this.characters.some((char) => char.value.trim() === '');
+  }
+
+  onCoverSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => (this.coverImageUrl = reader.result);
+      reader.readAsDataURL(file);
+    }
+  }
+
+  submit() {}
 }
