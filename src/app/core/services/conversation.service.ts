@@ -48,6 +48,13 @@ export class ConversationService {
       req
     );
   }
+
+  prefetchUserPosts(userId: number): void {
+    this.getPostsForUser(userId).subscribe((response) => {
+      this.setConversationData(response);
+    });
+  }
+
   setConversationData(
     conversationDto: Array<ConversationBoardPostResponseDto> | null
   ): void {

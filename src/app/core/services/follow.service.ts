@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of, switchMap } from 'rxjs';
+import { BehaviorSubject, map, Observable, of, switchMap } from 'rxjs';
 import { FollowDto } from '../../models/followDto';
 import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -50,6 +51,18 @@ export class FollowService {
       `${this.apiUrl}/${followerId}/follow/${followedId}`,
       null,
       { responseType: 'text' as 'json' }
+    );
+  }
+
+  prefetchOwnFollowing(userId: number): void {
+    this.getFollowingById(userId).subscribe((response) => {
+      this.setFollowData(response);
+    });
+  }
+
+  checkIfUserFollows(targetUserId: number, ownUserId: number): Observable<boolean> {
+    return this.getFollowingById(ownUserId).pipe(
+      map((res) => res.following?.some((u) => u.id === targetUserId) || false)
     );
   }
 

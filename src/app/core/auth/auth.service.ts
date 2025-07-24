@@ -3,6 +3,9 @@ import { LoginService } from '../services/login.service';
 import { Observable, catchError, map } from 'rxjs';
 import { BehaviorSubject } from 'rxjs';
 import { CredentialsDto } from '../../models/credentialsDto';
+import { ProfileService } from '../services/profile.service';
+import { FollowService } from '../services/follow.service';
+import { ConversationService } from '../services/conversation.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +20,12 @@ export class AuthService {
     .asObservable()
     .pipe(map((user) => !!user));
 
-  constructor(private loginService: LoginService) {
+  constructor(
+    private loginService: LoginService,
+    private profileService: ProfileService,
+    private followService: FollowService,
+    private conversationService: ConversationService
+  ) {
     const token = this.getToken();
     if (token) {
       this.userSubject.next(this.decodeToken(token));
@@ -29,7 +37,14 @@ export class AuthService {
       map((response) => {
         const token = response.token;
         localStorage.setItem(this.tokenKey, token);
-        this.userSubject.next(this.decodeToken(token));
+        const decodedUser = this.decodeToken(token);
+
+        this.userSubject.next(decodedUser);
+
+        this.profileService.loadOwnProfile(decodedUser.userName);
+        this.followService.prefetchOwnFollowing(decodedUser.sub);
+        this.conversationService.prefetchUserPosts(decodedUser.sub);
+
         return response;
       }),
       catchError((error) => {

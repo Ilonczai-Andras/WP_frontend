@@ -71,17 +71,30 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   private loadProfile(routeUsername: string): void {
     const isOwn = routeUsername === this.username;
-    this.profileService.setIsOwnProfile(isOwn);
 
-    this.profileService
-      .getUserByUsername(routeUsername)
-      .subscribe((profile) => {
-        this.profileService.setProfile(profile);
-        if (profile.id) {
-          this.getFollowers(profile.id);
-          this.getPostsForUser(profile.id);
-        }
-      });
+    if (isOwn) {
+      this.profileService.loadOwnProfile(routeUsername);
+    } else {
+      this.profileService.loadProfileByUsername(routeUsername);
+
+      this.profileService
+        .getUserByUsername(routeUsername)
+        .subscribe((profile) => {
+          if (profile?.id) {
+            this.followerService
+              .checkIfUserFollows(profile.id, this.userId)
+              .subscribe((isFollowing) => {
+                this.isFollowedByMe = isFollowing;
+              });
+            this.conversationService.prefetchUserPosts(profile.id);
+            this.followerService
+              .getFollowingById(profile.id)
+              .subscribe((res) => {
+                this.followerService.setFollowData(res);
+              });
+          }
+        });
+    }
   }
 
   ngOnDestroy() {
@@ -126,26 +139,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
         }
       );
     }
-  }
-
-  getFollowers(userId: number): void {
-    this.followerService.getFollowingById(userId).subscribe((response) => {
-      this.followerService.setFollowData(response);
-    });
-    this.checkIfUserFollowsProfile();
-  }
-
-  checkIfUserFollowsProfile(): void {
-    this.followerService.getFollowingById(this.userId).subscribe((response) => {
-      const following = response.following || [];
-      this.isFollowedByMe = following.some((f) => f.id === this.profile?.id);
-    });
-  }
-
-  getPostsForUser(userId: number): void {
-    this.conversationService.getPostsForUser(userId).subscribe((response) => {
-      this.conversationService.setConversationData(response);
-    });
   }
 
   follow_unfollow(): void {

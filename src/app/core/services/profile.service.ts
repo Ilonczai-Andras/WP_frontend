@@ -53,6 +53,20 @@ export class ProfileService {
     return this.http.get<any[]>(`${this.apiUrl}/search?query=${query}`);
   }
 
+  loadOwnProfile(username: string): void {
+    this.getUserByUsername(username).subscribe((profile) => {
+      this.setIsOwnProfile(true);
+      this.setProfile(profile);
+    });
+  }
+
+  loadProfileByUsername(username: string): void {
+    this.getUserByUsername(username).subscribe((profile) => {
+      this.setIsOwnProfile(false);
+      this.setProfile(profile);
+    });
+  }
+
   //ProfileStateService
   refreshUserProfile(id: number): void {
     this.refreshTrigger.next(id);
