@@ -1,8 +1,155 @@
 <div class="mystory-new-container">
   <div class="mystory-new-header">
-    <app-myworks-header/>
+    <div class="header-container">
+      <!-- Left section: Back arrow and text -->
+      <div class="left-section">
+        <button (click)="goBack()" class="back-button" aria-label="Go back">
+          <!-- Inline SVG for the back arrow icon -->
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-chevron-left"
+          >
+            <path d="m15 18-6-6 6-6" />
+          </svg>
+        </button>
+        <div class="text-content">
+          <span class="story-info">Add Story Info</span>
+          <h1 class="story-title">Untitled Story</h1>
+        </div>
+      </div>
+
+      <!-- Right section: Buttons -->
+      <div class="right-section">
+        <button class="cancel-button">Cancel</button>
+
+        <!-- Conditionally show Skip or Send -->
+        <button class="skip-button" (click)="onSubmit()">
+          {{ isComplete ? "Send" : "Skip" }}
+        </button>
+      </div>
+    </div>
   </div>
   <div class="mystory-new-body">
-    <app-myworks-body />
+    <div class="story-details-container">
+      <div class="cover-section">
+        <label class="cover-upload">
+          <input type="file" (change)="onCoverSelected($event)" hidden />
+          <img
+            *ngIf="coverImageUrl; else placeholder"
+            [src]="coverImageUrl"
+            alt="Cover"
+          />
+          <ng-template #placeholder>
+            <div class="cover-placeholder">Add a cover</div>
+          </ng-template>
+        </label>
+      </div>
+
+      <form [formGroup]="storyForm" class="form-section">
+        <h2>Story Details</h2>
+
+        <label>Title </label>
+        <input
+          type="text"
+          formControlName="title"
+          placeholder="Untitled Story"
+        />
+
+        <label>Description </label>
+        <textarea formControlName="description" rows="6"></textarea>
+
+        <label>Main Characters</label>
+        <div formArrayName="characters">
+          <div
+            *ngFor="let char of characters; let i = index"
+            class="character-row"
+          >
+            <input [formControlName]="i" />
+            <button
+              *ngIf="i !== characters.length - 1"
+              type="button"
+              (click)="removeCharacter(i)"
+            >
+              -
+            </button>
+            <button
+              *ngIf="i === characters.length - 1"
+              type="button"
+              (click)="addCharacter()"
+              [disabled]="hasEmptyCharacter()"
+            >
+              +
+            </button>
+          </div>
+        </div>
+
+        <label>Category </label>
+        <select formControlName="category">
+          <option [ngValue]="null" disabled>Select a category</option>
+          <option *ngFor="let cat of categories" [ngValue]="cat">
+            {{ categoryLabels[cat] }}
+          </option>
+        </select>
+
+        <label>Tags</label>
+        <div class="tag-container">
+          <span class="tag" *ngFor="let tag of tags">
+            {{ tag.value }}
+            <span class="remove-tag" (click)="removeTag(tag.value)">x</span>
+          </span>
+        </div>
+
+        <input
+          *ngIf="!tagInputVisible"
+          type="text"
+          [(ngModel)]="tagInput"
+          [ngModelOptions]="{ standalone: true }"
+          (keydown)="onTagInput($event)"
+          placeholder="Separate tags with a space"
+        />
+
+        <label>Target Audience </label>
+        <select formControlName="targetAudience">
+          <option [value]="null" disabled selected>Select audience</option>
+          <option *ngFor="let audience of audiences" [value]="audience">
+            {{ audienceLabels[audience] }}
+          </option>
+        </select>
+
+        <label>Language </label>
+        <select formControlName="language">
+          <option *ngFor="let lang of languages" [value]="lang">
+            {{ languageLabels[lang] }}
+          </option>
+        </select>
+
+        <label>Copyright </label>
+        <select formControlName="copyright">
+          <option *ngFor="let license of licenses" [value]="license">
+            {{ licenseLabels[license] }}
+          </option>
+        </select>
+
+        <label class="switch-label">
+          Rating (Mature)
+          <div class="switch-wrapper">
+            <input
+              type="checkbox"
+              formControlName="mature"
+              class="switch-input"
+            />
+            <span class="switch-slider"></span>
+          </div>
+        </label>
+      </form>
+    </div>
   </div>
 </div>
