@@ -1,5 +1,5 @@
 <form [formGroup]="form">
-  <p-dropdown
+  <p-select
     *ngIf="showMenu"
     formControlName="selectedMenuItem"
     [options]="menuItems"
@@ -12,5 +12,5 @@
         <span>{{ item.name }}</span>
       </div>
     </ng-template>
-  </p-dropdown>
+  </p-select>
 </form>

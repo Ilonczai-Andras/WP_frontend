@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
-import { DropdownModule } from 'primeng/dropdown';
+import { SelectModule } from 'primeng/select';
 import { FormGroup, ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { AuthService } from '../../core/auth/auth.service';
 import { Router } from '@angular/router';
@@ -15,7 +15,7 @@ interface MenuItem {
 
 @Component({
   selector: 'app-dropdown-menu',
-  imports: [DropdownModule, ReactiveFormsModule, CommonModule],
+  imports: [SelectModule, ReactiveFormsModule, CommonModule],
   templateUrl: './dropdown-menu.html',
   styleUrl: './dropdown-menu.css',
 })

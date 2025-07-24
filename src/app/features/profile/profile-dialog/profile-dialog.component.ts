@@ -10,7 +10,7 @@ import {
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
-import { DropdownModule } from 'primeng/dropdown';
+import { SelectModule } from 'primeng/select';
 import { ProfileService } from '../../../core/services/profile.service';
 import { AuthService } from '../../../core/auth/auth.service';
 import { AboutDto } from '../../../models/aboutDto';
@@ -26,7 +26,7 @@ interface Choice {
   imports: [
     DialogModule,
     ButtonModule,
-    DropdownModule,
+    SelectModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,

@@ -14,7 +14,7 @@
     <form [formGroup]="aboutForm" (ngSubmit)="onSubmit()" novalidate>
       <div class="form-group">
         <label for="gender" class="form-label">Gender</label>
-        <p-dropdown
+        <p-select
           class="dropdown-input"
           [options]="choices"
           [(ngModel)]="selectedChoice"

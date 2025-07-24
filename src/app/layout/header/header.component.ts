@@ -71,11 +71,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.authSub = this.authService.loggedIn$.subscribe((loggedIn) => {
       this.isLoggedIn = loggedIn;
     });
-
-    this.layoutService.setHeader(true);
-    this.layoutService.header$.subscribe((showHeader) => {
-      this.showHeader = showHeader;
-    });
   }
 
   ngOnDestroy() {

@@ -46,7 +46,6 @@ export class MyworksDropdownMenuComponent {
   }
 
   onItemClick(item: any): void {
-    console.log(`Clicked: ${item.label} (Action: ${item.action})`);
     switch (item.action) {
       case 'createStory':
         // Logic to navigate to create story page or open a modal

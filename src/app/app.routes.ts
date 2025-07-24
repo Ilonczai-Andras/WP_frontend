@@ -7,34 +7,47 @@ export const routes: Routes = [
   {
     path: 'home',
     loadChildren: () =>
-      import('./features/home/home.routes').then(m => m.HOME_ROUTES),
+      import('./features/home/home.routes').then((m) => m.HOME_ROUTES),
+    data: { showHeader: true },
   },
   {
     path: 'login',
-    component: LoginComponent
+    component: LoginComponent,
+    data: { showHeader: true }
   },
   {
     path: 'register',
-    component: RegisterComponent
+    component: RegisterComponent,
+    data: { showHeader: true }
   },
   {
     path: 'user',
-    loadChildren: () => import('./features/profile/profile.routes').then(m => m.PROFILE_ROUTES),
-    canActivate: [AuthGuard]
+    loadChildren: () =>
+      import('./features/profile/profile.routes').then((m) => m.PROFILE_ROUTES),
+    canActivate: [AuthGuard],
+    data: { showHeader: true }
   },
   {
     path: 'myworks',
-    loadChildren: () => import('./features/myworks/myworks-landing-page/mywork-landing-pages.routes').then(m => m.MY_WORKS_LANDING_PAGE),
-    canActivate: [AuthGuard]
+    loadChildren: () =>
+      import(
+        './features/myworks/myworks-landing-page/mywork-landing-pages.routes'
+      ).then((m) => m.MY_WORKS_LANDING_PAGE),
+    canActivate: [AuthGuard],
+    data: { showHeader: true }
   },
   {
     path: 'myworks/new',
-    loadChildren: () => import('./features/myworks/myworks-new/mywork-new.routes').then(m => m.MY_WORKS_NEW),
-    canActivate: [AuthGuard]
+    loadChildren: () =>
+      import('./features/myworks/myworks-new/mywork-new.routes').then(
+        (m) => m.MY_WORKS_NEW
+      ),
+    canActivate: [AuthGuard],
+    data: { showHeader: true }
   },
   {
     path: '',
     redirectTo: 'home',
-    pathMatch: 'full'
-  }
+    pathMatch: 'full',
+  },
 ];
