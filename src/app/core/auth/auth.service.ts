@@ -6,6 +6,7 @@ import { CredentialsDto } from '../../models/credentialsDto';
 import { ProfileService } from '../services/profile.service';
 import { FollowService } from '../services/follow.service';
 import { ConversationService } from '../services/conversation.service';
+import { StoryService } from '../services/story.service';
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +25,8 @@ export class AuthService {
     private loginService: LoginService,
     private profileService: ProfileService,
     private followService: FollowService,
-    private conversationService: ConversationService
+    private conversationService: ConversationService,
+    private storyService: StoryService
   ) {
     const token = this.getToken();
     if (token && !this.isTokenExpired(token)) {
@@ -35,6 +37,7 @@ export class AuthService {
         this.profileService.loadOwnProfile(decodedUser.userName);
         this.followService.prefetchOwnFollowing(decodedUser.sub);
         this.conversationService.prefetchUserPosts(decodedUser.sub);
+        this.storyService.prefetchUserStories(decodedUser.sub)
       }
     }
   }
@@ -50,6 +53,7 @@ export class AuthService {
           this.profileService.loadOwnProfile(decodedUser.userName);
           this.followService.prefetchOwnFollowing(decodedUser.sub);
           this.conversationService.prefetchUserPosts(decodedUser.sub);
+          this.storyService.prefetchUserStories(decodedUser.sub)
         }
 
         return response;

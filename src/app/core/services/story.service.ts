@@ -13,8 +13,11 @@ export class StoryService {
   private storySubject = new BehaviorSubject<StoryRequestDto | null>(null);
   story$: Observable<StoryRequestDto | null> = this.storySubject.asObservable();
 
-  private fileSubject = new BehaviorSubject<any>(null);
-  file$: Observable<any> = this.fileSubject.asObservable();
+  private storiesSubject = new BehaviorSubject<Array<StoryResponseDto> | null>(
+    null
+  );
+  stories$: Observable<Array<StoryResponseDto> | null> =
+    this.storiesSubject.asObservable();
 
   defaultStoryRequest: StoryRequestDto = {
     title: '',
@@ -52,6 +55,12 @@ export class StoryService {
     return this.http.post<StoryResponseDto>(
       `${this.apiUrl}/${userId}/create`,
       formData
+    );
+  }
+
+  getStories(userId: number): Observable<Array<StoryResponseDto>> {
+    return this.http.get<Array<StoryResponseDto>>(
+      `${this.apiUrl}/${userId}/stories`
     );
   }
 
@@ -105,11 +114,17 @@ export class StoryService {
     this.storySubject.next(req);
   }
 
-  setFormData(input: any) {
-    this.fileSubject.next(input);
+  setStories(stories: Array<StoryResponseDto>) {
+    this.storiesSubject.next(stories);
   }
 
   getDefaultStoryReq(): StoryRequestDto {
     return this.defaultStoryRequest;
+  }
+
+  prefetchUserStories(userId: number): void {
+    this.getStories(userId).subscribe((response) => {
+      this.setStories(response);
+    });
   }
 }
