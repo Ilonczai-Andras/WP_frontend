@@ -65,11 +65,11 @@ export class MyworksNewComponent implements OnInit {
       title: ['', [Validators.required]],
       description: ['', [Validators.required]],
       characters: this.fb.array([this.fb.control('')]),
-      category: ['', [Validators.required]],
+      category: [StoryRequestDto.CategoryEnum.GeneralFiction, [Validators.required]],
       tags: this.fb.array([]),
-      targetAudience: ['', [Validators.required]],
-      language: ['', [Validators.required]],
-      copyright: ['', [Validators.required]],
+      targetAudience: [StoryRequestDto.TargetAudienceEnum.YoungAdult, [Validators.required]],
+      language: [StoryRequestDto.LanguageEnum.English, [Validators.required]],
+      copyright: [StoryRequestDto.CopyrightEnum.AllRightsReserved, [Validators.required]],
       mature: [false],
     });
   }
@@ -102,7 +102,10 @@ export class MyworksNewComponent implements OnInit {
       this.storyService
         .createStory(this.profile.id, this.storyRequest, this.file)
         .subscribe({
-          next: () => console.log('Story submitted'),
+          next: () => {
+            console.log('Story submitted');
+            this.storyForm.reset(this.storyService.getDefaultStoryReq());
+          },
           error: (err) => console.error(err),
         });
   }
@@ -201,6 +204,5 @@ export class MyworksNewComponent implements OnInit {
       mature: this.storyForm.value.mature,
       coverImageUrl: this.coverImageUrl ? this.coverImageUrl.toString() : '',
     };
-    console.log(this.storyRequest);
   }
 }

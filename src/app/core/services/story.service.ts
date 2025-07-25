@@ -108,4 +108,8 @@ export class StoryService {
   setFormData(input: any) {
     this.fileSubject.next(input);
   }
+
+  getDefaultStoryReq(): StoryRequestDto {
+    return this.defaultStoryRequest;
+  }
 }

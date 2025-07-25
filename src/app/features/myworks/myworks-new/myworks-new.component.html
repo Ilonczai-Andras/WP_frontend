@@ -64,7 +64,11 @@
         />
 
         <label>Description </label>
-        <textarea formControlName="description" rows="6"></textarea>
+        <textarea
+          formControlName="description"
+          rows="6"
+          placeholder="Untitled description"
+        ></textarea>
 
         <label>Main Characters</label>
         <div formArrayName="characters">
@@ -126,6 +130,7 @@
 
         <label>Language </label>
         <select formControlName="language">
+          <option [ngValue]="null" disabled>Select a language</option>
           <option *ngFor="let lang of languages" [value]="lang">
             {{ languageLabels[lang] }}
           </option>
@@ -133,6 +138,7 @@
 
         <label>Copyright </label>
         <select formControlName="copyright">
+          <option [ngValue]="null" disabled>Select a copyright</option>
           <option *ngFor="let license of licenses" [value]="license">
             {{ licenseLabels[license] }}
           </option>
