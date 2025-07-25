@@ -13,19 +13,19 @@ export const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
-    data: { showHeader: true }
+    data: { showHeader: true },
   },
   {
     path: 'register',
     component: RegisterComponent,
-    data: { showHeader: true }
+    data: { showHeader: true },
   },
   {
     path: 'user',
     loadChildren: () =>
       import('./features/profile/profile.routes').then((m) => m.PROFILE_ROUTES),
     canActivate: [AuthGuard],
-    data: { showHeader: true }
+    data: { showHeader: true },
   },
   {
     path: 'myworks',
@@ -34,7 +34,7 @@ export const routes: Routes = [
         './features/myworks/myworks-landing-page/mywork-landing-pages.routes'
       ).then((m) => m.MY_WORKS_LANDING_PAGE),
     canActivate: [AuthGuard],
-    data: { showHeader: true }
+    data: { showHeader: true },
   },
   {
     path: 'myworks/new',
@@ -43,7 +43,16 @@ export const routes: Routes = [
         (m) => m.MY_WORKS_NEW
       ),
     canActivate: [AuthGuard],
-    data: { showHeader: true }
+    data: { showHeader: true },
+  },
+  {
+    path: 'story/:storyIdAndTitle',
+    loadChildren: () =>
+      import('./features/story/story-overview/story-overview.routes').then(
+        (m) => m.STORY_OVERVIEW_ROUTES
+      ),
+    canActivate: [AuthGuard],
+    data: { showHeader: true },
   },
   {
     path: '',

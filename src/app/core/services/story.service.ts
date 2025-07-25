@@ -64,6 +64,10 @@ export class StoryService {
     );
   }
 
+  getStory(storyId: number): Observable<StoryResponseDto>{
+    return this.http.get<StoryResponseDto>(`${this.apiUrl}/${storyId}/story`)
+  }
+
   private mergeWithDefaults(req: Partial<StoryRequestDto>): StoryRequestDto {
     const merged: StoryRequestDto = { ...this.defaultStoryRequest };
 

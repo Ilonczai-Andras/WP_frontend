@@ -8,6 +8,7 @@ import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
 import { MessageService } from 'primeng/api';
+import { ReplaceSpacesPipe } from './shared/pipes/replace-spaces.pipe';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -21,5 +22,6 @@ export const appConfig: ApplicationConfig = {
       },
     }),
     MessageService,
+    ReplaceSpacesPipe
   ],
 };

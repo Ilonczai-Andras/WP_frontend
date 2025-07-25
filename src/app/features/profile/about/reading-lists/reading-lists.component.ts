@@ -4,10 +4,12 @@ import { UserDto } from '../../../../models/userDto';
 import { CommonModule } from '@angular/common';
 import { StoryService } from '../../../../core/services/story.service';
 import { StoryResponseDto } from '../../../../models/storyResponseDto';
+import { RouterModule } from '@angular/router';
+import { ReplaceSpacesPipe } from "../../../../shared/pipes/replace-spaces.pipe";
 
 @Component({
   selector: 'app-reading-lists',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule, ReplaceSpacesPipe],
   templateUrl: './reading-lists.component.html',
   styleUrl: './reading-lists.component.css',
 })

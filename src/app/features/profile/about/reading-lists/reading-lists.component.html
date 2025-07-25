@@ -2,18 +2,25 @@
   <div class="mystories-list">
     <div class="list-title">Story by {{ profile?.userName }}</div>
     <div class="list-subtitle">
-      {{ publishedStoryCount }} Published Stories • {{ draftStoryCount }} Draft (only visible to you)
+      {{ publishedStoryCount }} Published Stories • {{ draftStoryCount }} Draft
+      (only visible to you)
     </div>
     <div
       class="story-card"
       *ngFor="let story of stories | slice : 0 : visibleCount"
     >
-      <img
-        *ngIf="story.coverImageUrl; else noImage"
-        [src]="story.coverImageUrl"
-        alt="Cover"
-        class="cover"
-      />
+      <a
+        [routerLink]="[
+          '/story',
+          story.id + '-' + (story.title || '' | lowercase | replaceSpaces)
+        ]"
+        ><img
+          *ngIf="story.coverImageUrl; else noImage"
+          [src]="story.coverImageUrl"
+          alt="Cover"
+          class="cover"
+      /></a>
+
       <ng-template #noImage>
         <div class="cover placeholder">No image</div>
       </ng-template>
