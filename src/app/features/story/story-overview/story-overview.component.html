@@ -1,0 +1,118 @@
+<div class="story-container" *ngIf="story">
+  <div class="book-header">
+    <div class="book-cover">
+      <img [src]="story.coverImageUrl" [alt]="story.title" />
+    </div>
+
+    <div class="book-info">
+      <h1 class="book-title">{{ story.title }}</h1>
+
+      <div class="reading-stats">
+        <!-- <div class="stat-divider">•</div> -->
+        <div class="stat">
+          <span class="stat-value">{{ 0 }}</span>
+          <span class="stat-label">Parts</span>
+        </div>
+      </div>
+
+      <div class="action-buttons">
+        <button class="start-reading-btn" (click)="startReading()">
+          <span class="btn-icon">📖</span>
+          <span class="btn-text">Start reading</span>
+        </button>
+        <button class="more-btn" (click)="showMore()">
+          <span class="more-icon">+</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="main-content">
+      <div class="author-info">
+        <img
+          *ngIf="profile?.userProfileDto?.imageUrl"
+          [src]="profile?.userProfileDto?.imageUrl"
+          [alt]="profile?.userProfileDto?.imageUrl"
+          class="author-avatar"
+        />
+        <span class="author-name">{{ story.authorUsername }}</span>
+      </div>
+
+      <div class="story-status">{{story.status}}</div>
+      <div class="story-meta">🗓️ 2 new parts</div>
+
+      <div class="story-description">
+        {{ story.description }}
+      </div>
+
+      <!-- <div class="story-meta">
+        Befejezett: - <br />
+        Jelentés: 15 | 3 fejezet <br />
+        Bármi béke megjelése eszköz történt meg a kiomlottott a
+        gorondimakatáral.
+      </div> -->
+
+      <!-- <div class="stats">
+        <div class="stat-item">📊 #5 /10</div>
+      </div> -->
+
+      <div class="tags">
+        <a *ngFor="let tag of story.tags" href="#" class="tag">
+          {{ tag }}
+        </a>
+      </div>
+
+      <div class="rights">🔒 All Rights Reserved</div>
+
+      <!-- <div class="table-of-contents">
+        <h2 class="toc-title">Table of contents</h2>
+
+        <div style="margin-bottom: 15px; color: #666; font-size: 14px">
+          Közöleg a holehó
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          Sun, Feb 2, 2025
+        </div>
+
+        <ul class="chapter-list">
+          <li class="chapter-item active">
+            <a href="#" class="chapter-title">1. Fejezet</a>
+            <span class="chapter-date">Mon, Feb 3, 2025</span>
+          </li>
+          <li class="chapter-item">
+            <a href="#" class="chapter-title">2. Fejezet</a>
+            <span class="chapter-date">Tue, Feb 4, 2025</span>
+          </li>
+          <li class="chapter-item">
+            <a href="#" class="chapter-title">3. Fejezet</a>
+            <span class="chapter-date">Wed, Feb 5, 2025</span>
+          </li>
+          <li class="chapter-item">
+            <a href="#" class="chapter-title">4. Fejezet</a>
+            <span class="chapter-date">Thu, Feb 6, 2025</span>
+          </li>
+          <li class="chapter-item">
+            <a href="#" class="chapter-title">5. fejezet</a>
+            <span class="chapter-date">Thu, Feb 6, 2025</span>
+          </li>
+          <li class="chapter-item">
+            <a href="#" class="chapter-title">6. Fejezet</a>
+            <span class="chapter-date">Fri, Feb 7, 2025</span>
+          </li>
+          <li class="chapter-item">
+            <a href="#" class="chapter-title">7. Fejezet</a>
+            <span class="chapter-date">Fri, Feb 7, 2025</span>
+          </li>
+          <li class="chapter-item">
+            <a href="#" class="chapter-title">8. Fejezet</a>
+            <span class="chapter-date">Sat, Feb 8, 2025</span>
+          </li>
+          <li class="chapter-item">
+            <a href="#" class="chapter-title">9. Rész</a>
+            <span class="chapter-date">Sun, Feb 9, 2025</span>
+          </li>
+        </ul>
+      </div> -->
+    </div>
+  </div>
+</div>
