@@ -2,6 +2,8 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './core/auth/login/login.component';
 import { RegisterComponent } from './core/auth/register/register.component';
 import { AuthGuard } from './core/auth/auth.guard';
+import { AuthorGuard } from './core/auth/author.guard';
+import { UnauthorizedPageComponent } from './layout/unauthorized-page/unauthorized-page.component';
 
 export const routes: Routes = [
   {
@@ -51,7 +53,7 @@ export const routes: Routes = [
       import('./features/myworks/myworks-write/mywork-write.routes').then(
         (m) => m.MY_WORKS_WRITE
       ),
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, AuthorGuard],
     data: { showHeader: true },
   },
   {
@@ -62,6 +64,10 @@ export const routes: Routes = [
       ),
     canActivate: [AuthGuard],
     data: { showHeader: true },
+  },
+  {
+    path: 'unauthorized',
+    component: UnauthorizedPageComponent,
   },
   {
     path: '',

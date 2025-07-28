@@ -131,6 +131,6 @@ export class AuthService {
       console.warn('User not found');
       return -1;
     }
-    return user.sub;
+    return Number(user.sub);
   }
 }

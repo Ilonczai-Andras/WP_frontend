@@ -1,0 +1,46 @@
+.unauthorized-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--background);
+  color: var(--text);
+  padding: 2rem;
+  text-align: center;
+
+  .error-code {
+    font-size: 6rem;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+
+  .error-message {
+    font-size: 2rem;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .error-description {
+    max-width: 500px;
+    margin-bottom: 2rem;
+    color: var(--text);
+    font-size: 1.1rem;
+  }
+
+  .home-button {
+    background-color: var(--primary);
+    color: var(--background);
+    padding: 0.75rem 1.5rem;
+    border: none;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: var(--accent);
+      color: var(--background);
+    }
+  }
+}
