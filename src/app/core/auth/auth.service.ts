@@ -7,6 +7,7 @@ import { ProfileService } from '../services/profile.service';
 import { FollowService } from '../services/follow.service';
 import { ConversationService } from '../services/conversation.service';
 import { StoryService } from '../services/story.service';
+import { TokenService } from '../services/token.service';
 
 @Injectable({
   providedIn: 'root',
@@ -26,10 +27,11 @@ export class AuthService {
     private profileService: ProfileService,
     private followService: FollowService,
     private conversationService: ConversationService,
-    private storyService: StoryService
+    private storyService: StoryService,
+    private tokenService: TokenService
   ) {
     const token = this.getToken();
-    if (token && !this.isTokenExpired(token)) {
+    if (token && !this.tokenService.isTokenExpired(token)) {
       const decodedUser = this.decodeToken(token);
       this.userSubject.next(decodedUser);
 
@@ -113,7 +115,7 @@ export class AuthService {
     }
   }
 
-  private isTokenExpired(token: string): boolean {
+  public isTokenExpired(token: string): boolean {
     const decoded = this.decodeToken(token);
     return !decoded?.exp || Date.now() > decoded.exp * 1000;
   }
