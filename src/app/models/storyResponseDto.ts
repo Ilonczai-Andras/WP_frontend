@@ -22,6 +22,7 @@ export interface StoryResponseDto {
     mature?: boolean;
     coverImageUrl?: string;
     authorUsername?: string;
+    authorId?: number;
     status?: StoryResponseDto.StatusEnum;
     createdAt?: string;
     updatedAt?: string;

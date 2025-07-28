@@ -9,6 +9,10 @@ import {
 import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
+import { ChapterService } from '../../../core/services/chapter.service';
+import { ChapterResponseDto } from '../../../models/chapterResponseDto';
+import { StoryService } from '../../../core/services/story.service';
+import { StoryResponseDto } from '../../../models/storyResponseDto';
 
 @Component({
   selector: 'app-myworks-write',
@@ -19,11 +23,11 @@ import { ActivatedRoute } from '@angular/router';
 export class MyworksWriteComponent implements OnInit {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
-  storyId!: string;
-  chapterId!: string;
+  storyId!: number;
+  chapterId!: number;
 
-  story = { title: 'Untitled Story' };
-  chapter = { title: 'Untitled Part 1', content: '', status: 'Draft' };
+  story: StoryResponseDto = {};
+  chapter: ChapterResponseDto = {};
   wordCount: number = 0;
 
   youtubeUrl: string = '';
@@ -36,11 +40,24 @@ export class MyworksWriteComponent implements OnInit {
     src: string;
   } = { type: null, src: '' };
 
-  constructor(private route: ActivatedRoute, private sanitizer: DomSanitizer) {}
+  constructor(
+    private route: ActivatedRoute,
+    private sanitizer: DomSanitizer,
+    private chapterService: ChapterService,
+    private storyService: StoryService
+  ) {}
 
   ngOnInit() {
-    this.storyId = this.route.snapshot.paramMap.get('storyId')!;
-    this.chapterId = this.route.snapshot.paramMap.get('chapterId')!;
+    this.storyId = Number(this.route.snapshot.paramMap.get('storyId')!);
+    this.chapterId = Number(this.route.snapshot.paramMap.get('chapterId')!);
+
+    this.chapterService.getChapter(this.chapterId).subscribe((response) => {
+      this.chapter = response;
+    });
+
+    this.storyService.getStory(this.storyId).subscribe((response) => {
+      this.story = response;
+    });
   }
 
   @HostListener('document:click', ['$event'])
@@ -135,6 +152,12 @@ export class MyworksWriteComponent implements OnInit {
   }
 
   onContentChange() {
-    this.wordCount = this.chapter.content.split(/\s+/).filter((w) => w).length;
+    if (this.chapter && this.chapter.content) {
+      this.wordCount = this.chapter.content
+        .split(/\s+/)
+        .filter((w) => w).length;
+    } else {
+      this.wordCount = 0;
+    }
   }
 }
