@@ -20,10 +20,17 @@ import { CategoryLabels } from '../../../shared/enums/category.enum';
 import { LanguageLabels } from '../../../shared/enums/language.enum';
 import { CopyrightLicenseLabels } from '../../../shared/enums/copyright-license.enum';
 import { TargetAudienceLabels } from '../../../shared/enums/target-audience.enum';
+import { LoadingSpinnerComponent } from '../../../shared/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-myworks-new-page',
-  imports: [RouterModule, CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [
+    RouterModule,
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    LoadingSpinnerComponent,
+  ],
   templateUrl: './myworks-new.component.html',
   styleUrl: './myworks-new.component.css',
 })
@@ -54,6 +61,8 @@ export class MyworksNewComponent implements OnInit {
   audiences = Object.values(StoryRequestDto.TargetAudienceEnum);
   audienceLabels = TargetAudienceLabels;
 
+  isLoading: boolean = false;
+
   constructor(
     private layoutService: LayoutService,
     private profileService: ProfileService,
@@ -65,11 +74,20 @@ export class MyworksNewComponent implements OnInit {
       title: ['', [Validators.required]],
       description: ['', [Validators.required]],
       characters: this.fb.array([this.fb.control('')]),
-      category: [StoryRequestDto.CategoryEnum.GeneralFiction, [Validators.required]],
+      category: [
+        StoryRequestDto.CategoryEnum.GeneralFiction,
+        [Validators.required],
+      ],
       tags: this.fb.array([]),
-      targetAudience: [StoryRequestDto.TargetAudienceEnum.YoungAdult, [Validators.required]],
+      targetAudience: [
+        StoryRequestDto.TargetAudienceEnum.YoungAdult,
+        [Validators.required],
+      ],
       language: [StoryRequestDto.LanguageEnum.English, [Validators.required]],
-      copyright: [StoryRequestDto.CopyrightEnum.AllRightsReserved, [Validators.required]],
+      copyright: [
+        StoryRequestDto.CopyrightEnum.AllRightsReserved,
+        [Validators.required],
+      ],
       mature: [false],
     });
   }
@@ -98,6 +116,7 @@ export class MyworksNewComponent implements OnInit {
   }
 
   onSubmit() {
+    this.isLoading = true;
     if (this.profile?.id)
       this.storyService
         .createStory(this.profile.id, this.storyRequest, this.file)
@@ -105,8 +124,12 @@ export class MyworksNewComponent implements OnInit {
           next: () => {
             console.log('Story submitted');
             this.storyForm.reset(this.storyService.getDefaultStoryReq());
+            this.coverImageUrl = '';
           },
           error: (err) => console.error(err),
+          complete: () => {
+            this.isLoading = false;
+          },
         });
   }
 
@@ -136,7 +159,10 @@ export class MyworksNewComponent implements OnInit {
   }
 
   hasEmptyCharacter(): boolean {
-    return this.characters.some((char) => char.value.trim() === '');
+    return this.characters.some((char) => {
+      const value = char.value;
+      return !value || (typeof value === 'string' && value.trim() === '');
+    });
   }
 
   removeTag(tagValue: string) {
@@ -190,18 +216,25 @@ export class MyworksNewComponent implements OnInit {
   }
 
   setStoryManually() {
+    const formValue = this.storyForm.value;
+
     this.storyRequest = {
-      title: this.storyForm.value.title.trim(),
-      description: this.storyForm.value.description.trim(),
-      mainCharacters: this.storyForm.value.characters.filter(
-        (char: string) => char.trim() !== ''
-      ),
-      category: this.storyForm.value.category,
-      tags: this.storyForm.value.tags,
-      targetAudience: this.storyForm.value.targetAudience,
-      language: this.storyForm.value.language,
-      copyright: this.storyForm.value.copyright,
-      mature: this.storyForm.value.mature,
+      title: formValue.title?.trim() ?? '',
+      description: formValue.description?.trim() ?? '',
+      mainCharacters: Array.isArray(formValue.characters)
+        ? formValue.characters
+            .filter(
+              (char: string | null) =>
+                typeof char === 'string' && char.trim() !== ''
+            )
+            .map((char: string) => char.trim())
+        : [],
+      category: formValue.category,
+      tags: formValue.tags ?? [],
+      targetAudience: formValue.targetAudience,
+      language: formValue.language,
+      copyright: formValue.copyright,
+      mature: formValue.mature,
       coverImageUrl: this.coverImageUrl ? this.coverImageUrl.toString() : '',
     };
   }

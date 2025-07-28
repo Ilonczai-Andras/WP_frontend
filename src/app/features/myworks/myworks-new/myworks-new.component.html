@@ -28,6 +28,7 @@
 
       <!-- Right section: Buttons -->
       <div class="right-section">
+        <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
         <button class="cancel-button">Cancel</button>
 
         <!-- Conditionally show Skip or Send -->
