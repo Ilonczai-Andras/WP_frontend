@@ -1,0 +1,102 @@
+<div class="container">
+  <!-- Header Section -->
+  <div class="header">
+    <div class="story-info">
+      <h1>{{ story.title }}</h1>
+      <h2>{{ chapter.title }}</h2>
+      <p class="status">{{ chapter.status }} | {{ wordCount }} Words</p>
+    </div>
+    <div class="buttons">
+      <button class="publish">Publish</button>
+      <button class="save">Save</button>
+      <button class="preview">Preview</button>
+    </div>
+  </div>
+
+  <!-- Content Section -->
+  <div class="content">
+    <div class="media-section">
+      <ng-container *ngIf="!media.type && !showYoutube">
+        <button (click)="triggerFileInput()">
+          <i class="fas fa-image"></i>
+        </button>
+        <button (click)="showYoutubeInput()">
+          <i class="fab fa-youtube"></i>
+        </button>
+      </ng-container>
+
+      <!-- IMAGE INPUT -->
+      <input
+        type="file"
+        #fileInput
+        style="display: none"
+        (change)="handleFileUpload($event)"
+      />
+
+      <!-- YOUTUBE INPUT -->
+      <div *ngIf="showYoutube" class="youtube-input">
+        <input
+          type="text"
+          [(ngModel)]="youtubeUrl"
+          placeholder="Enter YouTube URL"
+        />
+        <button (click)="addYoutube()">Add</button>
+        <button (click)="cancelYoutube()">Cancel</button>
+      </div>
+
+      <!-- IMAGE PREVIEW -->
+      <div *ngIf="media.type === 'image'" class="media-preview">
+        <img [src]="media.src" alt="Uploaded Image" />
+      </div>
+
+      <!-- YOUTUBE PREVIEW -->
+      <div *ngIf="media.type === 'youtube'" class="media-preview">
+        <iframe
+          [src]="sanitizedYoutubeUrl"
+          frameborder="0"
+          allowfullscreen
+        ></iframe>
+      </div>
+
+      <!-- MENU TRIGGER BUTTON (bottom right of media-section) -->
+      <div
+        *ngIf="media.type"
+        class="menu-trigger-button"
+        (click)="toggleMenu($event)"
+      >
+        <i class="fas fa-ellipsis-v"></i>
+      </div>
+
+      <!-- CONTEXT MENU -->
+      <div
+        *ngIf="menuOpen"
+        class="context-menu"
+        [style.left.px]="menuPosition.x"
+        [style.top.px]="menuPosition.y"
+      >
+        <div *ngIf="media.type === 'youtube'" (click)="showYoutubeInput(true)">
+          Add YouTube video
+        </div>
+        <div *ngIf="media.type === 'image'" (click)="triggerFileInput()">
+          Replace image
+        </div>
+        <div (click)="removeMedia()">Remove {{ media.type }}</div>
+      </div>
+    </div>
+
+    <div class="chapter-edit">
+      <input
+        type="text"
+        [(ngModel)]="chapter.title"
+        placeholder="Edit Chapter Title"
+        class="chapter-title"
+      />
+      <textarea
+        [(ngModel)]="chapter.content"
+        placeholder="Type your text..."
+        class="chapter-content"
+        (input)="onContentChange()"
+      ></textarea>
+    </div>
+  </div>
+</div>

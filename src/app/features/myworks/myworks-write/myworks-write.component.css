@@ -1,0 +1,229 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.story-info h1, .story-info h2 {
+  margin: 0;
+}
+
+.status {
+  font-size: 0.9em;
+  color: var(--primary);
+}
+
+button i,
+button .material-icons {
+  font-size: 2rem;
+}
+
+.buttons button {
+  background-color: var(--primary);
+  color: var(--text);
+  padding: 8px 16px;
+  margin-left: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.buttons button:hover {
+  background-color: var(--accent);
+  color: black;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+.media-section {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+button {
+  margin: 5px;
+  background-color: var(--primary);
+  color: var(--text);
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.youtube-input input {
+  margin: 5px 0;
+  padding: 6px;
+  width: 300px;
+  background-color: var(--background);
+  color: var(--text);
+  border: 1px solid var(--primary);
+}
+
+.media-preview {
+  position: relative;
+  margin-top: 1rem;
+  max-width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* Image Preview: medium size */
+.media-preview img {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 0 10px var(--primary);
+}
+
+/* YouTube Preview: large and responsive */
+.media-preview iframe {
+  width: 100%;
+  max-width: 900px;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 0 12px var(--primary);
+}
+
+.menu-trigger-button {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 40px;
+  height: 40px;
+  background-color: var(--background);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 100;
+  box-shadow: 0 2px 8px var(--primary);
+  border: none;
+}
+
+.menu-trigger-button:hover {
+  transform: scale(1.1);
+}
+
+.menu-trigger-button i {
+  font-size: 16px;
+  color: var(--primary);
+}
+
+.context-menu {
+  position: absolute;
+  background-color: var(--background);
+  color: var(--primary);
+  border-radius: 8px;
+  z-index: 1000;
+  font-size: 14px;
+  min-width: 150px;
+  border: 1px solid var(--primary);
+  overflow: hidden;
+}
+
+.context-menu div {
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  user-select: none;
+}
+
+.context-menu div:hover {
+  background-color: var(--accent);
+  color: black;
+}
+
+.context-menu {
+  animation: fadeInScale 0.15s ease-out;
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Chapter edit */
+.chapter-edit {
+  display: flex;
+  flex-direction: column;
+}
+
+.chapter-title, .chapter-content {
+  background-color: var(--background);
+  border: 1px solid var(--primary);
+  color: var(--text);
+  padding: 10px;
+  margin: 10px 0;
+  font-size: 1em;
+}
+
+.chapter-title {
+  font-weight: bold;
+}
+
+.chapter-content {
+  min-height: 200px;
+  resize: vertical;
+}
+
+/* RESPONSIVE: Header buttons stack on small screens */
+@media (max-width: 600px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .buttons button {
+    width: 100%;
+  }
+
+  .youtube-input input {
+    width: 100%;
+  }
+
+  .chapter-title,
+  .chapter-content {
+    width: 100%;
+  }
+}
+
+/* RESPONSIVE: Resize YouTube and Image previews */
+@media (max-width: 768px) {
+  .media-preview img {
+    max-width: 100%;
+  }
+
+  .media-preview iframe {
+    max-width: 100%;
+  }
+}

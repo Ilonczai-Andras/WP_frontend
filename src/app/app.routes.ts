@@ -46,6 +46,15 @@ export const routes: Routes = [
     data: { showHeader: true },
   },
   {
+    path: 'myworks/:storyId/write/:chapterId',
+    loadChildren: () =>
+      import('./features/myworks/myworks-write/mywork-write.routes').then(
+        (m) => m.MY_WORKS_WRITE
+      ),
+    canActivate: [AuthGuard],
+    data: { showHeader: true },
+  },
+  {
     path: 'story/:storyIdAndTitle',
     loadChildren: () =>
       import('./features/story/story-overview/story-overview.routes').then(
