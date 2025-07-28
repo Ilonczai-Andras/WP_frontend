@@ -3,26 +3,74 @@
 
   <div class="content-area">
     <div class="my-stories-card">
-      <svg
-        class="book-icon"
-        fill="currentColor"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M21 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm-1 18H8V5h13v14zM10 7h9v2h-9zm0 4h9v2h-9zm0 4h9v2h-9zM4 3h1v18H4c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1z"
-        />
-      </svg>
+      <div *ngIf="stories && stories.length > 0; else noStories">
+        <div *ngFor="let story of stories" class="story-card">
+          <div class="img-block">
+            <img
+              [src]="story.coverImageUrl || 'assets/default-cover.png'"
+              alt="Story Cover"
+              class="cover"
+            />
+          </div>
+          <div class="story-block">
+            <div class="story-info-actions">
+              <div class="story-info">
+                <h3 class="story-title">
+                  {{ story.title || "Untitled Story" }}
+                </h3>
+                <p class="story-meta">
+                  {{ publishedStoryCount }}
+                  {{ publishedStoryCount === 1 ? "Draft" : "Drafts" }}<br />
+                  Updated {{ getFormattedDate(story.updatedAt) }}
+                </p>
+              </div>
 
-      <p class="message-text">
-        {{ profile?.userName }}
-      </p>
-      <a
-        [routerLink]="['new']"
-        routerLinkActive="active"
-        class="create-story-button"
-        >+ Create a story</a
-      >
+              <div class="story-actions">
+                <button class="continue-btn" (click)="onContinueWriting(story)">
+                  Continue writing
+                </button>
+
+                <div *ngIf="selectedStory === story" class="dropdown">
+                  <div class="dropdown-menu" *ngIf="isMenuOpen">
+                    <!-- Chapter Dropdown -->
+                    <div class="chapter-dropdown">
+                      <div class="chapter-list">
+                        <a
+                          *ngFor="let chapter of selectedStory.chapters"
+                          class="chapter"
+                          [routerLink]="[
+                            '/myworks',
+                            selectedStory.id,
+                            'write',
+                            chapter.id
+                          ]"
+                          (click)="closeAllMenus()"
+                        >
+                          <div class="chapter-info">
+                            <div class="chapter-header">
+                              <p class="chapter-title">{{ chapter.title }}</p>
+                              <!-- <p class="chapter-status">
+                Status: {{ chapter.status }} | Date:
+                {{ getFormattedDate(chapter.updatedAt) }}
+              </p> -->
+                            </div>
+                          </div>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <button (click)="onDeleteStory(story)">Delete</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #noStories>
+        <p>No stories yet.</p>
+      </ng-template>
     </div>
   </div>
 </div>
