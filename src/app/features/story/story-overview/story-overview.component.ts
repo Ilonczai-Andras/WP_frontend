@@ -38,7 +38,6 @@ export class StoryOverviewComponent {
 
     this.storyService.getStory(id).subscribe((story) => {
       this.story = story;
-      console.log(story);
     });
   }
 

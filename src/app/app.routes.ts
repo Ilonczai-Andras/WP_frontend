@@ -4,6 +4,7 @@ import { RegisterComponent } from './core/auth/register/register.component';
 import { AuthGuard } from './core/auth/auth.guard';
 import { AuthorGuard } from './core/auth/author.guard';
 import { UnauthorizedPageComponent } from './layout/unauthorized-page/unauthorized-page.component';
+import { StatusGuard } from './core/auth/status.guard';
 
 export const routes: Routes = [
   {
@@ -62,7 +63,7 @@ export const routes: Routes = [
       import('./features/story/story-overview/story-overview.routes').then(
         (m) => m.STORY_OVERVIEW_ROUTES
       ),
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, StatusGuard],
     data: { showHeader: true },
   },
   {

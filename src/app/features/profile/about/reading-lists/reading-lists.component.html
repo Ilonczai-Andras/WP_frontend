@@ -2,37 +2,53 @@
   <div class="mystories-list">
     <div class="list-title">Story by {{ profile?.userName }}</div>
     <div class="list-subtitle">
-      {{ publishedStoryCount }} Published Stories • {{ draftStoryCount }} Draft
-      (only visible to you)
+      {{ publishedStoryCount }} Published Stories
+      <span *ngIf="isOwnProfile"
+        >• {{ draftStoryCount }} Draft (only visible to you)</span
+      >
     </div>
-    <div
-      class="story-card"
-      *ngFor="let story of stories | slice : 0 : visibleCount"
-    >
-      <a
-        [routerLink]="[
-          '/story',
-          story.id + '-' + (story.title || '' | lowercase | replaceSpaces)
-        ]"
-        ><img
-          *ngIf="story.coverImageUrl; else noImage"
-          [src]="story.coverImageUrl"
-          alt="Cover"
-          class="cover"
-      /></a>
+    <ng-container *ngFor="let story of stories | slice : 0 : visibleCount">
+      <div
+        class="story-card"
+        *ngIf="
+          story.status === 'PUBLISHED' ||
+          (isOwnProfile &&
+            (story.status === 'DRAFT' || story.status === 'ARCHIVED'))
+        "
+      >
+        <a
+          [routerLink]="[
+            '/story',
+            story.id + '-' + (story.title || '' | lowercase | replaceSpaces)
+          ]"
+        >
+          <img
+            *ngIf="story.coverImageUrl; else noImage"
+            [src]="story.coverImageUrl"
+            alt="Cover"
+            class="cover"
+          />
+        </a>
 
-      <ng-template #noImage>
-        <div class="cover placeholder">No image</div>
-      </ng-template>
+        <ng-template #noImage>
+          <div class="cover placeholder">No image</div>
+        </ng-template>
 
-      <div class="story-content">
-        <h2>{{ story.title }}</h2>
-        <p>
-          {{ story.description | slice : 0 : 240
-          }}{{ story.description!.length > 240 ? "..." : "" }}
-        </p>
+        <div class="story-content">
+          <a
+            [routerLink]="[
+              '/story',
+              story.id + '-' + (story.title || '' | lowercase | replaceSpaces)
+            ]"
+            ><h2>{{ story.title }}</h2></a
+          >
+          <p>
+            {{ story.description | slice : 0 : 240 }}
+            {{ story.description!.length > 240 ? "..." : "" }}
+          </p>
+        </div>
       </div>
-    </div>
+    </ng-container>
 
     <button
       *ngIf="visibleCount < stories!.length"

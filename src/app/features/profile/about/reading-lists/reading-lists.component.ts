@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { StoryService } from '../../../../core/services/story.service';
 import { StoryResponseDto } from '../../../../models/storyResponseDto';
 import { RouterModule } from '@angular/router';
-import { ReplaceSpacesPipe } from "../../../../shared/pipes/replace-spaces.pipe";
+import { ReplaceSpacesPipe } from '../../../../shared/pipes/replace-spaces.pipe';
 
 @Component({
   selector: 'app-reading-lists',

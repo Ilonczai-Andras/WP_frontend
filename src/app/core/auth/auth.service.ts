@@ -56,6 +56,7 @@ export class AuthService {
           this.followService.prefetchOwnFollowing(decodedUser.sub);
           this.conversationService.prefetchUserPosts(decodedUser.sub);
           this.storyService.prefetchUserStories(decodedUser.sub)
+          this.storyService.prefetchUserStories(decodedUser.sub);
         }
 
         return response;

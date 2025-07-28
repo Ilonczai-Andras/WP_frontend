@@ -11,6 +11,7 @@ import { MessageService } from 'primeng/api';
 import { ActivatedRoute } from '@angular/router';
 import { FollowService } from '../../core/services/follow.service';
 import { ConversationService } from '../../core/services/conversation.service';
+import { StoryService } from '../../core/services/story.service';
 
 @Component({
   selector: 'app-profile',
@@ -37,6 +38,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private profileService: ProfileService,
     private followerService: FollowService,
     private conversationService: ConversationService,
+    private storyService: StoryService,
     private dialogTriggerService: DialogTriggerService,
     private messageService: MessageService
   ) {}
@@ -90,6 +92,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
           this.followerService.getFollowingById(profile.id).subscribe((res) => {
             this.followerService.setFollowData(res);
           });
+          this.storyService.prefetchUserStories(profile.id);
         }
       });
   }
