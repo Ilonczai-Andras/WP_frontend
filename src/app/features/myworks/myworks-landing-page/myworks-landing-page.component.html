@@ -1,5 +1,8 @@
 <div class="my-works-container">
-  <h1 class="page-title">My Stories</h1>
+  <div class="page-header-container">
+    <h1 class="page-title">My Stories</h1>
+    <a class="page-link" [routerLink]="['/myworks', 'new']">+ New Story</a>
+  </div>
 
   <div class="content-area">
     <div class="my-stories-card">
@@ -35,7 +38,13 @@
                     <!-- Chapter Dropdown -->
                     <div class="chapter-dropdown">
                       <div class="chapter-list">
-                        <div *ngIf="selectedStory.chapters && selectedStory.chapters.length > 0; else noChapter">
+                        <div
+                          *ngIf="
+                            selectedStory.chapters &&
+                              selectedStory.chapters.length > 0;
+                            else noChapter
+                          "
+                        >
                           <a
                             *ngFor="
                               let chapter of selectedStory.chapters;

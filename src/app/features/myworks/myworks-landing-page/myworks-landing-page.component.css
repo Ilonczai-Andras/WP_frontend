@@ -14,13 +14,24 @@
   }
 }
 
-.page-title {
+.page-header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  width: 100%;
+}
+
+.page-title,
+.page-link {
   font-size: 2.25rem;
   font-weight: bold;
-  margin-bottom: 2rem;
-  align-self: flex-start;
-  margin-left: 1rem;
   color: var(--text);
+  text-decoration: none;
+}
+
+.page-link:hover {
+  text-decoration: underline;
 }
 
 @media (min-width: 640px) {

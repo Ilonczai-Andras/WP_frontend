@@ -125,6 +125,7 @@ export class MyworksNewComponent implements OnInit {
             console.log('Story submitted');
             this.storyForm.reset(this.storyService.getDefaultStoryReq());
             this.coverImageUrl = '';
+            this.storyService.refreshStories(this.profile?.id)
           },
           error: (err) => console.error(err),
           complete: () => {

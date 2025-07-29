@@ -62,7 +62,6 @@ export class MyworksLandingPageComponent implements OnInit {
 
     this.storyService.stories$.subscribe((response) => {
       this.stories = response;
-      console.log(response);
 
       this.publishedStoryCount = response?.filter(
         (story) => story.status === 'PUBLISHED'
@@ -107,12 +106,9 @@ export class MyworksLandingPageComponent implements OnInit {
   }
 
   onDeleteStory(story: StoryResponseDto) {
-    // Confirm and call delete API
-    // if (confirm(`Delete "${story.title}"?`)) {
-    //   this.storyService.deleteStory(story.id).subscribe(() => {
-    //     this.stories = this.stories!.filter((s) => s.id !== story.id);
-    //   });
-    // }
+    this.storyService.deleteStory(story.id).subscribe(() => {
+      this.storyService.refreshStories(this.profile?.id)
+    })
   }
 
   getFormattedDate(input: any): string {

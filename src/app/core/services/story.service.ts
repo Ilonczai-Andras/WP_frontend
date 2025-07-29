@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { StoryRequestDto } from '../../models/storyRequestDto';
 import { StoryResponseDto } from '../../models/storyResponseDto';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of, switchMap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -19,6 +19,8 @@ export class StoryService {
   stories$: Observable<Array<StoryResponseDto> | null> =
     this.storiesSubject.asObservable();
 
+  private refreshTrigger = new BehaviorSubject<number | null>(null);
+
   defaultStoryRequest: StoryRequestDto = {
     title: '',
     description: '',
@@ -32,7 +34,19 @@ export class StoryService {
     coverImageUrl: '',
   };
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.refreshTrigger
+      .pipe(
+        switchMap((id) => {
+          if (id === null) return of(null);
+          return this.getStories(id);
+        })
+      )
+      .subscribe({
+        next: (stories) => this.setStories(stories ?? []),
+        error: (err) => console.error('Failed to fetch stories:', err),
+      });
+  }
 
   createStory(
     userId: number,
@@ -64,8 +78,14 @@ export class StoryService {
     );
   }
 
-  getStory(storyId: number): Observable<StoryResponseDto>{
-    return this.http.get<StoryResponseDto>(`${this.apiUrl}/${storyId}/story`)
+  getStory(storyId: number): Observable<StoryResponseDto> {
+    return this.http.get<StoryResponseDto>(`${this.apiUrl}/${storyId}/story`);
+  }
+
+  deleteStory(storyId: number | undefined): Observable<string> {
+    return this.http.delete(`${this.apiUrl}/delete-story/${storyId}`, {
+      responseType: 'text',
+    });
   }
 
   private mergeWithDefaults(req: Partial<StoryRequestDto>): StoryRequestDto {
@@ -124,6 +144,10 @@ export class StoryService {
 
   getDefaultStoryReq(): StoryRequestDto {
     return this.defaultStoryRequest;
+  }
+
+  refreshStories(id: number | undefined): void {
+    this.refreshTrigger.next(id ?? 0);
   }
 
   prefetchUserStories(userId: number): void {
