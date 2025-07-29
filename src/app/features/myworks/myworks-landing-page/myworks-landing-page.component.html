@@ -35,33 +35,39 @@
                     <!-- Chapter Dropdown -->
                     <div class="chapter-dropdown">
                       <div class="chapter-list">
-                        <a
-                          *ngFor="let chapter of selectedStory.chapters"
-                          class="chapter"
-                          [routerLink]="[
-                            '/myworks',
-                            selectedStory.id,
-                            'write',
-                            chapter.id
-                          ]"
-                          (click)="closeAllMenus()"
-                        >
-                          <div class="chapter-info">
-                            <div class="chapter-header">
-                              <p class="chapter-title">{{ chapter.title }}</p>
-                              <!-- <p class="chapter-status">
-                Status: {{ chapter.status }} | Date:
-                {{ getFormattedDate(chapter.updatedAt) }}
-              </p> -->
+                        <div *ngIf="selectedStory.chapters && selectedStory.chapters.length > 0; else noChapter">
+                          <a
+                            *ngFor="
+                              let chapter of selectedStory.chapters;
+                              else: noChapter
+                            "
+                            class="chapter"
+                            [routerLink]="[
+                              '/myworks',
+                              selectedStory.id,
+                              'write',
+                              chapter.id
+                            ]"
+                            (click)="closeAllMenus()"
+                          >
+                            <div class="chapter-info">
+                              <div class="chapter-header">
+                                <p class="chapter-title">{{ chapter.title }}</p>
+                                <!-- <p class="chapter-status">
+                                Status: {{ chapter.status }} | Date:
+                                {{ getFormattedDate(chapter.updatedAt) }}
+                              </p> -->
+                              </div>
                             </div>
-                          </div>
-                        </a>
+                          </a>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-
-                <button (click)="onDeleteStory(story)">Delete</button>
+                <button class="delete-btn" (click)="onDeleteStory(story)">
+                  Delete
+                </button>
               </div>
             </div>
           </div>
@@ -70,6 +76,10 @@
 
       <ng-template #noStories>
         <p>No stories yet.</p>
+      </ng-template>
+
+      <ng-template #noChapter>
+        <p>No chapters yet.</p>
       </ng-template>
     </div>
   </div>

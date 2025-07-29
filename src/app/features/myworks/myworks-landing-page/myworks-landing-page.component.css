@@ -36,7 +36,6 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  max-width: 72rem;
   gap: 1.5rem;
 }
 
@@ -50,65 +49,233 @@
 .my-stories-card {
   flex: 1;
   width: 100%;
-  background-color: white;
+  background-color: var(--background);
   border-radius: 0.75rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  max-width: 28rem;
+  max-width: none;
 }
 
-@media (min-width: 1024px) {
-  .my-stories-card {
-    max-width: none;
-  }
+.story-card {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  background-color: #120828;
+  padding: 32px;
+  border-radius: 12px;
+  margin-bottom: 32px;
+  width: 100%;
+  max-width: 1000px;
+  min-height: 180px;
+  box-sizing: border-box;
 }
 
-.book-icon {
-  width: 6rem;
-  height: 6rem;
-  color: #9ca3af;
-  margin-bottom: 1.5rem;
+.img-block {
+  margin-right: 16px;
+  flex-shrink: 0;
 }
 
-.message-text {
-  color: #374151;
-  font-size: 1.125rem;
-  margin-bottom: 2rem;
+.cover {
+  width: 120px;
+  height: 120px;
+  border-radius: 10px;
+  object-fit: cover;
 }
 
-.create-story-button {
-  padding: 0.75rem 1.5rem;
-  border-radius: 9999px;
-  font-weight: 600;
-  color: white;
-  background-color: var(--primary);
-  transition: all 0.3s ease-in-out;
+.story-block {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.story-info-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.story-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.story-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin: 0;
+  color: var(--text);
+}
+
+.story-meta {
+   font-size: 1rem;
+  color: var(--text);
+  margin-top: 4px;
+}
+
+.story-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.continue-btn {
+  background: var(--primary);
+  color: black;
+  padding: 8px 16px;
+  font-size: 0.95rem;
   border: none;
+  border-radius: 5px;
   cursor: pointer;
 }
 
-.create-story-button:hover {
-  opacity: 0.9;
+.delete-btn{
+  background: var(--primary);
+   color: black;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-.create-story-button:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--primary);
+.dropdown {
+  position: relative;
 }
 
-a {
+.dropdown-menu {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: var(--background);
+  border: 1px solid var(--primary);
+  padding: 6px 10px;
+  z-index: 10;
+  border-radius: 4px;
+}
+
+.chapter-dropdown {
+  width: 300px;
+  max-height: 400px;
+  overflow-y: auto;
+  background-color: #2c2c2c;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  color: var(--text);
+  margin: 0;
+}
+
+.chapter-list {
+  display: flex;
+  flex-direction: column;
+  background-color: #120828;
+  gap: 12px;
+}
+
+.chapter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  background-color: var(--primary);
+  padding: 12px;
+  border-radius: 8px;
+  margin: 10px 0px;
+  width: 100%;
   text-decoration: none;
 }
 
-a.active {
-  text-decoration: underline;
+.chapter:hover {
+  text-decoration: none;
+  background-color: var(--accent);
+  color: black;
 }
 
-a:hover {
-  text-decoration: underline;
+.chapter:active {
+  transform: translateX(1px);
+  color: black;
+}
+
+.chapter:visited {
+  color: inherit;
+}
+
+.chapter:focus {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+}
+
+.chapter-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chapter-header {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.chapter-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: black;
+}
+
+.chapter-status {
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+.chapter p {
+  font-size: 0.7rem;
+  margin: 0;
+  flex: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.chapter-dropdown h4 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+  .story-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 24px;
+  }
+
+  .img-block {
+    margin-right: 0;
+    margin-bottom: 16px;
+  }
+
+  .story-block {
+    align-items: center;
+  }
+
+  .story-info-actions {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .story-actions {
+    align-items: center;
+  }
+
+  .dropdown-menu {
+    right: auto;
+    left: 0;
+  }
 }
