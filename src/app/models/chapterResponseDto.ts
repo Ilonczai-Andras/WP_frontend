@@ -15,6 +15,16 @@ export interface ChapterResponseDto {
     content?: string;
     chapterOrder?: number;
     status?: ChapterResponseDto.StatusEnum;
+    publishDate?: string;
+    views?: number;
+    votes?: number;
+    commentsCount?: number;
+    authorNotes?: string;
+    readTimeMinutes?: number;
+    wordCount?: number;
+    createdAt?: string;
+    updatedAt?: string;
+    published?: boolean;
 }
 export namespace ChapterResponseDto {
     export const StatusEnum = {

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ChapterResponseDto } from '../../models/chapterResponseDto';
+import { ChapterRequestDto } from '../../models/chapterRequestDto';
 
 @Injectable({
   providedIn: 'root',
@@ -13,5 +14,9 @@ export class ChapterService {
 
   getChapter(chapterId: number): Observable<ChapterResponseDto> {
     return this.http.get<ChapterResponseDto>(`${this.apiUrl}/${chapterId}/chapter`);
+  }
+
+  updateChapter(chapterId: number, updatedChapter: ChapterRequestDto): Observable<ChapterResponseDto> {
+    return this.http.put<ChapterResponseDto>(`${this.apiUrl}/update-chapter/${chapterId}`, updatedChapter);
   }
 }

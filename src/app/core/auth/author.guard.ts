@@ -21,7 +21,6 @@ export const AuthorGuard: CanActivateFn = (
 
   const storyId = Number(route.paramMap.get('storyId'));
   const loggedInUserId = authService.getUserId();
-  console.log(storyId, loggedInUserId);
 
   if (!storyId || !loggedInUserId) {
     router.navigate(['/unauthorized']);
