@@ -4,12 +4,29 @@
     <div class="story-info">
       <h1>{{ story.title }}</h1>
       <h2>{{ chapter.title }}</h2>
-      <p class="status">{{ chapter.status }} | {{ wordCount }} Words</p>
+      <p class="status">
+        {{ chapter.status }} | {{ wordCount }} Words
+        <span *ngIf="isModified" class="unsaved-indicator"
+          >• Unsaved changes</span
+        >
+      </p>
     </div>
     <div class="buttons">
-      <button class="publish">Publish</button>
-      <button class="save">Save</button>
-      <button class="preview">Preview</button>
+      <button
+        class="publish"
+        (click)="publishChapter()"
+        [disabled]="!chapter.content"
+      >
+        Publish
+      </button>
+      <button
+        class="save"
+        (click)="saveChapter()"
+        [disabled]="!chapter.content"
+      >
+        Save
+      </button>
+      <button class="preview" (click)="previewChapter()">Preview</button>
     </div>
   </div>
 
@@ -17,11 +34,21 @@
   <div class="content">
     <div class="media-section">
       <ng-container *ngIf="!media.type && !showYoutube">
-        <button (click)="triggerFileInput()">
+        <button
+          (click)="triggerFileInput()"
+          class="media-button"
+          title="Add Image"
+        >
           <i class="fas fa-image"></i>
+          <span>Add Image</span>
         </button>
-        <button (click)="showYoutubeInput()">
+        <button
+          (click)="showYoutubeInput()"
+          class="media-button"
+          title="Add YouTube Video"
+        >
           <i class="fab fa-youtube"></i>
+          <span>Add Video</span>
         </button>
       </ng-container>
 
@@ -30,23 +57,35 @@
         type="file"
         #fileInput
         style="display: none"
+        accept="image/*"
         (change)="handleFileUpload($event)"
       />
 
       <!-- YOUTUBE INPUT -->
       <div *ngIf="showYoutube" class="youtube-input">
-        <input
-          type="text"
-          [(ngModel)]="youtubeUrl"
-          placeholder="Enter YouTube URL"
-        />
-        <button (click)="addYoutube()">Add</button>
-        <button (click)="cancelYoutube()">Cancel</button>
+        <div class="input-group">
+          <input
+            type="text"
+            [(ngModel)]="youtubeUrl"
+            placeholder="Enter YouTube URL (e.g., https://www.youtube.com/watch?v=...)"
+            class="youtube-url-input"
+          />
+          <div class="button-group">
+            <button
+              (click)="addYoutube()"
+              class="add-btn"
+              [disabled]="!youtubeUrl.trim()"
+            >
+              Add
+            </button>
+            <button (click)="cancelYoutube()" class="cancel-btn">Cancel</button>
+          </div>
+        </div>
       </div>
 
       <!-- IMAGE PREVIEW -->
       <div *ngIf="media.type === 'image'" class="media-preview">
-        <img [src]="media.src" alt="Uploaded Image" />
+        <img [src]="media.src" alt="Chapter Image" />
       </div>
 
       <!-- YOUTUBE PREVIEW -->
@@ -55,14 +94,16 @@
           [src]="sanitizedYoutubeUrl"
           frameborder="0"
           allowfullscreen
+          title="YouTube Video"
         ></iframe>
       </div>
 
-      <!-- MENU TRIGGER BUTTON (bottom right of media-section) -->
+      <!-- MENU TRIGGER BUTTON -->
       <div
         *ngIf="media.type"
         class="menu-trigger-button"
         (click)="toggleMenu($event)"
+        title="Media options"
       >
         <i class="fas fa-ellipsis-v"></i>
       </div>
@@ -74,29 +115,73 @@
         [style.left.px]="menuPosition.x"
         [style.top.px]="menuPosition.y"
       >
-        <div *ngIf="media.type === 'youtube'" (click)="showYoutubeInput(true)">
-          Add YouTube video
+        <div
+          *ngIf="media.type === 'youtube'"
+          (click)="showYoutubeInput(true)"
+          class="menu-item"
+        >
+          <i class="fab fa-youtube"></i>
+          Replace YouTube video
         </div>
-        <div *ngIf="media.type === 'image'" (click)="triggerFileInput()">
+        <div
+          *ngIf="media.type === 'image'"
+          (click)="triggerFileInput()"
+          class="menu-item"
+        >
+          <i class="fas fa-image"></i>
           Replace image
         </div>
-        <div (click)="removeMedia()">Remove {{ media.type }}</div>
+        <div (click)="removeMedia()" class="menu-item remove">
+          <i class="fas fa-trash"></i>
+          Remove {{ media.type }}
+        </div>
       </div>
     </div>
 
     <div class="chapter-edit">
-      <input
-        type="text"
-        [(ngModel)]="chapter.title"
-        placeholder="Edit Chapter Title"
-        class="chapter-title"
-      />
-      <textarea
-        [(ngModel)]="chapter.content"
-        placeholder="Type your text..."
-        class="chapter-content"
-        (input)="onContentChange()"
-      ></textarea>
+      <!-- Chapter Title Input -->
+      <div class="title-section">
+        <input
+          type="text"
+          [(ngModel)]="chapter.title"
+          placeholder="Enter Chapter Title"
+          class="chapter-title-input"
+          maxlength="100"
+        />
+      </div>
+
+      <!-- Rich Text Editor -->
+      <div class="editor-section">
+        <quill-editor
+          [(ngModel)]="chapter.content"
+          [style]="editorStyle"
+          [modules]="editorConfig.modules"
+          [placeholder]="editorConfig.placeholder"
+          [theme]="editorConfig.theme"
+          (onContentChanged)="onContentChanged($event)"
+          (onSelectionChanged)="onSelectionChanged($event)"
+          (onEditorCreated)="onEditorCreated($event)"
+          (ngModelChange)="onContentChange()"
+        >
+        </quill-editor>
+      </div>
+
+      <!-- Writing Stats -->
+      <div class="writing-stats">
+        <div class="stat-item">
+          <span class="stat-label">Words:</span>
+          <span class="stat-value">{{ wordCount }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Characters:</span>
+          <span class="stat-value">{{ chapter.content?.length || 0 }}</span>
+        </div>
+      </div>
     </div>
+  </div>
+
+  <!-- Keyboard Shortcuts Help -->
+  <div class="shortcuts-info">
+    <small> <strong>Shortcuts:</strong> Ctrl+S to save </small>
   </div>
 </div>
