@@ -8,6 +8,7 @@ import { StoryResponseDto } from '../../../models/storyResponseDto';
 import { CommonModule } from '@angular/common';
 import { getFormattedDateFromNumberArray } from '../../../../app/shared/utils/string-utils';
 import { ChapterResponseDto } from '../../../models/chapterResponseDto';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-myworks-landing-page',
@@ -43,9 +44,10 @@ export class MyworksLandingPageComponent implements OnInit {
     const target = event.target as HTMLElement;
 
     // Check if the click was outside the dropdown and continue button
-    if (!this.elementRef.nativeElement.contains(target) ||
-        (!target.closest('.dropdown') && !target.closest('.continue-btn'))) {
-
+    if (
+      !this.elementRef.nativeElement.contains(target) ||
+      (!target.closest('.dropdown') && !target.closest('.continue-btn'))
+    ) {
       // Only close if the click wasn't on a continue button
       if (!target.closest('.continue-btn')) {
         this.closeAllMenus();
@@ -105,10 +107,41 @@ export class MyworksLandingPageComponent implements OnInit {
     this.isMenuOpen = false;
   }
 
-  onDeleteStory(story: StoryResponseDto) {
-    this.storyService.deleteStory(story.id).subscribe(() => {
-      this.storyService.refreshStories(this.profile?.id)
-    })
+  deleteStory(story: StoryResponseDto) {
+    Swal.fire({
+      title: 'Warning: This cannot be undone.',
+      html: `All reads for this story will be deleted.<br>
+             All votes for this story will be deleted.<br>
+             All comments for this story will be deleted.<br>`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete my story',
+      cancelButtonText: 'No, do not delete it',
+      customClass: {
+        confirmButton: 'custom-confirm-btn',
+        cancelButton: 'custom-cancel-btn',
+        popup: 'custom-popup',
+        title: 'custom-title',
+        htmlContainer: 'custom-text',
+      },
+      buttonsStyling: false,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.storyService.deleteStory(story.id).subscribe(() => {
+          Swal.fire({
+            title: 'Your story has been deleted!',
+            icon: 'success',
+            confirmButtonText: 'Okay',
+            customClass: {
+              confirmButton: 'custom-confirm-btn-success',
+              popup: 'custom-popup-success',
+            },
+            buttonsStyling: false,
+          });
+          this.storyService.refreshStories(this.profile?.id);
+        });
+      }
+    });
   }
 
   getFormattedDate(input: any): string {

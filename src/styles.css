@@ -18,3 +18,83 @@ html, body {
   --secondary: #935609;
   --accent: #baf227;
 }
+
+/* General Popup */
+.custom-popup {
+  background-color: #050110; /* background */
+  color: #e3dafd;            /* text */
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 0 10px #a885f850; /* subtle glow */
+}
+
+/* Title */
+.custom-title {
+  color: #a885f8; /* primary */
+  font-weight: bold;
+}
+
+/* Body text */
+.custom-text {
+  color: #e3dafd;
+  font-size: 1rem;
+}
+
+/* Confirm Button */
+.custom-confirm-btn {
+  background-color: #a885f8; /* primary */
+  color: #050110;            /* background as text */
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 0.95rem;
+  transition: background-color 0.3s ease;
+}
+
+.custom-confirm-btn:hover {
+  background-color: #935609; /* secondary */
+  color: #e3dafd;            /* text */
+}
+
+/* Cancel Button */
+.custom-cancel-btn {
+  background-color: transparent;
+  color: #baf227;            /* accent */
+  border: 2px solid #baf227;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  margin-left: 10px;
+}
+
+.custom-cancel-btn:hover {
+  background-color: #baf227;
+  color: #050110;            /* background as text */
+}
+
+/* Feedback after successful delete */
+.custom-popup-success {
+  background-color: #050110;
+  color: #e3dafd;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 0 10px #a885f850;
+}
+
+.custom-confirm-btn-success {
+  background-color: #baf227; /* accent color */
+  color: #050110;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 0.95rem;
+}
+
+.custom-confirm-btn-success:hover {
+  background-color: #935609; /* secondary color */
+  color: #e3dafd;
+}
