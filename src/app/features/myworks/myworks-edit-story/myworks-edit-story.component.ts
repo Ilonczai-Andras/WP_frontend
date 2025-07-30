@@ -79,6 +79,36 @@ export class MyworksEditStoryComponent implements OnInit {
   private loadStory(storyId: number | undefined) {
     this.storyService.getStory(storyId ?? 0).subscribe((response) => {
       this.story = response;
+
+      this.storyForm.patchValue({
+        title: this.story?.title || '',
+        description: this.story?.description || '',
+        category:
+          this.story?.category || StoryRequestDto.CategoryEnum.GeneralFiction,
+        targetAudience:
+          this.story?.targetAudience ||
+          StoryRequestDto.TargetAudienceEnum.YoungAdult,
+        language: this.story?.language || StoryRequestDto.LanguageEnum.English,
+        copyright:
+          this.story?.copyright ||
+          StoryRequestDto.CopyrightEnum.AllRightsReserved,
+        mature: this.story?.mature || false,
+      });
+
+      this.setFormArray('characters', this.story?.mainCharacters || []);
+      this.setFormArray('tags', this.story?.tags || []);
+      if (this.story?.coverImageUrl) {
+        this.coverImageUrl = this.story.coverImageUrl;
+      }
+    });
+  }
+
+  private setFormArray(controlName: string, values: any[]) {
+    const formArray = this.storyForm.get(controlName) as FormArray;
+    formArray.clear();
+
+    values.forEach((value) => {
+      formArray.push(this.fb.control(value));
     });
   }
 
