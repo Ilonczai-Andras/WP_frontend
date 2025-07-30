@@ -1,0 +1,109 @@
+<div class="story-details-container">
+  <div class="cover-section">
+    <label class="cover-upload">
+      <input type="file" (change)="coverSelected.emit($event)" hidden />
+      <img
+        *ngIf="coverImageUrl; else placeholder"
+        [src]="coverImageUrl"
+        alt="Cover"
+      />
+      <ng-template #placeholder>
+        <div class="cover-placeholder">Add a cover</div>
+      </ng-template>
+    </label>
+  </div>
+
+  <form [formGroup]="storyForm" class="form-section">
+    <h2>Story Details</h2>
+
+    <label>Title</label>
+    <input type="text" formControlName="title" placeholder="Untitled Story" />
+
+    <label>Description</label>
+    <textarea
+      formControlName="description"
+      rows="6"
+      placeholder="Untitled description"
+    ></textarea>
+
+    <label>Main Characters</label>
+    <div formArrayName="characters">
+      <div *ngFor="let char of characters; let i = index" class="character-row">
+        <input [formControlName]="i" />
+        <button
+          *ngIf="i !== characters.length - 1"
+          type="button"
+          (click)="removeCharacter.emit(i)"
+        >
+          -
+        </button>
+        <button
+          *ngIf="i === characters.length - 1"
+          type="button"
+          (click)="addCharacter.emit()"
+          [disabled]="hasEmptyCharacter()"
+        >
+          +
+        </button>
+      </div>
+    </div>
+
+    <label>Category</label>
+    <select formControlName="category">
+      <option [ngValue]="null" disabled>Select a category</option>
+      <option *ngFor="let cat of categories" [ngValue]="cat">
+        {{ categoryLabels[cat] }}
+      </option>
+    </select>
+
+    <label>Tags</label>
+    <div class="tag-container">
+      <span class="tag" *ngFor="let tag of tags">
+        {{ tag.value }}
+        <span class="remove-tag" (click)="removeTag.emit(tag.value)">x</span>
+      </span>
+    </div>
+
+    <input
+      #tagInputRef
+      *ngIf="!tagInputVisible"
+      type="text"
+      [value]="tagInput"
+      (input)="tagInputChange.emit(tagInputRef.value)"
+      (keydown)="tagKeydown.emit($event)"
+      placeholder="Separate tags with a space"
+    />
+
+    <label>Target Audience</label>
+    <select formControlName="targetAudience">
+      <option [value]="null" disabled>Select audience</option>
+      <option *ngFor="let audience of audiences" [value]="audience">
+        {{ audienceLabels[audience] }}
+      </option>
+    </select>
+
+    <label>Language</label>
+    <select formControlName="language">
+      <option [ngValue]="null" disabled>Select a language</option>
+      <option *ngFor="let lang of languages" [value]="lang">
+        {{ languageLabels[lang] }}
+      </option>
+    </select>
+
+    <label>Copyright</label>
+    <select formControlName="copyright">
+      <option [ngValue]="null" disabled>Select a copyright</option>
+      <option *ngFor="let license of licenses" [value]="license">
+        {{ licenseLabels[license] }}
+      </option>
+    </select>
+
+    <label class="switch-label">
+      Rating (Mature)
+      <div class="switch-wrapper">
+        <input type="checkbox" formControlName="mature" class="switch-input" />
+        <span class="switch-slider"></span>
+      </div>
+    </label>
+  </form>
+</div>

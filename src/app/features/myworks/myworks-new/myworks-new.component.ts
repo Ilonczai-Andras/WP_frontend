@@ -21,6 +21,7 @@ import { LanguageLabels } from '../../../shared/enums/language.enum';
 import { CopyrightLicenseLabels } from '../../../shared/enums/copyright-license.enum';
 import { TargetAudienceLabels } from '../../../shared/enums/target-audience.enum';
 import { LoadingSpinnerComponent } from '../../../shared/loading-spinner/loading-spinner.component';
+import { StoryFormComponent } from '../../../shared/story-form/story-form.component';
 
 @Component({
   selector: 'app-myworks-new-page',
@@ -30,6 +31,7 @@ import { LoadingSpinnerComponent } from '../../../shared/loading-spinner/loading
     ReactiveFormsModule,
     FormsModule,
     LoadingSpinnerComponent,
+    StoryFormComponent,
   ],
   templateUrl: './myworks-new.component.html',
   styleUrl: './myworks-new.component.css',
@@ -125,7 +127,7 @@ export class MyworksNewComponent implements OnInit {
             console.log('Story submitted');
             this.storyForm.reset(this.storyService.getDefaultStoryReq());
             this.coverImageUrl = '';
-            this.storyService.refreshStories(this.profile?.id)
+            this.storyService.refreshStories(this.profile?.id);
           },
           error: (err) => console.error(err),
           complete: () => {
@@ -159,13 +161,6 @@ export class MyworksNewComponent implements OnInit {
     charactersArray.push(this.fb.control(''));
   }
 
-  hasEmptyCharacter(): boolean {
-    return this.characters.some((char) => {
-      const value = char.value;
-      return !value || (typeof value === 'string' && value.trim() === '');
-    });
-  }
-
   removeTag(tagValue: string) {
     const tagsArray = this.storyForm.get('tags') as FormArray;
     const index = tagsArray.controls.findIndex(
@@ -189,15 +184,6 @@ export class MyworksNewComponent implements OnInit {
       !!this.storyRequest &&
       this.storyService.isCompleteStory(this.storyRequest)
     );
-  }
-
-  get characters(): FormControl[] {
-    return (this.storyForm.get('characters') as FormArray)
-      .controls as FormControl[];
-  }
-
-  get tags(): FormControl[] {
-    return (this.storyForm.get('tags') as FormArray).controls as FormControl[];
   }
 
   addTagFromInput() {
