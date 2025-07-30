@@ -58,6 +58,15 @@ export const routes: Routes = [
     data: { showHeader: true },
   },
   {
+    path: 'myworks/:storyIdAndTitle',
+    loadChildren: () =>
+      import('./features/myworks/myworks-edit-story/myworks-edit-story.routes').then(
+        (m) => m.MY_WORKS_EDIT_STORY
+      ),
+    canActivate: [AuthGuard],
+    data: { showHeader: false },
+  },
+  {
     path: 'story/:storyIdAndTitle',
     loadChildren: () =>
       import('./features/story/story-overview/story-overview.routes').then(

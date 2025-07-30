@@ -1,0 +1,175 @@
+<div class="mystory-edit-story-container">
+  <div class="mystory-edit-story-header">
+    <div class="header-container">
+      <!-- Left section: Back arrow and text -->
+      <div class="left-section">
+        <button (click)="goBack()" class="back-button" aria-label="Go back">
+          <!-- Inline SVG for the back arrow icon -->
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-chevron-left"
+          >
+            <path d="m15 18-6-6 6-6" />
+          </svg>
+        </button>
+        <div class="text-content">
+          <span class="story-info">Edit Story Details</span>
+          <h1 class="story-title">{{ story?.title }}</h1>
+        </div>
+      </div>
+
+      <!-- Right section: Buttons -->
+      <div class="right-section">
+        <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+        <button class="cancel-button">Cancel</button>
+
+        <!-- Conditionally show Skip or Send -->
+        <button class="save-button" (click)="onSave()">Save</button>
+      </div>
+    </div>
+  </div>
+  <div class="story-container">
+    <!-- Left sidebar with story cover -->
+    <div class="sidebar">
+      <div class="story-cover">
+        <img [src]="story?.coverImageUrl" alt="Story Cover" />
+        <div class="story-title-overlay">
+          <h2>Untitled Story</h2>
+        </div>
+        <div class="checkmark-badge">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="10" fill="#20B2AA" />
+            <path
+              d="M6 10l3 3 5-6"
+              stroke="white"
+              stroke-width="2"
+              fill="none"
+            />
+          </svg>
+        </div>
+      </div>
+
+      <button class="view-reader-btn" (click)="viewAsReader()">
+        View as reader
+      </button>
+    </div>
+
+    <!-- Main content area -->
+    <div class="main-content">
+      <!-- Tab navigation -->
+      <div class="tab-navigation">
+        <button
+          class="tab-btn"
+          [class.active]="activeTab === 'storyDetails'"
+          (click)="setActiveTab('storyDetails')"
+        >
+          Story Details
+        </button>
+        <button
+          class="tab-btn"
+          [class.active]="activeTab === 'tableOfContents'"
+          (click)="setActiveTab('tableOfContents')"
+        >
+          Table of Contents
+        </button>
+      </div>
+
+      <!-- Tab content -->
+      <div class="tab-content" *ngIf="activeTab === 'tableOfContents'">
+        <!-- Add New Part button -->
+        <button class="add-part-btn" (click)="createNewPart()">
+          + New Part
+        </button>
+
+        <!-- Story parts list -->
+        <div class="parts-list">
+          <div class="part-item" *ngFor="let part of story?.chapters">
+            <div class="part-icon">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <rect
+                  x="2"
+                  y="2"
+                  width="12"
+                  height="12"
+                  rx="1"
+                  stroke="#666"
+                  fill="none"
+                />
+                <line x1="5" y1="6" x2="11" y2="6" stroke="#666" />
+                <line x1="5" y1="8" x2="11" y2="8" stroke="#666" />
+                <line x1="5" y1="10" x2="8" y2="10" stroke="#666" />
+              </svg>
+            </div>
+
+            <div class="part-content">
+              <h3 class="part-title">{{ part.title }}</h3>
+              <div class="part-meta">
+                <span class="part-status">{{ part.status }}</span>
+                <span class="part-date">{{
+                  getFormattedDate(part.updatedAt)
+                }}</span>
+              </div>
+            </div>
+
+            <div class="part-stats">
+              <div class="stat-item">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <path
+                    d="M7 3C4.5 3 2.4 4.6 1 7c1.4 2.4 3.5 4 6 4s4.6-1.6 6-4c-1.4-2.4-3.5-4-6-4z"
+                    stroke="#888"
+                    fill="none"
+                  />
+                  <circle cx="7" cy="7" r="2" stroke="#888" fill="none" />
+                </svg>
+                <span>{{ part.views }}</span>
+              </div>
+              <div class="stat-item">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <path
+                    d="M7 12l-3.5-3.5L7 5l3.5 3.5L7 12z"
+                    stroke="#888"
+                    fill="none"
+                  />
+                </svg>
+                <span>{{ part.votes }}</span>
+              </div>
+              <div class="stat-item">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <path
+                    d="M12 7c0 2.8-2.2 5-5 5-1 0-2-.3-2.8-.8L2 12l.8-2.2C2.3 9 2 8 2 7c0-2.8 2.2-5 5-5s5 2.2 5 5z"
+                    stroke="#888"
+                    fill="none"
+                  />
+                </svg>
+                <span>{{ part.commentsCount }}</span>
+              </div>
+            </div>
+
+            <div class="part-actions">
+              <button class="action-btn">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="4" r="1" fill="#666" />
+                  <circle cx="8" cy="8" r="1" fill="#666" />
+                  <circle cx="8" cy="12" r="1" fill="#666" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Placeholder for other tabs -->
+      <div class="tab-content" *ngIf="activeTab === 'storyDetails'">
+        <p>Story Details content goes here...</p>
+      </div>
+    </div>
+  </div>
+</div>
