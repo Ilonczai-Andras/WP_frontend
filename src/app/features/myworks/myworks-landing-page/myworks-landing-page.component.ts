@@ -10,10 +10,11 @@ import { getFormattedDateFromNumberArray } from '../../../../app/shared/utils/st
 import { ChapterResponseDto } from '../../../models/chapterResponseDto';
 import Swal from 'sweetalert2';
 import { ChapterService } from '../../../core/services/chapter.service';
+import { ReplaceSpacesPipe } from '../../../shared/pipes/replace-spaces.pipe';
 
 @Component({
   selector: 'app-myworks-landing-page',
-  imports: [RouterModule, CommonModule],
+  imports: [RouterModule, CommonModule, ReplaceSpacesPipe],
   templateUrl: './myworks-landing-page.component.html',
   styleUrl: './myworks-landing-page.component.css',
 })
