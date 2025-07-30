@@ -13,10 +13,25 @@ export class ChapterService {
   constructor(private http: HttpClient) {}
 
   getChapter(chapterId: number): Observable<ChapterResponseDto> {
-    return this.http.get<ChapterResponseDto>(`${this.apiUrl}/${chapterId}/chapter`);
+    return this.http.get<ChapterResponseDto>(
+      `${this.apiUrl}/${chapterId}/chapter`
+    );
   }
 
-  updateChapter(chapterId: number, updatedChapter: ChapterRequestDto): Observable<ChapterResponseDto> {
-    return this.http.put<ChapterResponseDto>(`${this.apiUrl}/update-chapter/${chapterId}`, updatedChapter);
+  updateChapter(
+    chapterId: number,
+    updatedChapter: ChapterRequestDto
+  ): Observable<ChapterResponseDto> {
+    return this.http.put<ChapterResponseDto>(
+      `${this.apiUrl}/update-chapter/${chapterId}`,
+      updatedChapter
+    );
+  }
+
+  createNextChapter(chapterId: number): Observable<ChapterResponseDto> {
+    return this.http.post<ChapterResponseDto>(
+      `${this.apiUrl}/next-chapter/${chapterId}`,
+      {}
+    );
   }
 }

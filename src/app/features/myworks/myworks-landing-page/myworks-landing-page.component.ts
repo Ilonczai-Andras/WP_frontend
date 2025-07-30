@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { getFormattedDateFromNumberArray } from '../../../../app/shared/utils/string-utils';
 import { ChapterResponseDto } from '../../../models/chapterResponseDto';
 import Swal from 'sweetalert2';
+import { ChapterService } from '../../../core/services/chapter.service';
 
 @Component({
   selector: 'app-myworks-landing-page',
@@ -23,6 +24,7 @@ export class MyworksLandingPageComponent implements OnInit {
 
   selectedStory: StoryResponseDto | null = null;
   chapterList: ChapterResponseDto[] = [];
+  lastChapterId: number = 0;
 
   publishedStoryCount: number | undefined = 0;
   draftStoryCount: number | undefined = 0;
@@ -34,6 +36,7 @@ export class MyworksLandingPageComponent implements OnInit {
   constructor(
     private profileService: ProfileService,
     private storyService: StoryService,
+    private chapterService: ChapterService,
     private router: Router,
     private elementRef: ElementRef
   ) {}
@@ -153,5 +156,24 @@ export class MyworksLandingPageComponent implements OnInit {
     this.isMenuOpen = false;
     this.deleteMenuOpen = false;
     this.selectedStory = null;
+  }
+
+  createNewPart(
+    chapters: ChapterResponseDto[] | undefined,
+    storyId: number | undefined
+  ) {
+    if (chapters && chapters.length > 0) {
+      const maxChapterId = Math.max(
+        ...chapters
+          .map((chapter) => chapter.id)
+          .filter((id) => id !== undefined)
+      );
+      this.chapterService
+        .createNextChapter(maxChapterId)
+        .subscribe((response) => {
+          this.storyService.refreshStories(this.profile?.id);
+          this.router.navigateByUrl(`myworks/${storyId}/write/${response.id}`);
+        });
+    }
   }
 }

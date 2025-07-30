@@ -14,8 +14,10 @@ import { ChapterResponseDto } from '../../../models/chapterResponseDto';
 import { StoryService } from '../../../core/services/story.service';
 import { StoryResponseDto } from '../../../models/storyResponseDto';
 import { QuillModule } from 'ngx-quill';
-import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
 import { MessageService } from 'primeng/api';
+import { ProfileService } from '../../../core/services/profile.service';
+import { UserDto } from '../../../models/userDto';
 
 @Component({
   selector: 'app-myworks-write',
@@ -25,6 +27,10 @@ import { MessageService } from 'primeng/api';
 })
 export class MyworksWriteComponent implements OnInit {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+
+  private destroy$ = new Subject<void>();
+
+  profile!: UserDto | null;
 
   storyId!: number;
   chapterId!: number;
@@ -79,7 +85,8 @@ export class MyworksWriteComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private chapterService: ChapterService,
     private storyService: StoryService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private profileService: ProfileService
   ) {
     this.contentChange$
       .pipe(debounceTime(2000), distinctUntilChanged())
@@ -109,6 +116,14 @@ export class MyworksWriteComponent implements OnInit {
     this.storyService.getStory(this.storyId).subscribe((response) => {
       this.story = response;
     });
+  }
+
+  private loadProfile() {
+    this.profileService.profile$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((profile) => {
+        this.profile = profile;
+      });
   }
 
   private hasUnsavedChanges(): boolean {
@@ -288,6 +303,10 @@ export class MyworksWriteComponent implements OnInit {
     return this.hasUnsavedChanges();
   }
 
+  private refreshStories() {
+    this.storyService.refreshStories(this.profile?.id);
+  }
+
   //saving chapters
   saveChapter() {
     if (!this.chapter.content) {
@@ -298,6 +317,7 @@ export class MyworksWriteComponent implements OnInit {
     this.chapterService.updateChapter(this.chapterId, this.chapter).subscribe({
       next: (response) => {
         this.lastSavedContent = this.chapter.content || '';
+        this.refreshStories();
         this.messageService.add({
           severity: 'success',
           summary: 'Success',
@@ -321,6 +341,7 @@ export class MyworksWriteComponent implements OnInit {
         .subscribe({
           next: (response) => {
             this.lastSavedContent = this.chapter.content || '';
+            this.refreshStories();
             this.messageService.add({
               severity: 'success',
               summary: 'Success',
@@ -351,6 +372,7 @@ export class MyworksWriteComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.chapter = response;
+          this.refreshStories();
           this.messageService.add({
             severity: 'success',
             summary: 'Success',

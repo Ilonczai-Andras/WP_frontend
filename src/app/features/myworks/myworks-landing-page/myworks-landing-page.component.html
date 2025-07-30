@@ -38,7 +38,7 @@
                     <!-- Chapter Dropdown -->
                     <div class="chapter-dropdown">
                       <div class="chapter-list">
-                        <div
+                        <ng-container
                           *ngIf="
                             selectedStory.chapters &&
                               selectedStory.chapters.length > 0;
@@ -46,10 +46,7 @@
                           "
                         >
                           <a
-                            *ngFor="
-                              let chapter of selectedStory.chapters;
-                              else: noChapter
-                            "
+                            *ngFor="let chapter of selectedStory.chapters"
                             class="chapter"
                             [routerLink]="[
                               '/myworks',
@@ -61,16 +58,21 @@
                           >
                             <div class="chapter-info">
                               <div class="chapter-header">
-                                <p class="chapter-title">{{ chapter.title }}</p>
-                                <!-- <p class="chapter-status">
-                                Status: {{ chapter.status }} | Date:
-                                {{ getFormattedDate(chapter.updatedAt) }}
-                              </p> -->
+                                <p class="chapter-title">
+                                  {{ chapter.title }}
+                                </p>
+                                <p class="chapter-status">
+                                  Status: {{ chapter.status }} | Date:
+                                  {{ getFormattedDate(chapter.updatedAt) }}
+                                </p>
                               </div>
                             </div>
                           </a>
-                        </div>
+                        </ng-container>
                       </div>
+                    </div>
+                    <div class="new-part" (click)="createNewPart(selectedStory.chapters, selectedStory.id)">
+                      New part
                     </div>
                   </div>
                 </div>
