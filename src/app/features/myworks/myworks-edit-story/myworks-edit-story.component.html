@@ -168,7 +168,18 @@
 
       <!-- Placeholder for other tabs -->
       <div class="tab-content" *ngIf="activeTab === 'storyDetails'">
-        <p>Story Details content goes here...</p>
+        <app-story-form
+          [storyForm]="storyForm"
+          [coverImageUrl]="coverImageUrl"
+          [tagInput]="tagInput"
+          [tagInputVisible]="tagInputVisible"
+          (tagInputChange)="tagInput = $event"
+          (removeCharacter)="removeCharacter($event)"
+          (addCharacter)="addCharacter()"
+          (removeTag)="removeTag($event)"
+          (tagKeydown)="onTagInput($event)"
+          (coverSelected)="onCoverSelected($event)"
+        ></app-story-form>
       </div>
     </div>
   </div>
