@@ -8,6 +8,7 @@ import { FollowService } from '../services/follow.service';
 import { ConversationService } from '../services/conversation.service';
 import { StoryService } from '../services/story.service';
 import { TokenService } from '../services/token.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +16,12 @@ import { TokenService } from '../services/token.service';
 export class AuthService {
   private tokenKey = 'auth-token';
   private userSubject = new BehaviorSubject<any>(null);
+
+  private countdownSubject = new BehaviorSubject<number | null>(null);
+  public countdown$ = this.countdownSubject.asObservable();
+
+  private tokenExpirationTimeout: any;
+  private countdownInterval: any;
 
   public currentUser$ = this.userSubject.asObservable();
 
@@ -28,18 +35,20 @@ export class AuthService {
     private followService: FollowService,
     private conversationService: ConversationService,
     private storyService: StoryService,
-    private tokenService: TokenService
+    private tokenService: TokenService,
+    private router: Router
   ) {
     const token = this.getToken();
     if (token && !this.tokenService.isTokenExpired(token)) {
       const decodedUser = this.decodeToken(token);
       this.userSubject.next(decodedUser);
+      this.scheduleTokenExpiryLogout(decodedUser.exp);
 
       if (decodedUser && decodedUser.userName && decodedUser.sub) {
         this.profileService.loadOwnProfile(decodedUser.userName);
         this.followService.prefetchOwnFollowing(decodedUser.sub);
         this.conversationService.prefetchUserPosts(decodedUser.sub);
-        this.storyService.prefetchUserStories(decodedUser.sub)
+        this.storyService.prefetchUserStories(decodedUser.sub);
       }
     }
   }
@@ -52,10 +61,11 @@ export class AuthService {
         if (token) {
           const decodedUser = this.decodeToken(token);
           this.userSubject.next(decodedUser);
+          this.scheduleTokenExpiryLogout(decodedUser.exp);
           this.profileService.loadOwnProfile(decodedUser.userName);
           this.followService.prefetchOwnFollowing(decodedUser.sub);
           this.conversationService.prefetchUserPosts(decodedUser.sub);
-          this.storyService.prefetchUserStories(decodedUser.sub)
+          this.storyService.prefetchUserStories(decodedUser.sub);
           this.storyService.prefetchUserStories(decodedUser.sub);
         }
 
@@ -74,6 +84,8 @@ export class AuthService {
     this.profileService.clearProfile();
     this.followService.setFollowData(null);
     this.conversationService.setConversationData(null);
+    if (this.countdownInterval) clearInterval(this.countdownInterval);
+    if (this.tokenExpirationTimeout) clearTimeout(this.tokenExpirationTimeout);
   }
 
   getToken(): string | null {
@@ -133,5 +145,28 @@ export class AuthService {
       return -1;
     }
     return Number(user.sub);
+  }
+
+  private scheduleTokenExpiryLogout(exp: number) {
+    const expiresInMs = exp * 1000 - Date.now();
+
+    if (this.tokenExpirationTimeout) clearTimeout(this.tokenExpirationTimeout);
+    if (this.countdownInterval) clearInterval(this.countdownInterval);
+
+    if (expiresInMs > 0) {
+      this.countdownSubject.next(Math.floor(expiresInMs / 1000));
+      this.countdownInterval = setInterval(() => {
+        const current = this.countdownSubject.value;
+        if (current !== null && current > 0) {
+          this.countdownSubject.next(current - 1);
+        }
+      }, 1000);
+
+      this.tokenExpirationTimeout = setTimeout(() => {
+        this.logout();
+        alert('Session expired. Please login again.');
+        this.router.navigate(['/login']);
+      }, expiresInMs);
+    }
   }
 }

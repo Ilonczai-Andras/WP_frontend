@@ -34,6 +34,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   isSearchFocused: boolean = false;
 
+  tokenCountdown: string | null = null;
+  private countdownSub!: Subscription;
+
   @HostListener('document:click', ['$event'])
   handleClickOutside(event: Event) {
     const target = event.target as HTMLElement;
@@ -71,10 +74,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.authSub = this.authService.loggedIn$.subscribe((loggedIn) => {
       this.isLoggedIn = loggedIn;
     });
+
+    this.countdownSub = this.authService.countdown$.subscribe((seconds) => {
+      if (seconds !== null) {
+        const minutes = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        this.tokenCountdown = `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+      } else {
+        this.tokenCountdown = null;
+      }
+    });
   }
 
   ngOnDestroy() {
     this.authSub?.unsubscribe();
+    this.countdownSub?.unsubscribe();
   }
 
   toggleMenu() {

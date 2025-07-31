@@ -40,5 +40,8 @@
       <a routerLink="/login" class="btn">Login</a>
     </div>
     <app-dropdown-menu [showMenu]="isLoggedIn"></app-dropdown-menu>
+    <div *ngIf="tokenCountdown" class="token-timer">
+      Session expires in {{ tokenCountdown }}
+    </div>
   </div>
 </header>
