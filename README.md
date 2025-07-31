@@ -2,58 +2,103 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.14.
 
-## Development server
+## Technology overview
 
-To start a local development server, run:
+* **Angular**: A platform and framework for building single-page client applications using HTML and TypeScript.
+* **TypeScript**: A superset of JavaScript that adds static typing.
+* **SCSS/CSS**: For styling components.
 
-```bash
-ng serve
+## Project Structure
+
+The project follows a modular and well-organized structure to promote maintainability and scalability.
+
+```
+WP_FRONTEND/
+├── .angular/                  # Angular CLI configuration files
+├── .vscode/                   # VS Code specific settings
+├── node_modules/              # Project dependencies
+├── src/
+│   ├── app/                   # Application source code
+│   │   ├── core/              # Core application modules (e.g., authentication, services, interceptors)
+│   │   │   ├── auth/          # Authentication related modules (guards, services)
+│   │   │   ├── interceptors/  # HTTP interceptors
+│   │   │   └── services/      # Reusable application services
+│   │   ├── features/          # Feature-specific modules (e.g., dropdown-menu, home, myworks, profile, story)
+│   │   │   ├── dropdown-menu/
+│   │   │   ├── home/
+│   │   │   ├── myworks/       # Modules related to user's works (edit, landing, new, write)
+│   │   │   ├── profile/       # User profile related modules (about, conversations, following, dialog)
+│   │   │   └── story/         # Story specific modules
+│   │   ├── layout/            # Layout components (footer, header, unauthorized-page)
+│   │   ├── models/            # TypeScript interfaces/classes for data structures (DTOs)
+│   │   ├── shared/            # Shared components, modules, enums, pipes, utils
+│   │   │   ├── enums/
+│   │   │   ├── loading-spinner/
+│   │   │   ├── pipes/
+│   │   │   └── utils/
+│   │   ├── app.component.ts   # Root component
+│   │   ├── app.config.ts      # Application configuration
+│   │   ├── app.routes.ts      # Application routes
+│   │   └── main.ts            # Entry point for the application
+│   ├── assets/                # Static assets (images, fonts, etc.)
+│   ├── environments/          # Environment-specific configuration
+│   ├── index.html             # Main HTML file
+│   ├── styles.css             # Global styles
+│   └── tsconfig.app.json      # TypeScript configuration for the application
+├── .editorconfig              # Editor configuration
+├── .gitignore                 # Git ignore file
+├── angular.json               # Angular CLI workspace configuration
+├── openapiapitools.json       # OpenAPI/Swagger related configuration (if used for API generation)
+├── package.json               # Project dependencies and scripts
+├── package-lock.json          # Dependency lock file
+├── README.md                  # This README file
+├── tsconfig.json              # Base TypeScript configuration
+└── tsconfig.spec.json         # TypeScript configuration for tests
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Install and Run
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
+Prerequisites
+* Node.js (LTS version recommended)
+* npm (usually comes with Node.js)
+* Angular CLI:
+``` bash
+npm install -g @angular/cli
+```
+Installation
+1. **Clone** the repository:
+``` bash
+git clone https://github.com/Ilonczai-Andras/WP_frontend
+cd WP_FRONTEND
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
+2. **Install** dependencies:
+``` bash
+npm install
 ```
 
-## Building
+Development Server
 
-To build the project run:
+Run ng serve for a development server. Navigate to http://localhost:4200/. The application will automatically reload if you change any of the source files.
 
-```bash
-ng build
-```
+Key Features
+* Authentication: User login, registration, and protected routes using guards.
+* User Profiles: Display and manage user profiles, including conversations and following.
+* Story Management: Create, edit, and view stories.
+* Dynamic Layout: Responsive layout components (header, footer).
+* API Integration: Services to interact with the backend API.
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Contributing
+We welcome contributions! Please follow these steps:
 
-## Running unit tests
+1. Fork the repository.
+2. Create a new branch (git checkout -b feature/your-feature-name).
+3. Make your changes.
+4. Commit your changes (git commit -m 'feat: Add new feature').
+5. Push to the branch (git push origin feature/your-feature-name).
+6. Create a Pull Request.
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+Please ensure your code adheres to the project's coding style and includes appropriate tests.
 
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Contact
+For any questions or issues, please contact [Your Name/Team Email Address].
