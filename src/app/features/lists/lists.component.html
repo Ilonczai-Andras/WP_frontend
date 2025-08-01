@@ -32,7 +32,7 @@
   <div class="library-content">
     <!-- Reading Lists Tab Content -->
     <div *ngIf="currentTab === 'reading-lists'" class="reading-lists-content">
-      <button class="create-btn" (click)="createReadingList()">
+      <button class="create-btn" (click)="openModal()">
         <span class="plus-icon">+</span>
         Create reading list
       </button>
@@ -98,3 +98,7 @@
     </div>
   </div>
 </div>
+<app-reading-list-modal
+  [(visible)]="showModal"
+  (create)="createReadingList($event)">
+</app-reading-list-modal>

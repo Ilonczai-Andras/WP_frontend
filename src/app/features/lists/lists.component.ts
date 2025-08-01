@@ -8,27 +8,36 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { ReadingListResponseDto } from '../../models/readingListResponseDto';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, take, takeUntil } from 'rxjs';
 import { ReadinglistService } from '../../core/services/readinglist.service';
+import { ReadingListModalComponent } from './reading-list-modal/reading-list-modal.component';
+import { ProfileService } from '../../core/services/profile.service';
+import { UserDto } from '../../models/userDto';
+import { ReadingListRequestDto } from '../../models/readingListRequestDto';
 
 @Component({
   selector: 'app-lists',
-  imports: [CommonModule],
+  imports: [CommonModule, ReadingListModalComponent],
   templateUrl: './lists.component.html',
   styleUrl: './lists.component.css',
 })
 export class ListsComponent implements OnInit, OnDestroy {
   currentTab: string = 'reading-lists';
 
+  profile: UserDto | null = {};
+
   readingLists: ReadingListResponseDto[] | null = [];
 
   openedMenuIndex: number | null = null;
+
+  showModal = false;
 
   private destroy$ = new Subject<void>();
 
   constructor(
     private router: Router,
     private readingListService: ReadinglistService,
+    private profileService: ProfileService,
     private elementRef: ElementRef
   ) {}
 
@@ -52,6 +61,12 @@ export class ListsComponent implements OnInit, OnDestroy {
       .subscribe((response) => {
         this.readingLists = response;
       });
+
+    this.profileService.profile$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((response) => {
+        this.profile = response;
+      });
   }
 
   ngOnDestroy(): void {
@@ -63,9 +78,17 @@ export class ListsComponent implements OnInit, OnDestroy {
     this.currentTab = tab;
   }
 
-  createReadingList() {
-    // Handle create reading list functionality
-    console.log('Create reading list clicked');
+  createReadingList(name: string) {
+    const req: ReadingListRequestDto = {
+      name: name,
+      private: false,
+    };
+    this.readingListService
+      .createList(this.profile?.id, req)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.readingListService.refreshFollowers(this.profile?.id);
+      });
   }
 
   toggleMenu(index: number) {
@@ -74,5 +97,9 @@ export class ListsComponent implements OnInit, OnDestroy {
 
   closeMenu() {
     this.openedMenuIndex = null;
+  }
+
+  openModal() {
+    this.showModal = true;
   }
 }

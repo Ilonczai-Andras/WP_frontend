@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, switchMap } from 'rxjs';
 import { ReadingListResponseDto } from '../../models/readingListResponseDto';
 import { HttpClient } from '@angular/common/http';
+import { ReadingListRequestDto } from '../../models/readingListRequestDto';
 
 @Injectable({
   providedIn: 'root',
@@ -38,6 +39,16 @@ export class ReadinglistService {
     );
   }
 
+  createList(
+    ownerId: number | undefined,
+    req: ReadingListRequestDto
+  ): Observable<ReadingListResponseDto> {
+    return this.http.post<ReadingListResponseDto>(
+      `${this.apiUrl}/${ownerId}`,
+      req
+    );
+  }
+
   prefetchOwnReadingLists(userId: number): void {
     this.getUserLists(userId).subscribe((response) => {
       this.setFollowData(response);
@@ -50,7 +61,7 @@ export class ReadinglistService {
     this.readingListSubject.next(readingListResponseDto);
   }
 
-  refreshFollowers(id: number): void {
-    this.refreshTrigger.next(id);
+  refreshFollowers(id: number | undefined): void {
+    this.refreshTrigger.next(id ?? 0);
   }
 }
