@@ -72,6 +72,13 @@ export class StoryService {
     );
   }
 
+  updateStory(
+    storyId: number | undefined,
+    req: StoryRequestDto
+  ): Observable<StoryResponseDto> {
+    return this.http.put(`${this.apiUrl}/${storyId}`, req);
+  }
+
   getStories(userId: number): Observable<Array<StoryResponseDto>> {
     return this.http.get<Array<StoryResponseDto>>(
       `${this.apiUrl}/${userId}/stories`

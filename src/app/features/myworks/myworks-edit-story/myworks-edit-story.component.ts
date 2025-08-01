@@ -11,6 +11,7 @@ import { ChapterService } from '../../../core/services/chapter.service';
 import { StoryFormComponent } from '../../../shared/story-form/story-form.component';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { StoryRequestDto } from '../../../models/storyRequestDto';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-myworks-edit-story',
@@ -34,6 +35,8 @@ export class MyworksEditStoryComponent implements OnInit {
   tagInput: string = '';
 
   storyForm: FormGroup;
+  storyId: number = 0;
+  storyRequest: StoryRequestDto = {};
 
   constructor(
     private location: Location,
@@ -41,6 +44,7 @@ export class MyworksEditStoryComponent implements OnInit {
     private profileService: ProfileService,
     private storyService: StoryService,
     private chapterService: ChapterService,
+    private messageService: MessageService,
     private fb: FormBuilder
   ) {
     this.storyForm = this.fb.group({
@@ -67,13 +71,17 @@ export class MyworksEditStoryComponent implements OnInit {
 
   ngOnInit(): void {
     const param = this.route.snapshot.paramMap.get('storyIdAndTitle');
-    const id = param ? Number(param.split('-')[0]) : 0;
+    this.storyId = param ? Number(param.split('-')[0]) : 0;
+
+    this.storyForm.valueChanges.subscribe((value) => {
+      this.setStoryManually();
+    });
 
     this.profileService.profile$.subscribe((response) => {
       this.profile = response;
     });
 
-    this.loadStory(id);
+    this.loadStory(this.storyId);
   }
 
   private loadStory(storyId: number | undefined) {
@@ -130,7 +138,7 @@ export class MyworksEditStoryComponent implements OnInit {
       this.chapterService
         .createNextChapter(maxChapterId)
         .subscribe((response) => {
-          this.storyService.refreshStories(this.profile?.id);
+          this.loadStory(this.storyId);
         });
     }
   }
@@ -201,5 +209,47 @@ export class MyworksEditStoryComponent implements OnInit {
     }
   }
 
-  onSave() {}
+  setStoryManually() {
+    const formValue = this.storyForm.value;
+
+    this.storyRequest = {
+      title: formValue.title?.trim() ?? '',
+      description: formValue.description?.trim() ?? '',
+      mainCharacters: Array.isArray(formValue.characters)
+        ? formValue.characters
+            .filter(
+              (char: string | null) =>
+                typeof char === 'string' && char.trim() !== ''
+            )
+            .map((char: string) => char.trim())
+        : [],
+      category: formValue.category,
+      tags: formValue.tags ?? [],
+      targetAudience: formValue.targetAudience,
+      language: formValue.language,
+      copyright: formValue.copyright,
+      mature: formValue.mature,
+      coverImageUrl: this.coverImageUrl ? this.coverImageUrl.toString() : '',
+    };
+  }
+
+  onUpdate() {
+    this.storyService.updateStory(this.story?.id, this.storyRequest).subscribe(
+      (response) => {
+        this.loadStory(this.storyId);
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Story saved successfully!',
+        });
+      },
+      (error) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Story was not saved successfully!',
+        });
+      }
+    );
+  }
 }
