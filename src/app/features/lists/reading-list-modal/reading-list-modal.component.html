@@ -1,0 +1,39 @@
+<p-dialog
+  [(visible)]="visible"
+  header="Name your reading list"
+  [modal]="true"
+  [closable]="true"
+  [style]="{ width: '400px' }"
+  [contentStyle]="{
+    'background-color': 'var(--background)',
+    color: 'var(--text)'
+  }"
+>
+  <p class="dialog-description">
+    Give your reading list a specific name so you can quickly recognize it later
+  </p>
+
+  <input
+    type="text"
+    [(ngModel)]="readingListName"
+    placeholder="ex. Best fantasy books"
+    class="dialog-input"
+  />
+
+  <ng-template pTemplate="footer">
+    <p-button
+      label="Cancel"
+      [text]="true"
+      severity="secondary"
+      (click)="closeDialog()"
+      type="button"
+    ></p-button>
+    <p-button
+      label="Save"
+      [outlined]="true"
+      severity="primary"
+      (click)="onCreate()"
+      type="button"
+    ></p-button>
+  </ng-template>
+</p-dialog>
