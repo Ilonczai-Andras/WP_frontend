@@ -14,10 +14,11 @@ import { ReadingListModalComponent } from './reading-list-modal/reading-list-mod
 import { ProfileService } from '../../core/services/profile.service';
 import { UserDto } from '../../models/userDto';
 import { ReadingListRequestDto } from '../../models/readingListRequestDto';
+import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-lists',
-  imports: [CommonModule, ReadingListModalComponent],
+  imports: [CommonModule, ReadingListModalComponent, DragDropModule],
   templateUrl: './lists.component.html',
   styleUrl: './lists.component.css',
 })
@@ -26,7 +27,7 @@ export class ListsComponent implements OnInit, OnDestroy {
 
   profile: UserDto | null = {};
 
-  readingLists: ReadingListResponseDto[] | null = [];
+  readingLists: ReadingListResponseDto[]= [];
 
   openedMenuIndex: number | null = null;
 
@@ -59,7 +60,7 @@ export class ListsComponent implements OnInit, OnDestroy {
     this.readingListService.readingList$
       .pipe(takeUntil(this.destroy$))
       .subscribe((response) => {
-        this.readingLists = response;
+        if (response) this.readingLists = response;
       });
 
     this.profileService.profile$
@@ -101,5 +102,9 @@ export class ListsComponent implements OnInit, OnDestroy {
 
   openModal() {
     this.showModal = true;
+  }
+
+  drop(event: CdkDragDrop<ReadingListResponseDto[]>) {
+    moveItemInArray(this.readingLists, event.previousIndex, event.currentIndex);
   }
 }
