@@ -76,6 +76,15 @@ export const routes: Routes = [
     data: { showHeader: true },
   },
   {
+    path: 'list',
+    loadChildren: () =>
+      import('./features/lists/lists.routes').then(
+        (m) => m.LISTS_ROUTES
+      ),
+    canActivate: [AuthGuard],
+    data: { showHeader: true },
+  },
+  {
     path: 'unauthorized',
     component: UnauthorizedPageComponent,
   },

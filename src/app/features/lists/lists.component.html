@@ -1,0 +1,98 @@
+<div class="library-container">
+  <div class="library-header">
+    <h1>Library</h1>
+  </div>
+
+  <nav class="library-nav">
+    <div class="nav-tabs">
+      <a
+        [routerLink]="['/list/current-reads']"
+        routerLinkActive="active"
+        class="nav-tab"
+        (click)="navigateToTab('current-reads')"
+      >
+        Current reads
+      </a>
+      <a
+        [routerLink]="['/list/archive']"
+        routerLinkActive="active"
+        class="nav-tab"
+        (click)="navigateToTab('archive')"
+      >
+        Archive
+      </a>
+      <a
+        [routerLink]="['/list/reading-lists']"
+        routerLinkActive="active"
+        class="nav-tab"
+        (click)="navigateToTab('reading-lists')"
+      >
+        Reading lists
+      </a>
+    </div>
+  </nav>
+
+  <div class="library-content">
+    <!-- Reading Lists Tab Content -->
+    <div *ngIf="currentTab === 'reading-lists'" class="reading-lists-content">
+      <button class="create-btn" (click)="createReadingList()">
+        <span class="plus-icon">+</span>
+        Create reading list
+      </button>
+
+      <div class="reading-lists">
+        <div *ngFor="let list of readingLists" class="reading-list-item">
+          <div class="list-drag-handle">
+            <div class="drag-dots">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+          </div>
+
+          <!-- <div class="list-avatar">
+            <div *ngIf="list.isLiked" class="liked-avatar">
+              <span class="heart">♥</span>
+            </div>
+            <div *ngIf="!list.isLiked" class="user-avatar">
+              <span>{{ list.avatar }}</span>
+            </div>
+          </div> -->
+
+          <div class="list-info">
+            <h3 class="list-title">{{ list.name }}</h3>
+            <p class="list-stats">
+              {{ list.storyCount }}
+              {{ list.storyCount === 1 ? "story" : "stories" }}
+              <span *ngIf="list.storyCount === 0">lists</span>
+            </p>
+          </div>
+
+          <div class="list-actions">
+            <button class="menu-btn" (click)="toggleMenu()">
+              <span class="menu-dots">⋮</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Current Reads Tab Content -->
+    <div *ngIf="currentTab === 'current-reads'" class="tab-content">
+      <div class="privacy-indicator">
+        <span class="lock-icon">🔒</span>
+        Private
+      </div>
+      <p class="no-content">No stories available.</p>
+    </div>
+
+    <!-- Archive Tab Content -->
+    <div *ngIf="currentTab === 'archive'" class="tab-content">
+      <div class="privacy-indicator">
+        <span class="lock-icon">🔒</span>
+        Private
+      </div>
+      <p class="no-content">No stories available.</p>
+    </div>
+  </div>
+</div>
