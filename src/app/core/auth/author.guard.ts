@@ -19,7 +19,8 @@ export const AuthorGuard: CanActivateFn = (
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  const storyId = Number(route.paramMap.get('storyId'));
+  const param = route.paramMap.get('storyIdAndTitle');
+  const storyId = param ? Number(param.split('-')[0]) : 0;
   const loggedInUserId = authService.getUserId();
 
   if (!storyId || !loggedInUserId) {

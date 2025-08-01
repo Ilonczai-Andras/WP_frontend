@@ -63,7 +63,7 @@ export const routes: Routes = [
       import('./features/myworks/myworks-edit-story/myworks-edit-story.routes').then(
         (m) => m.MY_WORKS_EDIT_STORY
       ),
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, AuthorGuard],
     data: { showHeader: false },
   },
   {
