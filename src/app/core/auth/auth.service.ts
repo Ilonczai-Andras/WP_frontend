@@ -9,6 +9,7 @@ import { ConversationService } from '../services/conversation.service';
 import { StoryService } from '../services/story.service';
 import { TokenService } from '../services/token.service';
 import { Router } from '@angular/router';
+import { ReadinglistService } from '../services/readinglist.service';
 
 @Injectable({
   providedIn: 'root',
@@ -36,6 +37,7 @@ export class AuthService {
     private conversationService: ConversationService,
     private storyService: StoryService,
     private tokenService: TokenService,
+    private readinglistService: ReadinglistService,
     private router: Router
   ) {
     const token = this.getToken();
@@ -49,6 +51,7 @@ export class AuthService {
         this.followService.prefetchOwnFollowing(decodedUser.sub);
         this.conversationService.prefetchUserPosts(decodedUser.sub);
         this.storyService.prefetchUserStories(decodedUser.sub);
+        this.readinglistService.prefetchOwnReadingLists(decodedUser.sub);
       }
     }
   }
@@ -67,6 +70,7 @@ export class AuthService {
           this.conversationService.prefetchUserPosts(decodedUser.sub);
           this.storyService.prefetchUserStories(decodedUser.sub);
           this.storyService.prefetchUserStories(decodedUser.sub);
+          this.readinglistService.prefetchOwnReadingLists(decodedUser.sub);
         }
 
         return response;
@@ -84,6 +88,7 @@ export class AuthService {
     this.profileService.clearProfile();
     this.followService.setFollowData(null);
     this.conversationService.setConversationData(null);
+    this.readinglistService.setFollowData(null);
     if (this.countdownInterval) clearInterval(this.countdownInterval);
     if (this.tokenExpirationTimeout) clearTimeout(this.tokenExpirationTimeout);
   }

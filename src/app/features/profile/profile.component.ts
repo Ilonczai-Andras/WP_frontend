@@ -12,6 +12,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FollowService } from '../../core/services/follow.service';
 import { ConversationService } from '../../core/services/conversation.service';
 import { StoryService } from '../../core/services/story.service';
+import { ReadinglistService } from '../../core/services/readinglist.service';
 
 @Component({
   selector: 'app-profile',
@@ -40,6 +41,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private conversationService: ConversationService,
     private storyService: StoryService,
     private dialogTriggerService: DialogTriggerService,
+    private readinglistService: ReadinglistService,
     private messageService: MessageService
   ) {}
 
@@ -93,6 +95,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
             this.followerService.setFollowData(res);
           });
           this.storyService.prefetchUserStories(profile.id);
+          this.readinglistService.prefetchOwnReadingLists(profile.id);
         }
       });
   }

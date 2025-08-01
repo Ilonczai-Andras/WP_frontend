@@ -6,7 +6,6 @@
   <nav class="library-nav">
     <div class="nav-tabs">
       <a
-        [routerLink]="['/list/current-reads']"
         routerLinkActive="active"
         class="nav-tab"
         (click)="navigateToTab('current-reads')"
@@ -14,7 +13,6 @@
         Current reads
       </a>
       <a
-        [routerLink]="['/list/archive']"
         routerLinkActive="active"
         class="nav-tab"
         (click)="navigateToTab('archive')"
@@ -22,7 +20,6 @@
         Archive
       </a>
       <a
-        [routerLink]="['/list/reading-lists']"
         routerLinkActive="active"
         class="nav-tab"
         (click)="navigateToTab('reading-lists')"
@@ -41,7 +38,10 @@
       </button>
 
       <div class="reading-lists">
-        <div *ngFor="let list of readingLists" class="reading-list-item">
+        <div
+          *ngFor="let list of readingLists; let i = index"
+          class="reading-list-item"
+        >
           <div class="list-drag-handle">
             <div class="drag-dots">
               <div class="dot"></div>
@@ -49,15 +49,6 @@
               <div class="dot"></div>
             </div>
           </div>
-
-          <!-- <div class="list-avatar">
-            <div *ngIf="list.isLiked" class="liked-avatar">
-              <span class="heart">♥</span>
-            </div>
-            <div *ngIf="!list.isLiked" class="user-avatar">
-              <span>{{ list.avatar }}</span>
-            </div>
-          </div> -->
 
           <div class="list-info">
             <h3 class="list-title">{{ list.name }}</h3>
@@ -69,9 +60,20 @@
           </div>
 
           <div class="list-actions">
-            <button class="menu-btn" (click)="toggleMenu()">
+            <button class="menu-btn" (click)="toggleMenu(i)">
               <span class="menu-dots">⋮</span>
             </button>
+
+            <div class="dropdown-menu" *ngIf="openedMenuIndex === i">
+              <ul>
+                <li><span class="icon">✏️</span> Edit</li>
+                <li><span class="icon">🗑️</span> Delete</li>
+                <li><span class="icon">f</span> Share via Facebook</li>
+                <li><span class="icon">x</span> Share via Twitter</li>
+                <li><span class="icon">p</span> Share via Pinterest</li>
+                <li><span class="icon">t</span> Share via Tumblr</li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
