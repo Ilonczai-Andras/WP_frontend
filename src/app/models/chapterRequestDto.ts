@@ -15,5 +15,6 @@ export interface ChapterRequestDto {
     isPublished?: boolean;
     publishDate?: string;
     authorNotes?: string;
+    mediaUrl?: string;
 }
 

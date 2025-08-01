@@ -22,6 +22,7 @@ export interface ChapterResponseDto {
     authorNotes?: string;
     readTimeMinutes?: number;
     wordCount?: number;
+    mediaUrl?: string;
     createdAt?: string;
     updatedAt?: string;
     published?: boolean;

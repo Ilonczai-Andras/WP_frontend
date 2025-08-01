@@ -18,6 +18,8 @@ import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { ProfileService } from '../../../core/services/profile.service';
 import { UserDto } from '../../../models/userDto';
+import { ChapterRequestDto } from '../../../models/chapterRequestDto';
+import { StoryRequestDto } from '../../../models/storyRequestDto';
 
 @Component({
   selector: 'app-myworks-write',
@@ -39,8 +41,11 @@ export class MyworksWriteComponent implements OnInit {
 
   story: StoryResponseDto = {};
   chapter: ChapterResponseDto = {};
+  chapterUpdate: ChapterRequestDto = {};
   characterCount = 0;
   wordCount: number = 0;
+
+  selectedImageFile: File | null = null;
 
   youtubeUrl: string = '';
   showYoutube: boolean = false;
@@ -108,7 +113,26 @@ export class MyworksWriteComponent implements OnInit {
   private loadChapter() {
     this.chapterService.getChapter(this.chapterId).subscribe((response) => {
       this.chapter = response;
+      this.chapterUpdate = {
+        title: response.title,
+        content: response.content,
+        authorNotes: response.authorNotes,
+        mediaUrl: response.mediaUrl,
+        isPublished:
+          response.status === ChapterResponseDto.StatusEnum.Published,
+        publishDate: response.publishDate,
+      };
       this.lastSavedContent = response.content || '';
+
+      if (response.mediaUrl) {
+        if (this.isYoutubeUrl(response.mediaUrl)) {
+          this.media = { type: 'youtube', src: response.mediaUrl };
+        } else {
+          this.media = { type: 'image', src: response.mediaUrl };
+        }
+      } else {
+        this.media = { type: null, src: '' };
+      }
     });
   }
 
@@ -127,7 +151,7 @@ export class MyworksWriteComponent implements OnInit {
   }
 
   private hasUnsavedChanges(): boolean {
-    return this.chapter.content !== this.lastSavedContent;
+    return this.chapterUpdate.content !== this.lastSavedContent;
   }
 
   triggerFileInput() {
@@ -142,9 +166,12 @@ export class MyworksWriteComponent implements OnInit {
         return;
       }
 
+      this.selectedImageFile = file;
+
       const reader = new FileReader();
       reader.onload = () => {
         this.media = { type: 'image', src: reader.result as string };
+        this.chapterUpdate.mediaUrl = '';
       };
       reader.readAsDataURL(file);
     }
@@ -188,8 +215,15 @@ export class MyworksWriteComponent implements OnInit {
     return match ? match[1] : null;
   }
 
+  private isYoutubeUrl(url: string): boolean {
+    return url.includes('youtube.com') || url.includes('youtu.be');
+  }
+
   removeMedia() {
     this.media = { type: null, src: '' };
+    this.chapterUpdate.mediaUrl = '';
+    this.selectedImageFile = null;
+    this.youtubeUrl = '';
     this.menuOpen = false;
   }
 
@@ -269,8 +303,9 @@ export class MyworksWriteComponent implements OnInit {
     this.quill = quill;
 
     quill.on('text-change', () => {
+      this.chapterUpdate.content = quill.root.innerHTML;
       this.updateWordCount();
-      this.contentChange$.next(quill.root.innerHTML);
+      this.contentChange$.next(this.chapterUpdate.content || '');
     });
 
     quill.keyboard.addBinding(
@@ -309,14 +344,28 @@ export class MyworksWriteComponent implements OnInit {
 
   //saving chapters
   saveChapter() {
-    if (!this.chapter.content) {
+    if (!this.chapterUpdate.content) {
       alert('Chapter content cannot be empty');
       return;
     }
 
-    this.chapterService.updateChapter(this.chapterId, this.chapter).subscribe({
+    const mediaUrl =
+      this.media.type === 'image'
+        ? this.media.src
+        : this.media.type === 'youtube'
+        ? this.media.src
+        : '';
+
+    this.chapterUpdate.mediaUrl = mediaUrl;
+
+    this.submitChapterRequest(
+      this.chapterUpdate,
+      this.media.type === 'image' && this.selectedImageFile
+        ? this.selectedImageFile
+        : undefined
+    ).subscribe({
       next: (response) => {
-        this.lastSavedContent = this.chapter.content || '';
+        this.lastSavedContent = this.chapterUpdate.content || '';
         this.refreshStories();
         this.messageService.add({
           severity: 'success',
@@ -324,10 +373,10 @@ export class MyworksWriteComponent implements OnInit {
           detail: 'Chapter saved successfully!',
         });
       },
-      error: (error) => {
+      error: () => {
         this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
+          severity: 'error',
+          summary: 'Error',
           detail: 'Error saving chapter. Please try again.',
         });
       },
@@ -335,57 +384,97 @@ export class MyworksWriteComponent implements OnInit {
   }
 
   private autoSave() {
-    if (this.chapter.content && this.hasUnsavedChanges()) {
-      this.chapterService
-        .updateChapter(this.chapterId, this.chapter)
-        .subscribe({
-          next: (response) => {
-            this.lastSavedContent = this.chapter.content || '';
-            this.refreshStories();
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Success',
-              detail: 'Auto-saved',
-            });
-          },
-          error: (error) => {
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Success',
-              detail: `Auto-save failed:', ${error}`,
-            });
-          },
-        });
-    }
-  }
+    const mediaUrl =
+      this.media.type === 'image'
+        ? this.media.src
+        : this.media.type === 'youtube'
+        ? this.media.src
+        : '';
 
-  publishChapter() {
-    if (!this.chapter.content) {
-      alert('Chapter content cannot be empty');
-      return;
-    }
+    this.chapterUpdate.mediaUrl = mediaUrl;
 
-    const publishedChapter = { ...this.chapter, status: 'Published' };
-
-    this.chapterService
-      .updateChapter(this.chapterId, publishedChapter)
-      .subscribe({
-        next: (response) => {
-          this.chapter = response;
+    if (this.chapterUpdate.content && this.hasUnsavedChanges()) {
+      this.submitChapterRequest(
+        this.chapterUpdate,
+        this.media.type === 'image' && this.selectedImageFile
+          ? this.selectedImageFile
+          : undefined
+      ).subscribe({
+        next: () => {
+          this.lastSavedContent = this.chapterUpdate.content || '';
           this.refreshStories();
           this.messageService.add({
             severity: 'success',
-            summary: 'Success',
-            detail: 'Chapter published successfully!',
+            summary: 'Auto-saved',
+            detail: 'Changes saved automatically.',
           });
         },
         error: (error) => {
           this.messageService.add({
-            severity: 'success',
-            summary: 'Success',
-            detail: 'Error publishing chapter. Please try again.',
+            severity: 'error',
+            summary: 'Error',
+            detail: `Auto-save failed: ${error.message}`,
           });
         },
       });
+    }
+  }
+
+  publishChapter() {
+    if (!this.chapterUpdate.content) {
+      alert('Chapter content cannot be empty');
+      return;
+    }
+
+    const publishedChapter: ChapterRequestDto = {
+      ...this.chapterUpdate,
+      isPublished: true,
+      publishDate: new Date().toISOString(),
+    };
+
+    const mediaUrl =
+      this.media.type === 'image'
+        ? this.media.src
+        : this.media.type === 'youtube'
+        ? this.media.src
+        : '';
+
+    this.chapterUpdate.mediaUrl = mediaUrl;
+
+    this.submitChapterRequest(
+      publishedChapter,
+      this.media.type === 'image' && this.selectedImageFile
+        ? this.selectedImageFile
+        : undefined
+    ).subscribe({
+      next: (response) => {
+        this.chapter = response;
+        this.refreshStories();
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Chapter published successfully!',
+        });
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error publishing chapter. Please try again.',
+        });
+      },
+    });
+  }
+
+  private submitChapterRequest(dto: ChapterRequestDto, file?: File) {
+    const formData = new FormData();
+    const blob = new Blob([JSON.stringify(dto)], { type: 'application/json' });
+
+    formData.append('req', blob);
+    if (file) {
+      formData.append('file', file);
+    }
+
+    return this.chapterService.updateChapterFormData(this.chapterId, formData);
   }
 }

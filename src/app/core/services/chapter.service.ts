@@ -28,6 +28,10 @@ export class ChapterService {
     );
   }
 
+  updateChapterFormData(chapterId: number, formData: FormData): Observable<ChapterResponseDto>  {
+  return this.http.put<ChapterResponseDto>(`${this.apiUrl}/${chapterId}`, formData);
+}
+
   createNextChapter(chapterId: number): Observable<ChapterResponseDto> {
     return this.http.post<ChapterResponseDto>(
       `${this.apiUrl}/next-chapter/${chapterId}`,
