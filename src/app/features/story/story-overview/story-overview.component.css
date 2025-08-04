@@ -92,6 +92,15 @@
   align-items: center;
 }
 
+.more-btn-and-dropdown {
+  position: relative;
+}
+
+.more-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
 .start-reading-btn {
   display: flex;
   align-items: center;
@@ -120,9 +129,9 @@
   width: 2.5rem; /* 40px */
   height: 2.5rem; /* 40px */
   border-radius: 50%;
-  border: 2px solid var(--text);
+  border: 2px solid var(--primary);
   background-color: transparent;
-  color: var(--text);
+  color: var(--primary);
   font-size: 1.25rem; /* 20px */
   font-weight: 300;
   cursor: pointer;
@@ -133,14 +142,98 @@
 }
 
 .more-btn:hover {
-  border-color: var(--primary);
-  color: var(--primary);
   transform: scale(1.05);
 }
 
 .more-btn:active {
   transform: scale(0.95);
 }
+
+.dropdown-menu {
+  position: absolute;
+  background:var(--background);
+  border: 1px solid var(--primary);
+  border-radius: 8px;
+  padding: 12px;
+  width: 240px;
+  top: 110%;
+  left: 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 1000;
+}
+
+.dropdown-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+
+.done-btn {
+  background:var(--background);
+  border: var(--primary);
+  color: var(--text);
+  font-size: 18px;
+  padding: 2px;
+}
+
+.done-btn:hover {
+  background-color: var(--accent);
+  border-radius: 8px;
+  color: black;
+}
+
+.dropdown-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 10px 0;
+}
+
+.dropdown-item {
+  padding: 6px 8px;
+  color: var(--text);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+}
+
+.dropdown-item:hover {
+  background-color: var(--accent);
+  border-radius: 8px;
+  color: black;
+}
+
+.check-icon {
+  color: green;
+}
+
+.dropdown-footer {
+  display: flex;
+  gap: 5px;
+}
+
+.dropdown-footer input {
+  background-color: var(--background);
+  border-color: var(--primary);
+  flex: 1;
+  padding: 4px;
+}
+
+.dropdown-footer button {
+  background-color: var(--background);
+  border-color: var(--primary);
+  color: var(--text);
+  width: 32px;
+  font-size: 18px;
+  padding: 2px 0;
+}
+
+.dropdown-footer button:hover {
+  background-color: var(--accent);
+  color: black;
+}
+
 
 /* mystory-view body */
 .container {

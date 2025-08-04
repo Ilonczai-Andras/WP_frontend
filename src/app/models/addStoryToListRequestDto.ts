@@ -10,7 +10,7 @@
 
 
 export interface AddStoryToListRequestDto { 
-    listId?: number;
+    listIds?: Array<number>;
     storyId?: number;
 }
 

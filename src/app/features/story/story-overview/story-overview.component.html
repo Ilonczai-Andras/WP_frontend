@@ -20,9 +20,39 @@
           <span class="btn-icon">📖</span>
           <span class="btn-text">Start reading</span>
         </button>
-        <button class="more-btn" (click)="showMore()">
-          <span class="more-icon">+</span>
-        </button>
+        <div class="more-btn-and-dropdown">
+          <button [disabled]="disableAddToReadingList" class="more-btn" (click)="toggleDropdown()">
+            <span class="more-icon">+</span>
+          </button>
+          <div class="dropdown-menu" *ngIf="showDropdown">
+            <div class="dropdown-header">
+              <div>Add to</div>
+              <button class="done-btn" (click)="saveReadingLists()">
+                Done
+              </button>
+            </div>
+            <ul class="dropdown-list">
+              <li
+                class="dropdown-item"
+                *ngFor="let list of readingLists"
+                (click)="toggleListSelection(list)"
+              >
+                {{ list.name }}
+                <span *ngIf="selectedLists.has(list)" class="check-icon"
+                  >✔</span
+                >
+              </li>
+            </ul>
+            <div class="dropdown-footer">
+              <input
+                type="text"
+                [(ngModel)]="newListName"
+                placeholder="Add new reading list..."
+              />
+              <button (click)="createReadingList()">+</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -39,7 +69,7 @@
         <span class="author-name">{{ story.authorUsername }}</span>
       </div>
 
-      <div class="story-status">{{story.status}}</div>
+      <div class="story-status">{{ story.status }}</div>
       <div class="story-meta">🗓️ 2 new parts</div>
 
       <div class="story-description">
