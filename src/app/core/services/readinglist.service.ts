@@ -3,6 +3,8 @@ import { BehaviorSubject, Observable, of, switchMap } from 'rxjs';
 import { ReadingListResponseDto } from '../../models/readingListResponseDto';
 import { HttpClient } from '@angular/common/http';
 import { ReadingListRequestDto } from '../../models/readingListRequestDto';
+import { AddStoryToListRequestDto } from '../../models/addStoryToListRequestDto';
+import { ReadingListItemResponseDto } from '../../models/readingListItemResponseDto';
 
 @Injectable({
   providedIn: 'root',
@@ -27,7 +29,7 @@ export class ReadinglistService {
       )
       .subscribe({
         next: (readingListResponseDto) =>
-          this.setFollowData(readingListResponseDto),
+          this.setReadingListData(readingListResponseDto),
         error: (err) =>
           console.error('Failed to fetch reading-list data:', err),
       });
@@ -36,6 +38,12 @@ export class ReadinglistService {
   getUserLists(userId: number): Observable<Array<ReadingListResponseDto>> {
     return this.http.get<Array<ReadingListResponseDto>>(
       `${this.apiUrl}/${userId}`
+    );
+  }
+
+  getListItems(listId: number): Observable<Array<ReadingListItemResponseDto>> {
+    return this.http.get<Array<ReadingListItemResponseDto>>(
+      `${this.apiUrl}/${listId}/items`
     );
   }
 
@@ -49,19 +57,23 @@ export class ReadinglistService {
     );
   }
 
+  addStory(req: AddStoryToListRequestDto): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/add`, req);
+  }
+
   prefetchOwnReadingLists(userId: number): void {
     this.getUserLists(userId).subscribe((response) => {
-      this.setFollowData(response);
+      this.setReadingListData(response);
     });
   }
 
-  setFollowData(
+  setReadingListData(
     readingListResponseDto: Array<ReadingListResponseDto> | null
   ): void {
     this.readingListSubject.next(readingListResponseDto);
   }
 
-  refreshFollowers(id: number | undefined): void {
+  refreshReadingLists(id: number | undefined): void {
     this.refreshTrigger.next(id ?? 0);
   }
 }

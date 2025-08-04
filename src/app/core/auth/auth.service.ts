@@ -88,7 +88,7 @@ export class AuthService {
     this.profileService.clearProfile();
     this.followService.setFollowData(null);
     this.conversationService.setConversationData(null);
-    this.readinglistService.setFollowData(null);
+    this.readinglistService.setReadingListData(null);
     if (this.countdownInterval) clearInterval(this.countdownInterval);
     if (this.tokenExpirationTimeout) clearTimeout(this.tokenExpirationTimeout);
   }

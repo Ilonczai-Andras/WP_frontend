@@ -32,7 +32,6 @@ export const StatusGuard: CanActivateFn = (
   return storyService.getStory(storyId).pipe(
     map((story) => {
       const isOwnProfile = story.authorId === loggedInUserId;
-      console.log(isOwnProfile);
 
       const isPublished =
         story.status === StoryResponseDto.StatusEnum.Published;
