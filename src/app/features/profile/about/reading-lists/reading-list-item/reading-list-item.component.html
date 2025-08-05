@@ -1,23 +1,42 @@
 <div class="reading-item">
-  <div class="book-cover">Egy Régi December</div>
+  <a
+    [routerLink]="[
+      '/story',
+      story.storyId + '-' + (story.title || '' | lowercase | replaceSpaces)
+    ]"
+    ><img
+      class="book-cover"
+      [src]="story.coverImageUrl"
+      alt="{{ story.title }}"
+  /></a>
+
   <div class="book-info">
     <div>
-      <div class="book-title">Egy Régi December</div>
-      <div class="book-author">by Classic Author</div>
+      <a
+        [routerLink]="[
+          '/story',
+          story.storyId + '-' + (story.title || '' | lowercase | replaceSpaces)
+        ]"
+        ><div class="book-title">{{ story.title }}</div></a
+      >
+      <div class="book-author">by {{ story.authorUsername }}</div>
     </div>
+    <!-- Optional stats block -->
+    <!--
     <div class="book-stats">
       <div class="stat">
         <span class="stat-icon">👁️</span>
-        <span>1.3K</span>
+        <span>{{ story.viewCount }}</span>
       </div>
       <div class="stat">
         <span class="stat-icon">💬</span>
-        <span>130</span>
+        <span>{{ story.commentCount }}</span>
       </div>
       <div class="stat">
         <span class="stat-icon">📖</span>
-        <span>48</span>
+        <span>{{ story.chapterCount }}</span>
       </div>
     </div>
+    -->
   </div>
 </div>

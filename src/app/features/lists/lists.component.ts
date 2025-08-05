@@ -33,6 +33,7 @@ export class ListsComponent implements OnInit, OnDestroy {
   profile: UserDto | null = {};
 
   readingLists: ReadingListResponseDto[] = [];
+  ReadingListTypeEnum = ReadingListResponseDto.ReadingListTypeEnum;
 
   openedMenuIndex: number | null = null;
 

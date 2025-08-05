@@ -79,7 +79,10 @@
               </p>
             </div>
 
-            <div class="list-actions">
+            <div
+              class="list-actions"
+              *ngIf="list.readingListType !== ReadingListTypeEnum.Liked"
+            >
               <button class="menu-btn" (click)="toggleMenu(i)">
                 <span class="menu-dots">⋮</span>
               </button>

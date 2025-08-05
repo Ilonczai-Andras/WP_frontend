@@ -18,6 +18,16 @@ export interface ReadingListResponseDto {
     ownerUsername?: string;
     storyCount?: number;
     items?: Array<ReadingListItemResponseDto>;
+    readingListType?: ReadingListResponseDto.ReadingListTypeEnum;
     'private'?: boolean;
 }
+export namespace ReadingListResponseDto {
+    export const ReadingListTypeEnum = {
+        Default: 'DEFAULT',
+        Liked: 'LIKED',
+        Custom: 'CUSTOM'
+    } as const;
+    export type ReadingListTypeEnum = typeof ReadingListTypeEnum[keyof typeof ReadingListTypeEnum];
+}
+
 

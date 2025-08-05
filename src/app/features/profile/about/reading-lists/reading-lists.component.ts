@@ -11,6 +11,8 @@ import { ReadingListModalComponent } from '../../../lists/reading-list-modal/rea
 import { ReadingListRequestDto } from '../../../../models/readingListRequestDto';
 import { ReadinglistService } from '../../../../core/services/readinglist.service';
 import { Subject, takeUntil } from 'rxjs';
+import { ReadingListResponseDto } from '../../../../models/readingListResponseDto';
+import { ReadingListItemComponent } from './reading-list-item/reading-list-item.component';
 
 @Component({
   selector: 'app-reading-lists',
@@ -19,6 +21,7 @@ import { Subject, takeUntil } from 'rxjs';
     RouterModule,
     ReplaceSpacesPipe,
     ReadingListModalComponent,
+    ReadingListItemComponent
   ],
   templateUrl: './reading-lists.component.html',
   styleUrl: './reading-lists.component.css',
@@ -28,6 +31,9 @@ export class ReadingListsComponent {
   isOwnProfile = false;
 
   showModal = false;
+
+  defaultReadingLists: ReadingListResponseDto[] | undefined = [];
+  readingListLength: number | undefined = 0;
 
   visibleCount = 3;
 
@@ -62,6 +68,20 @@ export class ReadingListsComponent {
         (story) => story.status === 'DRAFT'
       ).length;
     });
+
+    this.readingListService.readingList$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((response) => {
+        this.readingListLength = response?.filter((story) => story).length;
+
+        this.defaultReadingLists =
+          response?.filter(
+            (readingList) =>
+              readingList.readingListType ===
+              ReadingListResponseDto.ReadingListTypeEnum.Default
+          ) || [];
+      });
+
   }
 
   showMore(): void {
