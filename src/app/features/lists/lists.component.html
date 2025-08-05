@@ -85,14 +85,15 @@
               </button>
 
               <div class="dropdown-menu" *ngIf="openedMenuIndex === i">
-                <ul>
-                  <li><span class="icon">✏️</span> Edit</li>
-                  <li><span class="icon">🗑️</span> Delete</li>
-                  <li><span class="icon">f</span> Share via Facebook</li>
-                  <li><span class="icon">x</span> Share via Twitter</li>
-                  <li><span class="icon">p</span> Share via Pinterest</li>
-                  <li><span class="icon">t</span> Share via Tumblr</li>
-                </ul>
+                <button class="dropdown-item" (click)="editList(list)">
+                  <span class="icon">✏️</span> Edit
+                </button>
+                <button
+                  class="dropdown-item delete"
+                  (click)="deleteById(list.id)"
+                >
+                  <span class="icon">🗑️</span> Delete
+                </button>
               </div>
             </div>
           </div>

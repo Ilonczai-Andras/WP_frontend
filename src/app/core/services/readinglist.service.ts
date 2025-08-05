@@ -61,6 +61,11 @@ export class ReadinglistService {
     return this.http.post<void>(`${this.apiUrl}/add`, req);
   }
 
+  deleteReadingList(readingListId: number | undefined): Observable<string> {
+    return this.http.delete(`${this.apiUrl}/${readingListId}`, {
+      responseType: 'text',
+    });
+  }
   prefetchOwnReadingLists(userId: number): void {
     this.getUserLists(userId).subscribe((response) => {
       this.setReadingListData(response);

@@ -19,6 +19,7 @@ import {
   DragDropModule,
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-lists',
@@ -112,5 +113,63 @@ export class ListsComponent implements OnInit, OnDestroy {
 
   drop(event: CdkDragDrop<ReadingListResponseDto[]>) {
     moveItemInArray(this.readingLists, event.previousIndex, event.currentIndex);
+  }
+
+  deleteById(readingListId: number | undefined) {
+    if (!readingListId || !this.profile?.id) return;
+
+    Swal.fire({
+      title: 'Delete reading list?',
+      html: `This action can't be undone`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Delete',
+      cancelButtonText: 'No',
+      customClass: {
+        confirmButton: 'custom-confirm-btn',
+        cancelButton: 'custom-cancel-btn',
+        popup: 'custom-popup',
+        title: 'custom-title',
+        htmlContainer: 'custom-text',
+      },
+      buttonsStyling: false,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.readingListService.deleteReadingList(readingListId).subscribe({
+          next: () => {
+            Swal.fire({
+              title: 'Your reading list has been deleted!',
+              icon: 'success',
+              confirmButtonText: 'Okay',
+              customClass: {
+                confirmButton: 'custom-confirm-btn-success',
+                popup: 'custom-popup-success',
+              },
+              buttonsStyling: false,
+            });
+            this.readingListService.refreshReadingLists(this.profile!.id);
+          },
+          error: (err) => {
+            console.error('Failed to delete reading list:', err);
+            Swal.fire({
+              title: 'Error deleting reading list',
+              text: 'Something went wrong. Please try again.',
+              icon: 'error',
+              confirmButtonText: 'Okay',
+              customClass: {
+                confirmButton: 'custom-confirm-btn-error',
+                popup: 'custom-popup-error',
+              },
+              buttonsStyling: false,
+            });
+          },
+        });
+      }
+    });
+  }
+
+  editList(list: ReadingListResponseDto) {
+    // open modal pre-filled or navigate to edit route
+    console.log('Edit:', list);
   }
 }
