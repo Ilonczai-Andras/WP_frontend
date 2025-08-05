@@ -74,9 +74,9 @@ export class StoryService {
 
   updateStory(
     storyId: number | undefined,
-    req: StoryRequestDto
+    formData: FormData
   ): Observable<StoryResponseDto> {
-    return this.http.put(`${this.apiUrl}/${storyId}`, req);
+    return this.http.put(`${this.apiUrl}/${storyId}`, formData);
   }
 
   getStories(userId: number): Observable<Array<StoryResponseDto>> {

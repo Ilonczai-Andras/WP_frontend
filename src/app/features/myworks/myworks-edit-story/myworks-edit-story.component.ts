@@ -26,7 +26,7 @@ export class MyworksEditStoryComponent implements OnInit {
 
   profile!: UserDto | null;
 
-  file!: any;
+  selectedCoverFile: File | null = null;
 
   story: StoryResponseDto | null = {};
   coverImageUrl: string | ArrayBuffer | null = null;
@@ -73,10 +73,6 @@ export class MyworksEditStoryComponent implements OnInit {
     const param = this.route.snapshot.paramMap.get('storyIdAndTitle');
     this.storyId = param ? Number(param.split('-')[0]) : 0;
 
-    this.storyForm.valueChanges.subscribe((value) => {
-      this.setStoryManually();
-    });
-
     this.profileService.profile$.subscribe((response) => {
       this.profile = response;
     });
@@ -108,6 +104,12 @@ export class MyworksEditStoryComponent implements OnInit {
       if (this.story?.coverImageUrl) {
         this.coverImageUrl = this.story.coverImageUrl;
       }
+
+      this.storyForm.valueChanges.subscribe((value) => {
+        this.setStoryManually();
+      });
+
+      this.setStoryManually();
     });
   }
 
@@ -205,7 +207,7 @@ export class MyworksEditStoryComponent implements OnInit {
       }
 
       this.coverImageUrl = URL.createObjectURL(file);
-      this.file = file;
+      this.selectedCoverFile = file;
     }
   }
 
@@ -234,7 +236,18 @@ export class MyworksEditStoryComponent implements OnInit {
   }
 
   onUpdate() {
-    this.storyService.updateStory(this.story?.id, this.storyRequest).subscribe(
+    const formData = new FormData();
+
+    const jsonBlob = new Blob([JSON.stringify(this.storyRequest)], {
+      type: 'application/json',
+    });
+    formData.append('req', jsonBlob);
+
+    if (this.selectedCoverFile) {
+      formData.append('file', this.selectedCoverFile);
+    }
+
+    this.storyService.updateStory(this.story?.id, formData).subscribe(
       (response) => {
         this.loadStory(this.storyId);
         this.messageService.add({
