@@ -14,7 +14,11 @@ import { ReadingListModalComponent } from './reading-list-modal/reading-list-mod
 import { ProfileService } from '../../core/services/profile.service';
 import { UserDto } from '../../models/userDto';
 import { ReadingListRequestDto } from '../../models/readingListRequestDto';
-import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
+import {
+  CdkDragDrop,
+  DragDropModule,
+  moveItemInArray,
+} from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-lists',
@@ -27,7 +31,7 @@ export class ListsComponent implements OnInit, OnDestroy {
 
   profile: UserDto | null = {};
 
-  readingLists: ReadingListResponseDto[]= [];
+  readingLists: ReadingListResponseDto[] = [];
 
   openedMenuIndex: number | null = null;
 
@@ -60,7 +64,9 @@ export class ListsComponent implements OnInit, OnDestroy {
     this.readingListService.readingList$
       .pipe(takeUntil(this.destroy$))
       .subscribe((response) => {
-        if (response) this.readingLists = response;
+        if (response) {
+          this.readingLists = response;
+        }
       });
 
     this.profileService.profile$
@@ -88,7 +94,7 @@ export class ListsComponent implements OnInit, OnDestroy {
       .createList(this.profile?.id, req)
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
-        this.readingListService.refreshFollowers(this.profile?.id);
+        this.readingListService.refreshReadingLists(this.profile?.id);
       });
   }
 
