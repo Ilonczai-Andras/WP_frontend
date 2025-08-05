@@ -6,10 +6,20 @@ import { StoryService } from '../../../../core/services/story.service';
 import { StoryResponseDto } from '../../../../models/storyResponseDto';
 import { RouterModule } from '@angular/router';
 import { ReplaceSpacesPipe } from '../../../../shared/pipes/replace-spaces.pipe';
+import { DialogTriggerService } from '../../../../core/services/dialog-trigger.service';
+import { ReadingListModalComponent } from '../../../lists/reading-list-modal/reading-list-modal.component';
+import { ReadingListRequestDto } from '../../../../models/readingListRequestDto';
+import { ReadinglistService } from '../../../../core/services/readinglist.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-reading-lists',
-  imports: [CommonModule, RouterModule, ReplaceSpacesPipe],
+  imports: [
+    CommonModule,
+    RouterModule,
+    ReplaceSpacesPipe,
+    ReadingListModalComponent,
+  ],
   templateUrl: './reading-lists.component.html',
   styleUrl: './reading-lists.component.css',
 })
@@ -17,15 +27,20 @@ export class ReadingListsComponent {
   profile!: UserDto | null;
   isOwnProfile = false;
 
+  showModal = false;
+
   visibleCount = 3;
 
   stories: Array<StoryResponseDto> | null = [];
   publishedStoryCount: number | undefined = 0;
   draftStoryCount: number | undefined = 0;
 
+  private destroy$ = new Subject<void>();
+
   constructor(
     private profileService: ProfileService,
-    private storyService: StoryService
+    private storyService: StoryService,
+    private readingListService: ReadinglistService
   ) {}
 
   ngOnInit(): void {
@@ -51,5 +66,22 @@ export class ReadingListsComponent {
 
   showMore(): void {
     this.visibleCount += 3;
+  }
+
+  createReadingList(name: string) {
+    const req: ReadingListRequestDto = {
+      name: name,
+      private: false,
+    };
+    this.readingListService
+      .createList(this.profile?.id, req)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.readingListService.refreshReadingLists(this.profile?.id);
+      });
+  }
+
+  openModal() {
+    this.showModal = true;
   }
 }

@@ -54,7 +54,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       if (routeUsername) this.loadProfile(routeUsername);
     });
 
-    this.dialogTriggerService.trigger$
+    this.dialogTriggerService.profileDialogtrigger$
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         this.openProfileDialog();

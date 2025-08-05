@@ -38,6 +38,6 @@ export class DescriptionCardComponent {
   }
 
   openProfileDialog() {
-    this.dialogTriggerService.triggerOpen();
+    this.dialogTriggerService.profileDialog();
   }
 }

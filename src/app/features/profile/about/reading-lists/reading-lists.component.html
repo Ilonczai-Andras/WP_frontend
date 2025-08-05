@@ -62,7 +62,7 @@
     <div class="header">
       <h1>{{ profile?.userStatsDto?.readCount }} Reading List</h1>
       <div class="header-controls" *ngIf="isOwnProfile">
-        <button class="btn add-btn">+ Add</button>
+        <button class="btn add-btn" (click)="openModal()">+ Add</button>
         <a [routerLink]="['/list']"><button class="btn">⚙️</button></a>
       </div>
     </div>
@@ -78,3 +78,8 @@
     </div>
   </div>
 </div>
+<app-reading-list-modal
+  [(visible)]="showModal"
+  (create)="createReadingList($event)"
+>
+</app-reading-list-modal>

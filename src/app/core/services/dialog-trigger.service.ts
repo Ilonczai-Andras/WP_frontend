@@ -3,10 +3,10 @@ import { Observable, Subject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class DialogTriggerService {
-  private openTrigger = new Subject<void>();
-  trigger$: Observable<void> = this.openTrigger.asObservable();
+  private openprofileDialog = new Subject<void>();
+  profileDialogtrigger$: Observable<void> = this.openprofileDialog.asObservable();
 
-  triggerOpen() {
-    this.openTrigger.next();
+  profileDialog() {
+    this.openprofileDialog.next();
   }
 }
