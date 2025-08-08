@@ -6,7 +6,7 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ReadingListResponseDto } from '../../models/readingListResponseDto';
 import { Subject, take, takeUntil } from 'rxjs';
 import { ReadinglistService } from '../../core/services/readinglist.service';
@@ -23,7 +23,7 @@ import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-lists',
-  imports: [CommonModule, ReadingListModalComponent, DragDropModule],
+  imports: [CommonModule, ReadingListModalComponent, DragDropModule, RouterLink],
   templateUrl: './lists.component.html',
   styleUrl: './lists.component.css',
 })
@@ -167,10 +167,5 @@ export class ListsComponent implements OnInit, OnDestroy {
         });
       }
     });
-  }
-
-  editList(list: ReadingListResponseDto) {
-    // open modal pre-filled or navigate to edit route
-    console.log('Edit:', list);
   }
 }

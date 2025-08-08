@@ -6,6 +6,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { ReadinglistService } from '../../../core/services/readinglist.service';
 import { ReadingListItemResponseDto } from '../../../models/readingListItemResponseDto';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-reading-list-edit',
@@ -15,6 +16,7 @@ import { ReadingListItemResponseDto } from '../../../models/readingListItemRespo
 })
 export class ReadingListEditComponent {
   totalStories = 1;
+  listId: number = 0;
 
   profile!: UserDto | null;
 
@@ -29,15 +31,9 @@ export class ReadingListEditComponent {
   ) {}
 
   ngOnInit(): void {
-    const listID = Number(this.route.snapshot.paramMap.get('listId'));
-    console.log(listID);
+    this.listId = Number(this.route.snapshot.paramMap.get('listId'));
 
-    this.readinglistService
-      .getListItems(listID)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((response) => {
-        this.readingListItems = response;
-      });
+    this.getReadingListItems(this.listId);
 
     this.profileService.profile$
       .pipe(takeUntil(this.destroy$))
@@ -46,7 +42,69 @@ export class ReadingListEditComponent {
       });
   }
 
-  onRemoveBook() {}
+  getReadingListItems(listID: number) {
+    this.readinglistService
+      .getListItems(listID)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((response) => {
+        this.readingListItems = response;
+
+        this.totalStories = response.map(() => {}).length;
+      });
+  }
+
+  deleteReadingListItem(readingListItemId: number | undefined) {
+    Swal.fire({
+      title: 'Delete reading list item?',
+      html: `This action can't be undone`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Delete',
+      cancelButtonText: 'No',
+      customClass: {
+        confirmButton: 'custom-confirm-btn',
+        cancelButton: 'custom-cancel-btn',
+        popup: 'custom-popup',
+        title: 'custom-title',
+        htmlContainer: 'custom-text',
+      },
+      buttonsStyling: false,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.readinglistService
+          .deleteReadingListItem(readingListItemId)
+          .subscribe({
+            next: () => {
+              Swal.fire({
+                title: 'Your reading list item has been deleted!',
+                icon: 'success',
+                confirmButtonText: 'Okay',
+                customClass: {
+                  confirmButton: 'custom-confirm-btn-success',
+                  popup: 'custom-popup-success',
+                },
+                buttonsStyling: false,
+              });
+              this.getReadingListItems(this.listId);
+            },
+            error: (err) => {
+              console.error('Failed to delete reading list:', err);
+              Swal.fire({
+                title: 'Error deleting reading list',
+                text: 'Something went wrong. Please try again.',
+                icon: 'error',
+                confirmButtonText: 'Okay',
+                customClass: {
+                  confirmButton: 'custom-confirm-btn-error',
+                  popup: 'custom-popup-error',
+                },
+                buttonsStyling: false,
+              });
+            },
+          });
+      }
+    });
+  }
 
   onClearAllStories() {
     if (

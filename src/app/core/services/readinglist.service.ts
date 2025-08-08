@@ -62,10 +62,17 @@ export class ReadinglistService {
   }
 
   deleteReadingList(readingListId: number | undefined): Observable<string> {
-    return this.http.delete(`${this.apiUrl}/${readingListId}`, {
+    return this.http.delete(`${this.apiUrl}/list/${readingListId}`, {
       responseType: 'text',
     });
   }
+
+  deleteReadingListItem(readingListItemId: number | undefined): Observable<string> {
+    return this.http.delete(`${this.apiUrl}/item/${readingListItemId}`, {
+      responseType: 'text',
+    });
+  }
+
   prefetchOwnReadingLists(userId: number): void {
     this.getUserLists(userId).subscribe((response) => {
       this.setReadingListData(response);

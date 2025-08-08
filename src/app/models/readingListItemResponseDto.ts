@@ -10,6 +10,7 @@
 
 
 export interface ReadingListItemResponseDto { 
+    id?: number;
     storyId?: number;
     title?: string;
     coverImageUrl?: string;

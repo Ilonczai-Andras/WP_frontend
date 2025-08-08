@@ -88,8 +88,10 @@
               </button>
 
               <div class="dropdown-menu" *ngIf="openedMenuIndex === i">
-                <button class="dropdown-item" (click)="editList(list)">
-                  <span class="icon">✏️</span> Edit
+                <button class="dropdown-item">
+                  <a [routerLink]="['/list', list.id, 'edit']"
+                    ><span class="icon">✏️</span> Edit</a
+                  >
                 </button>
                 <button
                   class="dropdown-item delete"
