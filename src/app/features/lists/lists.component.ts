@@ -20,10 +20,16 @@ import {
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
 import Swal from 'sweetalert2';
+import { ReadingListOrderUpdateDto } from '../../models/readingListOrderUpdateDto';
 
 @Component({
   selector: 'app-lists',
-  imports: [CommonModule, ReadingListModalComponent, DragDropModule, RouterLink],
+  imports: [
+    CommonModule,
+    ReadingListModalComponent,
+    DragDropModule,
+    RouterLink,
+  ],
   templateUrl: './lists.component.html',
   styleUrl: './lists.component.css',
 })
@@ -114,6 +120,16 @@ export class ListsComponent implements OnInit, OnDestroy {
 
   drop(event: CdkDragDrop<ReadingListResponseDto[]>) {
     moveItemInArray(this.readingLists, event.previousIndex, event.currentIndex);
+
+    const reorderedPayload: ReadingListOrderUpdateDto[] = this.readingLists.map(
+      (list, index) => ({
+        id: list.id,
+        orderIndex: index,
+      })
+    );
+    this.readingListService
+      .reorderReadingLists(this.profile?.id, reorderedPayload)
+      .subscribe(() => {});
   }
 
   deleteById(readingListId: number | undefined) {

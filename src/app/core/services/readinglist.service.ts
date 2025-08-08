@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { ReadingListRequestDto } from '../../models/readingListRequestDto';
 import { AddStoryToListRequestDto } from '../../models/addStoryToListRequestDto';
 import { ReadingListItemResponseDto } from '../../models/readingListItemResponseDto';
+import { ReadingListOrderUpdateDto } from '../../models/readingListOrderUpdateDto';
 
 @Injectable({
   providedIn: 'root',
@@ -67,16 +68,33 @@ export class ReadinglistService {
     });
   }
 
-  deleteReadingListItem(readingListItemId: number | undefined): Observable<string> {
+  deleteReadingListItem(
+    readingListItemId: number | undefined
+  ): Observable<string> {
     return this.http.delete(`${this.apiUrl}/item/${readingListItemId}`, {
       responseType: 'text',
     });
   }
 
-  deleteAllReadingListItem(readingListId: number | undefined): Observable<string> {
+  deleteAllReadingListItem(
+    readingListId: number | undefined
+  ): Observable<string> {
     return this.http.delete(`${this.apiUrl}/delete-all/${readingListId}`, {
       responseType: 'text',
     });
+  }
+
+  reorderReadingLists(
+    userId: number | undefined,
+    reorderedLists: ReadingListOrderUpdateDto[]
+  ) {
+    return this.http.post(
+      `${this.apiUrl}/${userId}/reading-lists/reorder`,
+      reorderedLists,
+      {
+        responseType: 'text',
+      }
+    );
   }
 
   prefetchOwnReadingLists(userId: number): void {
