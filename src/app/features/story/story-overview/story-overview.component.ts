@@ -75,7 +75,7 @@ export class StoryOverviewComponent {
       this.disableAddToReadingList =
         this.story.authorId === this.loginedProfileId;
 
-      this.readingListService.readingList$
+      this.readingListService.getUserLists(this.loginedProfileId)
         .pipe(takeUntil(this.destroy$))
         .subscribe((response) => {
           this.readingLists = response || [];
