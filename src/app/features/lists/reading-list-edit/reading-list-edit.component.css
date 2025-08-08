@@ -19,20 +19,6 @@
   color: var(--text);
 }
 
-.breadcrumb {
-  margin-bottom: 20px;
-}
-
-.breadcrumb-link {
-  color: var(--secondary);
-  text-decoration: none;
-  font-size: 14px;
-}
-
-.breadcrumb-link:hover {
-  text-decoration: underline;
-}
-
 .story-count {
   margin-bottom: 20px;
   color: var(--text);
@@ -50,20 +36,6 @@
   border-bottom: 1px solid var(--secondary);
   position: relative;
   gap: 16px;
-}
-
-.menu-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #666;
-  padding: 8px;
-  border-radius: 4px;
-  transition: background-color 0.2s;
-}
-
-.menu-btn:hover {
-  background-color: #f0f0f0;
 }
 
 .book-cover {

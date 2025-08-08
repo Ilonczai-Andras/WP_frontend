@@ -2,11 +2,6 @@
   <!-- Header -->
   <div class="header">
     <h1 class="title">{{ profile?.userName }}'s Reading List</h1>
-    <div class="breadcrumb">
-      <a href="#" class="breadcrumb-link"
-        >{{ profile?.userName }}'s Reading List</a
-      >
-    </div>
   </div>
 
   <!-- Story count -->
@@ -76,7 +71,7 @@
 
   <!-- Clear all button -->
   <div class="clear-all-container">
-    <button class="clear-all-btn" (click)="onClearAllStories()">
+    <button class="clear-all-btn" (click)="deleteAllReadingListItem()">
       <svg
         width="16"
         height="16"
