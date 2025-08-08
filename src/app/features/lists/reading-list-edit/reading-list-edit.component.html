@@ -1,0 +1,112 @@
+<div class="reading-list-container">
+  <!-- Header -->
+  <div class="header">
+    <h1 class="title">{{ profile?.userName }}'s Reading List</h1>
+    <div class="breadcrumb">
+      <a href="#" class="breadcrumb-link"
+        >{{ profile?.userName }}'s Reading List</a
+      >
+    </div>
+  </div>
+
+  <!-- Story count -->
+  <div class="story-count">
+    <span>{{ totalStories }} story</span>
+  </div>
+
+  <!-- Book list -->
+  <div class="book-list">
+    <div class="book-item" *ngFor="let readingListItem of readingListItems">
+      <!-- Menu button -->
+      <button class="menu-btn" (click)="onRemoveBook()">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <circle cx="12" cy="12" r="1"></circle>
+          <circle cx="19" cy="12" r="1"></circle>
+          <circle cx="5" cy="12" r="1"></circle>
+        </svg>
+      </button>
+
+      <!-- Book cover -->
+      <div class="book-cover">
+        <img
+          [src]="readingListItem.coverImageUrl"
+          [alt]="readingListItem.title"
+        />
+      </div>
+
+      <!-- Book details -->
+      <div class="book-details">
+        <h3 class="book-title">{{ readingListItem.title }}</h3>
+        <p class="book-author">{{ readingListItem.authorUsername }}</p>
+
+        <div class="book-stats">
+          <span class="stat">
+            <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"
+              />
+            </svg>
+            {{ 10 }}
+          </span>
+          <span class="stat">
+            <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M14,20.408c-0.118,0.3-0.407,0.5-0.748,0.494c-0.338,0.006-0.611-0.188-0.748-0.494L9.826,11.4L8.5,12.726c-0.19,0.19-0.45,0.297-0.72,0.297c-0.562,0-1.017-0.455-1.017-1.017c0-0.27,0.107-0.53,0.297-0.72l2.24-2.24c0.283-0.283,0.677-0.378,1.06-0.255c0.383,0.123,0.677,0.46,0.747,0.86l1.669,9.408l2.678-6.804c0.118-0.3,0.407-0.5,0.748-0.494c0.338-0.006,0.611,0.188,0.748,0.494l1.669,4.242h2.361c0.562,0,1.017,0.455,1.017,1.017s-0.455,1.017-1.017,1.017h-3c-0.341-0.006-0.63-0.194-0.748-0.494L14,20.408z"
+              />
+            </svg>
+            {{ 100 }}
+          </span>
+          <span class="stat">{{ 1 }} parts</span>
+        </div>
+      </div>
+
+      <!-- Delete button -->
+      <button
+        class="delete-btn"
+        (click)="onRemoveBook()"
+        title="Remove from reading list"
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <polyline points="3,6 5,6 21,6"></polyline>
+          <path
+            d="m19,6v14a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2v2"
+          ></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Clear all button -->
+  <div class="clear-all-container">
+    <button class="clear-all-btn" (click)="onClearAllStories()">
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <polyline points="3,6 5,6 21,6"></polyline>
+        <path
+          d="m19,6v14a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2v2"
+        ></path>
+      </svg>
+      Clear all stories
+    </button>
+  </div>
+</div>

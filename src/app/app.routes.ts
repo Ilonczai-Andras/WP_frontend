@@ -85,6 +85,15 @@ export const routes: Routes = [
     data: { showHeader: true },
   },
   {
+    path: 'list/:listId/edit',
+    loadChildren: () =>
+      import('./features/lists/reading-list-edit/reading-list-edit.routes').then(
+        (m) => m.READING_LIST_EDIT_ROUTES
+      ),
+    canActivate: [AuthGuard],
+    data: { showHeader: true },
+  },
+  {
     path: 'unauthorized',
     component: UnauthorizedPageComponent,
   },
